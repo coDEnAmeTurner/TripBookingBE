@@ -7,17 +7,15 @@ namespace TripBookingBE.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IMyDependency _myDependency;
 
-    public HomeController(ILogger<HomeController> logger, IMyDependency myDependency)
+    public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
-        _myDependency = myDependency;
     }
 
     public IActionResult Index()
     {
-        _myDependency.WriteMessage("Hello from HomeController Index action!");
+        Console.WriteLine("Index action called");
         return View();
     }
 
