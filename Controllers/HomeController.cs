@@ -15,7 +15,6 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        Console.WriteLine("Index action called");
         return View();
     }
 
