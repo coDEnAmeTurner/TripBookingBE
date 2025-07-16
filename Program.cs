@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using TripBookingBE.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddMyDependencyGroup();
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<TripBookingContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext")));
 
 
 var app = builder.Build();
@@ -15,6 +22,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseRouting();
 
 app.UseAuthorization();
