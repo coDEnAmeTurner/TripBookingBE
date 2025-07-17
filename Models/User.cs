@@ -15,8 +15,8 @@ public partial class User
     [Column("id")]
     public long Id { get; set; }
 
-    [Column("password",TypeName ="varchar(255)")]
-    public string? Password { get; set; }
+    [Column("password", TypeName = "varchar(255)")]
+    public string Password { get; set; }
 
     [NotMapped]
     public string? NewPassword { get; set; }
