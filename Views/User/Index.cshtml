@@ -8,6 +8,43 @@
 
 <div>
     <h4>User</h4>
+    <form asp-controller="User" asp-action="Index">
+        <div class="container">
+            <div class="row gy-3">
+                <div class="col col-3">
+                    <label for="filter-name" class="form-label">Name: </label>
+                    <input id="filter-name" type="text" name="name" class="form-control" />
+
+                </div>
+                <div class="col col-3">
+                    <label for="filter-type" class="form-label">Type: </label>
+                    <select class="form-select" id="filter-type" name="type" >
+                        <option value="">Default</option>
+                        <option value="CUSTOMER">CUSTOMER</option>
+                        <option value="DRIVER">DRIVER</option>
+                        <option value="SELLER">SELLER</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select>
+
+                </div>
+                <div class="col col-3">
+                    <label for="filter-seller-code" class="form-label">Seller Code: </label>
+                    <input id="filter-seller-code" type="text" name="sellerCode" class="form-control" />
+
+                </div>
+
+                <div class="col col-3">
+                    <label for="filter-email" class="form-label">Email: </label>
+                    <input id="filter-email" type="text" name="email" class="form-control" />
+
+                </div>
+                <div class="col col-5 mx-2 d-flex justify-content-space-between align-items-center">
+                    <input class="btn btn-primary" type="submit" value="Filter" />
+                    <a class="btn btn-success mx-2" asp-action="CreateOrUpdate">Create</a>
+                </div>
+            </div>
+        </div>
+    </form>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
@@ -63,6 +100,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.DateModified)
 
+                    </th>
+                    <th>
+                        Actions
                     </th>
                 </tr>
             </thead>
@@ -120,6 +160,11 @@
                         <td>
                             @Html.DisplayFor(item => model.DateModified)
 
+                        </td>
+                        <td class="d-flex justify-content-center align-items-center">
+                            <a class="btn btn-light" asp-action="Edit" asp-route-id="@(model.Id)">Edit</a> |
+                            <a class="btn btn-info" asp-action="Details" asp-route-id="@(model.Id)">Details</a> |
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@(model.Id)">Delete</a>
                         </td>
                     </tr>
                 }
