@@ -64,6 +64,9 @@
                         @Html.DisplayNameFor(model => model.DateModified)
 
                     </th>
+                    <th>
+                        Actions
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -120,6 +123,11 @@
                         <td>
                             @Html.DisplayFor(item => model.DateModified)
 
+                        </td>
+                        <td class="d-flex justify-content-center align-items-center">
+                            <a class="btn btn-light" asp-action="Edit" asp-route-id="@(model.Id)">Edit</a> |
+                            <a class="btn btn-info" asp-action="Details" asp-route-id="@(model.Id)">Details</a> |
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@(model.Id)">Delete</a>
                         </td>
                     </tr>
                 }

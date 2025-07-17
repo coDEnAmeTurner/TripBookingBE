@@ -15,8 +15,14 @@ public partial class User
     [Column("id")]
     public long Id { get; set; }
 
+    [Column("password",TypeName ="varchar(255)")]
+    public string? Password { get; set; }
+
     [NotMapped]
-    public string Password { get; set; } = null!;
+    public string? NewPassword { get; set; }
+
+    [NotMapped]
+    public string? ConfirmPassword { get; set; }
 
     [DisplayName("Last Login")]
     [Column("lastLogin", TypeName = "datetime")]
