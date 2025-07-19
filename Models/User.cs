@@ -11,6 +11,9 @@ namespace TripBookingBE.Models;
 [Index("UserName", Name = "UQ__User__66DCF95C55A682B1", IsUnique = true)]
 public partial class User
 {
+    [NotMapped]
+    public IFormFile File { get; set; }
+
     [Key]
     [Column("id")]
     public long Id { get; set; }
