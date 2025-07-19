@@ -31,26 +31,37 @@ public class UsersServiceImpl : IUsersService
         string Avatar = string.Empty;
         using (var memoryStream = new MemoryStream())
         {
-            await file.OpenReadStream().CopyToAsync(memoryStream);
-
-            var uploadParams = new ImageUploadParams()
+            try
             {
-                File = new FileDescription()
+                file.CopyTo(memoryStream);
+                var bytes = memoryStream.ToArray();
+                Stream stream = new MemoryStream(bytes);
+                var uploadParams = new ImageUploadParams()
                 {
-                    FileName = file.FileName,
-                    FileSize = file.Length,
-                    Stream = memoryStream
+                    File = new FileDescription()
+                    {
+                        FileName = file.FileName,
+                        FileSize = file.Length,
+                        Stream = stream
+                    },
+                    UseFilename = true
+                };
+                var uploadResult = cloudinary.Upload(uploadParams);
+                if (uploadResult.StatusCode != HttpStatusCode.OK)
+                {
+                    dto.StatusCode = uploadResult.StatusCode;
+                    dto.Message = uploadResult.Error.Message;
+                    return dto;
                 }
-            };
-            var uploadResult = cloudinary.Upload(uploadParams);
-            if (uploadResult.StatusCode != HttpStatusCode.OK)
+
+                Avatar = uploadResult.SecureUrl.AbsoluteUri;
+            }
+            catch (Exception ex)
             {
-                dto.StatusCode = uploadResult.StatusCode;
-                dto.Message = uploadResult.Error.Message;
+                dto.StatusCode = HttpStatusCode.InternalServerError;
+                dto.Message = ex.Message;
                 return dto;
             }
-
-            Avatar = uploadResult.Url.AbsolutePath;
         }
 
         UserCreateOrUpdateDTO dtoDAL = new();
@@ -76,23 +87,36 @@ public class UsersServiceImpl : IUsersService
         return dto;
     }
 
-    public async Task<User> GetCreateOrUpdateModel(long? id)
+    public async Task<UserDeleteDTO> DeleteUser(long id)
     {
-        User user;
+        
+
+        return await dal.DeleteUser(id);
+    }
+
+    public async Task<UserGetCreateOrUpdateModelDTO> GetCreateOrUpdateModel(long? id)
+    {
+        UserGetCreateOrUpdateModelDTO dto = new();
         if (id == null)
-            user = new Models.User();
+            dto.User = new Models.User();
         else
-            user = await GetUserById(id.GetValueOrDefault());
+        {
+            var dtoDAL = await GetUserById(id.GetValueOrDefault());
+            dto.User = dtoDAL.User;
+            dto.StatusCode = dtoDAL.StatusCode;
+            dto.Message = dtoDAL.Message;
+        }
 
-        return user;
+        return dto;
     }
 
-    public async Task<User> GetUserById(long id)
+    public async Task<UserGetByIdDTO> GetUserById(long id)
     {
-        return await dal.GetUserById(id);
+        var dto = await dal.GetUserById(id);
+        return dto;
     }
 
-    public IQueryable<User> GetUsers(string name, string type, string sellerCode, string email)
+    public UserGetUsersDTO GetUsers(string name, string type, string sellerCode, string email)
     {
         return dal.GetUsers(name, type, sellerCode, email);
     }

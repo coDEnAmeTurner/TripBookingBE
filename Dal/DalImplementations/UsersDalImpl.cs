@@ -51,40 +51,91 @@ public class UsersDalImpl : IUsersDal
         return dto;
     }
 
-    public async Task<User> GetUserById(long id)
+    public async Task<UserDeleteDTO> DeleteUser(long id)
     {
-        return await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+        UserDeleteDTO dto = new();
+        try
+        {
+            var inst = await context.Users.FindAsync(id);
+            if (inst == null)
+            {
+                dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+                dto.Message = $"User with Id {id} not found!";
+                return dto;
+            }
+            context.Users.Remove(inst);
+            await context.SaveChangesAsync();
+            dto.User = inst;
+        }
+        catch (Exception ex)
+        {
+            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.Message = ex.Message;
+        }
+        return dto;
     }
 
-    public IQueryable<User> GetUsers(string name, string type, string sellerCode, string email)
+    public async Task<UserGetByIdDTO> GetUserById(long id)
+    {
+        UserGetByIdDTO dto = new();
+        try
+        {
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            if (user == null)
+            {
+                dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.Message = $"User with Id {id} not found!";
+            }
+            dto.User = user;
+        }
+        catch (Exception ex)
+        {
+            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.Message = ex.Message;
+        }
+        return dto;
+    }
+
+    public UserGetUsersDTO GetUsers(string name, string type, string sellerCode, string email)
     {
 
-        var users = from user in context.Users
-                    select user;
+        UserGetUsersDTO dto = new();
+        try
+        {
+            var users = from user in context.Users
+                        select user;
 
-        if (!String.IsNullOrEmpty(name))
-        {
-            users = users.Where(u => u.Name!.ToUpper().Contains(name.ToUpper())
-            || u.UserName!.ToUpper().Contains(name.ToUpper())
-            || u.FirstName!.ToUpper().Contains(name.ToUpper())
-            || u.LastName!.ToUpper().Contains(name.ToUpper()));
+            if (!String.IsNullOrEmpty(name))
+            {
+                users = users.Where(u => u.Name!.ToUpper().Contains(name.ToUpper())
+                || u.UserName!.ToUpper().Contains(name.ToUpper())
+                || u.FirstName!.ToUpper().Contains(name.ToUpper())
+                || u.LastName!.ToUpper().Contains(name.ToUpper()));
+            }
+            if (!String.IsNullOrEmpty(type))
+            {
+                users = users.Where(u => u.Type.Contains(type));
+            }
+            if (!String.IsNullOrEmpty(sellerCode))
+            {
+                users = users.Where(u => u.SellerCode != null && u.SellerCode.Contains(sellerCode));
+            }
+            if (!String.IsNullOrEmpty(email))
+            {
+                users = users.Where(u => u.Email != null && u.Email.Contains(sellerCode));
+            }
+
+            users = users.OrderByDescending(u => u.Id);
+
+            dto.Users = users;
         }
-        if (!String.IsNullOrEmpty(type))
+        catch (Exception ex)
         {
-            users = users.Where(u => u.Type.Contains(type));
-        }
-        if (!String.IsNullOrEmpty(sellerCode))
-        {
-            users = users.Where(u => u.SellerCode != null && u.SellerCode.Contains(sellerCode));
-        }
-        if (!String.IsNullOrEmpty(email))
-        {
-            users = users.Where(u => u.Email != null && u.Email.Contains(sellerCode));
+            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.Message = ex.Message;
         }
 
-        users = users.OrderByDescending(u => u.Id);
-
-        return users;
+        return dto;
     }
 
     public async Task<UserCreateOrUpdateDTO> Update(long id, string Password, string UserName, string FirstName, string LastName, string Email, bool Active, string Name, string Phone, string Type, string SellerCode, string Avatar)

@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SQLitePCL;
 using TripBookingBE.Data;
 using TripBookingBE.DTO;
@@ -22,25 +23,52 @@ public class UsersController : Controller
 
     public async Task<IActionResult> Index(string name, string type, string sellerCode, string email)
     {
-        var users = usersService.GetUsers(name, type, sellerCode, email);
+        var dto = usersService.GetUsers(name, type, sellerCode, email);
+        if (dto.StatusCode != HttpStatusCode.OK)
+        {
+            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["errorMessage"] = dto.Message;
+            return View();
+        }
 
-        return View(users);
+        return View(dto.Users);
     }
 
     public async Task<IActionResult> Details(long? id)
     {
-        var user = await usersService.GetUserById(id.GetValueOrDefault());
-        if (user == null)
+        var dto = await usersService.GetUserById(id.GetValueOrDefault());
+        if (dto.StatusCode != HttpStatusCode.OK || dto.User == null)
         {
-            return NotFound();
+            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["errorMessage"] = dto.Message;
+            return View("Index");
         }
 
-        return View(user);
+        return View(dto.User);
+    }
+
+    public async Task<IActionResult> Delete(long id)
+    {
+        var dto = await usersService.DeleteUser(id);
+        if (dto.StatusCode != HttpStatusCode.NoContent)
+        {
+            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["errorMessage"] = dto.Message;
+        }
+        
+        return View("Index",model: usersService.GetUsers().Users);
     }
 
     public async Task<IActionResult> CreateOrUpdate(long? id)
     {
-        return View(await usersService.GetCreateOrUpdateModel(id));
+        var dto = await usersService.GetCreateOrUpdateModel(id);
+        if (dto.StatusCode != HttpStatusCode.OK)
+        {
+            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["errorMessage"] = dto.Message;
+            return View();
+        }
+        return View(dto.User);
     }
 
     [HttpPost]
@@ -60,7 +88,7 @@ public class UsersController : Controller
                 }
 
                 targetUser = await usersService.CreateOrUpdate(id, user.Password, user.NewPassword, user.ConfirmPassword, user.UserName, user.FirstName, user.LastName, user.Email, user.Active, user.Name, user.Phone, user.Type, user.SellerCode, user.File);
-                if (targetUser.StatusCode != HttpStatusCode.OK)
+                if (targetUser.StatusCode != HttpStatusCode.Created)
                 {
                     ViewData["statusCode"] = targetUser.StatusCode;
                     ViewData["errorMessage"] = targetUser.Message;

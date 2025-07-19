@@ -4,7 +4,13 @@
     ViewData["Title"] = "User List";
 }
 
-<h1>Details</h1>
+@if (ViewData["statusCode"] != null && ViewData["errorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <p><b>Status Code: @(ViewData["statusCode"].ToString())</b></p>
+        <p><b>Message: @(ViewData["errorMessage"].ToString())</b></p>
+    </div>
+}
 
 <div>
     <h4>User</h4>
@@ -18,7 +24,7 @@
                 </div>
                 <div class="col col-3">
                     <label for="filter-type" class="form-label">Type: </label>
-                    <select class="form-select" id="filter-type" name="type" >
+                    <select class="form-select" id="filter-type" name="type">
                         <option value="">Default</option>
                         <option value="CUSTOMER">CUSTOMER</option>
                         <option value="DRIVER">DRIVER</option>
@@ -134,7 +140,9 @@
 
                         </td>
                         <td>
-                            @Html.DisplayFor(item => model.Avatar)
+                            <img style="object-fit: contain;"
+                                src=@(String.IsNullOrEmpty(model.Avatar) ? "aspnetcore-logo.png" : model.Avatar) width="170"
+                                height="320">
 
                         </td>
                         <td>
@@ -161,10 +169,12 @@
                             @Html.DisplayFor(item => model.DateModified)
 
                         </td>
-                        <td class="d-flex justify-content-center align-items-center">
-                            <a class="btn btn-light" asp-action="CreateOrUpdate" asp-route-id="@(model.Id)">Edit</a> |
-                            <a class="btn btn-info" asp-action="Details" asp-route-id="@(model.Id)">Details</a> |
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@(model.Id)">Delete</a>
+                        <td>
+                            <div class="d-flex justify-content-center align-items-center" style="margin-top: 8rem;">
+                                <a class="btn btn-light" asp-action="CreateOrUpdate" asp-route-id="@(model.Id)">Edit</a> |
+                                <a class="btn btn-info" asp-action="Details" asp-route-id="@(model.Id)">Details</a> |
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@(model.Id)">Delete</a>
+                            </div>
                         </td>
                     </tr>
                 }
