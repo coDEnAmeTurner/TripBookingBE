@@ -1,4 +1,4 @@
-using TripBookingBE.DTO;
+using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
 
 namespace TripBookingBE.Services.ServiceInterfaces;

@@ -1,11 +1,11 @@
 using System.Net;
 using TripBookingBE.Models;
 
-namespace TripBookingBE.DTO;
+namespace TripBookingBE.DTO.UserDTO;
 
-public class UserGetCreateOrUpdateModelDTO
+public class UserCreateOrUpdateDTO
 {
     public User User { get; set; } = null;
-    public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
+    public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.Created;
     public string Message { get; set; } = string.Empty;
 }

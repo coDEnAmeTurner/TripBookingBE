@@ -1,7 +1,7 @@
 using System.Net;
 using TripBookingBE.Models;
 
-namespace TripBookingBE.DTO;
+namespace TripBookingBE.DTO.UserDTO;
 
 public class UserDeleteDTO
 {

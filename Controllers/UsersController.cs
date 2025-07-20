@@ -1,13 +1,8 @@
 using System.Net;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SQLitePCL;
-using TripBookingBE.Data;
-using TripBookingBE.DTO;
+using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
-using TripBookingBE.Services.ServiceImplementations;
 using TripBookingBE.Services.ServiceInterfaces;
 
 namespace TripBookingBE.Controllers;

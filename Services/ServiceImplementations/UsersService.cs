@@ -6,22 +6,26 @@ using CloudinaryDotNet.Actions;
 using Microsoft.VisualBasic;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.Data;
-using TripBookingBE.DTO;
+using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
 using TripBookingBE.Services.ServiceInterfaces;
 
 namespace TripBookingBE.Services.ServiceImplementations;
 
-public class UsersServiceImpl : IUsersService
+public class UsersService : IUsersService
 {
-    private readonly IUsersDal dal;
+    private readonly IUsersDal usersDAL;
+    private readonly ICustomerBookTripsService bookingService;
+    private readonly ICustomerReviewTripsService reviewService;
 
     private readonly Cloudinary cloudinary;
 
-    public UsersServiceImpl(IUsersDal dal, Cloudinary cloudinary)
+    public UsersService(IUsersDal dal, Cloudinary cloudinary, ICustomerBookTripsService bookingService, ICustomerReviewTripsService reviewService)
     {
-        this.dal = dal;
+        this.usersDAL = dal;
         this.cloudinary = cloudinary;
+        this.bookingService = bookingService;
+        this.reviewService = reviewService;
     }
 
     public async Task<UserCreateOrUpdateDTO> CreateOrUpdate(long? id, string Password, string NewPassword, string ConfirmPassword, string UserName, string FirstName, string LastName, string Email, bool Active, string Name, string Phone, string Type, string SellerCode, IFormFile file)
@@ -70,13 +74,13 @@ public class UsersServiceImpl : IUsersService
             if (!Type.Equals("SELLER"))
                 SellerCode = null;
 
-            dtoDAL = await dal.Create(Password, UserName, FirstName, LastName, Email, Active, Name, Phone, Type, SellerCode, Avatar);
+            dtoDAL = await usersDAL.Create(Password, UserName, FirstName, LastName, Email, Active, Name, Phone, Type, SellerCode, Avatar);
         }
         else
         {
             //check for password, with jwt configured
             //up file cloudinary
-            dtoDAL = await dal.Update(id.GetValueOrDefault(), Password, UserName, FirstName, LastName, Email, Active, Name, Phone, Type, SellerCode, Avatar);
+            dtoDAL = await usersDAL.Update(id.GetValueOrDefault(), Password, UserName, FirstName, LastName, Email, Active, Name, Phone, Type, SellerCode, Avatar);
         }
         dto.User = dtoDAL.User;
         if (dtoDAL.StatusCode != HttpStatusCode.OK)
@@ -89,9 +93,35 @@ public class UsersServiceImpl : IUsersService
 
     public async Task<UserDeleteDTO> DeleteUser(long id)
     {
-        
+        UserDeleteDTO dto = new();
 
-        return await dal.DeleteUser(id);
+        var bookingDTO = await bookingService.DeleteCustomerBookTripsByUser(id);
+        if (bookingDTO.StatusCode != HttpStatusCode.NoContent)
+        {
+            dto.StatusCode = bookingDTO.StatusCode;
+            dto.Message = bookingDTO.Message;
+            return dto;
+        }
+
+        var reviewDTO = await reviewService.DeleteCustomerReviewTripsByUser(id);
+        if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
+        {
+            dto.StatusCode = reviewDTO.StatusCode;
+            dto.Message = reviewDTO.Message;
+            return dto;
+        }
+
+        var userDTO = await usersDAL.DeleteUser(id);
+        if (userDTO.StatusCode != HttpStatusCode.NoContent)
+        {
+            dto.StatusCode = userDTO.StatusCode;
+            dto.Message = userDTO.Message;
+            return dto;
+        }
+
+        dto.User = userDTO.User;
+
+        return dto;
     }
 
     public async Task<UserGetCreateOrUpdateModelDTO> GetCreateOrUpdateModel(long? id)
@@ -112,12 +142,12 @@ public class UsersServiceImpl : IUsersService
 
     public async Task<UserGetByIdDTO> GetUserById(long id)
     {
-        var dto = await dal.GetUserById(id);
+        var dto = await usersDAL.GetUserById(id);
         return dto;
     }
 
     public UserGetUsersDTO GetUsers(string name, string type, string sellerCode, string email)
     {
-        return dal.GetUsers(name, type, sellerCode, email);
+        return usersDAL.GetUsers(name, type, sellerCode, email);
     }
 }

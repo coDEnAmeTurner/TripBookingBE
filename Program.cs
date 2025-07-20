@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using TripBookingBE.Data;
 using CloudinaryDotNet;
 using dotenv.net;
@@ -13,8 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 //db context
-builder.Services.AddDbContext<TripBookingContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext")));
+builder.Services.AddDbContext<TripBookingContext>();
 
 //cloudinary
 DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
@@ -23,8 +21,12 @@ cloudinary.Api.Secure = true;
 builder.Services.AddSingleton(typeof(Cloudinary), cloudinary);
 
 //services and dals
-builder.Services.AddScoped<IUsersService,UsersServiceImpl>();
-builder.Services.AddScoped<IUsersDal,UsersDalImpl>();
+builder.Services.AddScoped<IUsersService,UsersService>();
+builder.Services.AddScoped<IUsersDal, UsersDal>();
+builder.Services.AddScoped<ICustomerBookTripsService,CustomerBookTripsService>();
+builder.Services.AddScoped<ICustomerBookTripsDal, CustomerBookTripsDal>();
+builder.Services.AddScoped<ICustomerReviewTripsService,CustomerReviewTripsService>();
+builder.Services.AddScoped<ICustomerReviewTripsDal,CustomerReviewTripsDal>();
 
 var app = builder.Build();
 

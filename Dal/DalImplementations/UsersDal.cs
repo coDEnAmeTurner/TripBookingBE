@@ -3,16 +3,16 @@ using Azure.Identity;
 using Microsoft.EntityFrameworkCore;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.Data;
-using TripBookingBE.DTO;
+using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
 
 namespace TripBookingBE.Dal.DalImplementations;
 
-public class UsersDalImpl : IUsersDal
+public class UsersDal : IUsersDal
 {
     private readonly TripBookingContext context;
 
-    public UsersDalImpl(TripBookingContext context)
+    public UsersDal(TripBookingContext context)
     {
         this.context = context;
     }
