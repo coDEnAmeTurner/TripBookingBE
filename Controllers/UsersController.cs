@@ -44,7 +44,7 @@ public class UsersController : Controller
 
     public async Task<IActionResult> Delete(long id)
     {
-        var dto = await usersService.DeleteUser(id);
+        var dto = await usersService.DeleteUser(4);
         if (dto.StatusCode != HttpStatusCode.NoContent)
         {
             ViewData["statusCode"] = dto.StatusCode;
@@ -68,7 +68,7 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateOrUpdate(long? id, [Bind("Password,NewPassword,ConfirmPassword,UserName,FirstName,LastName,Email,Active,Name,Phone,Type,SellerCode,File")] User user)
+    public async Task<IActionResult> CreateOrUpdate([Bind("Id, Password,NewPassword,ConfirmPassword,UserName,FirstName,LastName,Email,Active,Name,Phone,Type,SellerCode,File,DateCreated,DateModified,Avatar")] User user)
     {
 
         if (ModelState.IsValid)
@@ -82,7 +82,13 @@ public class UsersController : Controller
                     return View(user);
                 }
 
-                targetUser = await usersService.CreateOrUpdate(id, user.Password, user.NewPassword, user.ConfirmPassword, user.UserName, user.FirstName, user.LastName, user.Email, user.Active, user.Name, user.Phone, user.Type, user.SellerCode, user.File);
+                if (user.Id == 0 && user.File == null)
+                {
+                    ViewData["avatarError"] = "Avatar is missing!";
+                    return View(user);
+                }
+
+                targetUser = await usersService.CreateOrUpdate(user);
                 if (targetUser.StatusCode != HttpStatusCode.Created)
                 {
                     ViewData["statusCode"] = targetUser.StatusCode;

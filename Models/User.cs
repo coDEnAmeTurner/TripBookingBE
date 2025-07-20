@@ -12,7 +12,7 @@ namespace TripBookingBE.Models;
 public partial class User
 {
     [NotMapped]
-    public IFormFile File { get; set; }
+    public IFormFile? File { get; set; }
 
     [Key]
     [Column("id")]

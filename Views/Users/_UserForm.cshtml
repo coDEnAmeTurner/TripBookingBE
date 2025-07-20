@@ -14,20 +14,21 @@
 <form asp-action="CreateOrUpdate" enctype="multipart/form-data" method="post" class="container">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="hidden" asp-for="Id" />
-        <div class="form-group col col-12">
-            <label asp-for="Avatar" class="control-label col col-12" style="font-weight: bold;"></label>
-            @if (!ViewData["AllowedSave"].ToString().Equals("False"))
-            {
-                <input asp-for="File" type="file" class="form-control col col-12" />
-                <span asp-validation-for="Avatar" class="text-danger col col-12"></span>
-            }
-            else 
-            {
-                <img style="object-fit: contain;"
-                                src=@(String.IsNullOrEmpty(Model.Avatar) ? "aspnetcore-logo.png" : Model.Avatar) width="270"
-                                height="420">
-            }
-        </div>
+    <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="hidden" asp-for="Avatar" />
+    <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="hidden" asp-for="DateCreated" />
+    <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="hidden" asp-for="DateModified" />
+    <div class="form-group col col-12">
+        <label asp-for="Avatar" class="control-label col col-12" style="font-weight: bold;"></label>
+        <img style="object-fit: contain;"
+                        src=@(String.IsNullOrEmpty(Model.Avatar) ? "aspnetcore-logo.png" : Model.Avatar) width="270"
+                        height="420">
+        @if (!ViewData["AllowedSave"].ToString().Equals("False"))
+        {
+            <input asp-for="File" type="file" class="form-control col col-12" />
+            <span asp-validation-for="Avatar" class="text-danger col col-12">@ViewData["avatarError"]</span>
+        }
+        
+    </div>
     <div class="form-group col col-12">
         <label asp-for="UserName" class="control-label col col-12" style="font-weight: bold;"></label>
         <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) asp-for="UserName"
@@ -112,7 +113,7 @@
         <span asp-validation-for="SellerCode" class="text-danger col col-12"></span>
     </div>
     <div class="form-group col col-12 mt-2 justify-content-center">
-        <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="submit" value="Save"
+        <input disabled=@(ViewData["AllowedSave"].ToString().Equals("False")) type="submit" value="Save"
             class="btn btn-primary" />
         <a class="btn btn-dark" asp-action="Index">Back to List</a>
     </div>

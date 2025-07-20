@@ -1,3 +1,5 @@
+using System.Net;
+using System.Transactions;
 using AspNetCoreGeneratedDocument;
 using Azure.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,35 +14,26 @@ public class UsersDal : IUsersDal
 {
     private readonly TripBookingContext context;
 
-    public UsersDal(TripBookingContext context)
+    private readonly ICustomerBookTripsDal bookingDAL;
+    private readonly ICustomerReviewTripsDal reviewDAL;
+
+    public UsersDal(TripBookingContext context, ICustomerBookTripsDal bookingDAL, ICustomerReviewTripsDal reviewDAL)
     {
         this.context = context;
+        this.bookingDAL = bookingDAL;
+        this.reviewDAL = reviewDAL;
     }
 
-    public async Task<UserCreateOrUpdateDTO> Create(string Password, string UserName, string FirstName, string LastName, string Email, bool Active, string Name, string Phone, string Type, string SellerCode, string Avatar)
+    public async Task<UserCreateOrUpdateDTO> Create(User user)
     {
         UserCreateOrUpdateDTO dto = new();
 
         try
         {
-            User u = new User()
-            {
-                Password = Password,
-                UserName = UserName,
-                FirstName = FirstName,
-                LastName = LastName,
-                Email = Email,
-                Active = Active,
-                Name = Name,
-                Phone = Phone,
-                Type = Type,
-                SellerCode = SellerCode,
-                Avatar = Avatar
-            };
-            context.Add(u);
+            context.Add(user);
             await context.SaveChangesAsync();
 
-            dto.User = u;
+            dto.User = user;
         }
         catch (Exception ex)
         {
@@ -54,23 +47,48 @@ public class UsersDal : IUsersDal
     public async Task<UserDeleteDTO> DeleteUser(long id)
     {
         UserDeleteDTO dto = new();
-        try
+        using (TransactionScope scope = new TransactionScope())
         {
-            var inst = await context.Users.FindAsync(id);
-            if (inst == null)
+            try
             {
-                dto.StatusCode = System.Net.HttpStatusCode.NotFound;
-                dto.Message = $"User with Id {id} not found!";
-                return dto;
+                var bookingDTO = await bookingDAL.DeleteCustomerBookTripsByUser(id);
+                if (bookingDTO.StatusCode != HttpStatusCode.NoContent)
+                {
+                    dto.StatusCode = bookingDTO.StatusCode;
+                    dto.Message = bookingDTO.Message;
+                    throw new Exception(dto.Message);
+                }
+
+                var reviewDTO = await reviewDAL.DeleteCustomerReviewTripsByUser(id);
+                if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
+                {
+                    dto.StatusCode = reviewDTO.StatusCode;
+                    dto.Message = reviewDTO.Message;
+                    throw new Exception(dto.Message);
+                }
+
+                var inst = await context.Users.FindAsync(id);
+                if (inst == null)
+                {
+                    dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+                    dto.Message = $"User with Id {id} not found!";
+                    throw new Exception(dto.Message);
+                }
+
+                context.Users.Remove(inst);
+                await context.SaveChangesAsync();
+
+                dto.User = inst;
             }
-            context.Users.Remove(inst);
-            await context.SaveChangesAsync();
-            dto.User = inst;
-        }
-        catch (Exception ex)
-        {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
-            dto.Message = ex.Message;
+            catch (Exception ex)
+            {
+                if (dto.StatusCode == HttpStatusCode.NoContent)
+                {
+                    dto.StatusCode = HttpStatusCode.InternalServerError;
+                    dto.Message = ex.Message;
+                }
+            }
+            scope.Complete();
         }
         return dto;
     }
@@ -138,29 +156,18 @@ public class UsersDal : IUsersDal
         return dto;
     }
 
-    public async Task<UserCreateOrUpdateDTO> Update(long id, string Password, string UserName, string FirstName, string LastName, string Email, bool Active, string Name, string Phone, string Type, string SellerCode, string Avatar)
+    public async Task<UserCreateOrUpdateDTO> Update(User user)
     {
         UserCreateOrUpdateDTO dto = new();
         try
         {
-
-            var targetUser = await context.Users.FindAsync(id);
-
-            targetUser.Password = Password == null ? targetUser.Password : Password;
-            targetUser.UserName = UserName;
-            targetUser.FirstName = FirstName;
-            targetUser.LastName = LastName;
-            targetUser.Email = Email;
-            targetUser.Active = Active;
-            targetUser.Name = Name;
-            targetUser.Phone = Phone;
-            targetUser.Type = Type;
-            targetUser.SellerCode = SellerCode;
-            targetUser.Avatar = Avatar;
-            context.Update(targetUser);
+            var currentState = context.Entry(user).State;
+            context.Entry(user).State = EntityState.Modified;
+            user.Password = user.NewPassword == null ? user.Password : user.NewPassword;
+            context.Update(user);
             await context.SaveChangesAsync();
 
-            dto.User = targetUser;
+            dto.User = user;
         }
         catch (Exception ex)
         {

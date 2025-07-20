@@ -15,72 +15,69 @@ namespace TripBookingBE.Services.ServiceImplementations;
 public class UsersService : IUsersService
 {
     private readonly IUsersDal usersDAL;
-    private readonly ICustomerBookTripsService bookingService;
-    private readonly ICustomerReviewTripsService reviewService;
-
     private readonly Cloudinary cloudinary;
 
-    public UsersService(IUsersDal dal, Cloudinary cloudinary, ICustomerBookTripsService bookingService, ICustomerReviewTripsService reviewService)
+    public UsersService(IUsersDal dal, Cloudinary cloudinary)
     {
         this.usersDAL = dal;
         this.cloudinary = cloudinary;
-        this.bookingService = bookingService;
-        this.reviewService = reviewService;
     }
 
-    public async Task<UserCreateOrUpdateDTO> CreateOrUpdate(long? id, string Password, string NewPassword, string ConfirmPassword, string UserName, string FirstName, string LastName, string Email, bool Active, string Name, string Phone, string Type, string SellerCode, IFormFile file)
+    public async Task<UserCreateOrUpdateDTO> CreateOrUpdate(User user)
     {
         UserCreateOrUpdateDTO dto = new();
 
-        string Avatar = string.Empty;
-        using (var memoryStream = new MemoryStream())
+        if (user.File != null)
         {
-            try
+            using (var memoryStream = new MemoryStream())
             {
-                file.CopyTo(memoryStream);
-                var bytes = memoryStream.ToArray();
-                Stream stream = new MemoryStream(bytes);
-                var uploadParams = new ImageUploadParams()
+                try
                 {
-                    File = new FileDescription()
+                    user.File.CopyTo(memoryStream);
+                    var bytes = memoryStream.ToArray();
+                    Stream stream = new MemoryStream(bytes);
+                    var uploadParams = new ImageUploadParams()
                     {
-                        FileName = file.FileName,
-                        FileSize = file.Length,
-                        Stream = stream
-                    },
-                    UseFilename = true
-                };
-                var uploadResult = cloudinary.Upload(uploadParams);
-                if (uploadResult.StatusCode != HttpStatusCode.OK)
+                        File = new FileDescription()
+                        {
+                            FileName = user.File.FileName,
+                            FileSize = user.File.Length,
+                            Stream = stream
+                        },
+                        UseFilename = true
+                    };
+                    var uploadResult = cloudinary.Upload(uploadParams);
+                    if (uploadResult.StatusCode != HttpStatusCode.OK)
+                    {
+                        dto.StatusCode = uploadResult.StatusCode;
+                        dto.Message = uploadResult.Error.Message;
+                        return dto;
+                    }
+
+                    user.Avatar = uploadResult.SecureUrl.AbsoluteUri;
+                }
+                catch (Exception ex)
                 {
-                    dto.StatusCode = uploadResult.StatusCode;
-                    dto.Message = uploadResult.Error.Message;
+                    dto.StatusCode = HttpStatusCode.InternalServerError;
+                    dto.Message = ex.Message;
                     return dto;
                 }
-
-                Avatar = uploadResult.SecureUrl.AbsoluteUri;
-            }
-            catch (Exception ex)
-            {
-                dto.StatusCode = HttpStatusCode.InternalServerError;
-                dto.Message = ex.Message;
-                return dto;
             }
         }
 
         UserCreateOrUpdateDTO dtoDAL = new();
-        if (id == 0)
+        if (user.Id == 0)
         {
-            if (!Type.Equals("SELLER"))
-                SellerCode = null;
+            if (!user.Type.Equals("SELLER"))
+                user.SellerCode = null;
 
-            dtoDAL = await usersDAL.Create(Password, UserName, FirstName, LastName, Email, Active, Name, Phone, Type, SellerCode, Avatar);
+            dtoDAL = await usersDAL.Create(user);
         }
         else
         {
             //check for password, with jwt configured
-            //up file cloudinary
-            dtoDAL = await usersDAL.Update(id.GetValueOrDefault(), Password, UserName, FirstName, LastName, Email, Active, Name, Phone, Type, SellerCode, Avatar);
+
+            dtoDAL = await usersDAL.Update(user);
         }
         dto.User = dtoDAL.User;
         if (dtoDAL.StatusCode != HttpStatusCode.OK)
@@ -93,34 +90,7 @@ public class UsersService : IUsersService
 
     public async Task<UserDeleteDTO> DeleteUser(long id)
     {
-        UserDeleteDTO dto = new();
-
-        var bookingDTO = await bookingService.DeleteCustomerBookTripsByUser(id);
-        if (bookingDTO.StatusCode != HttpStatusCode.NoContent)
-        {
-            dto.StatusCode = bookingDTO.StatusCode;
-            dto.Message = bookingDTO.Message;
-            return dto;
-        }
-
-        var reviewDTO = await reviewService.DeleteCustomerReviewTripsByUser(id);
-        if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
-        {
-            dto.StatusCode = reviewDTO.StatusCode;
-            dto.Message = reviewDTO.Message;
-            return dto;
-        }
-
-        var userDTO = await usersDAL.DeleteUser(id);
-        if (userDTO.StatusCode != HttpStatusCode.NoContent)
-        {
-            dto.StatusCode = userDTO.StatusCode;
-            dto.Message = userDTO.Message;
-            return dto;
-        }
-
-        dto.User = userDTO.User;
-
+        UserDeleteDTO dto = await usersDAL.DeleteUser(id);
         return dto;
     }
 
