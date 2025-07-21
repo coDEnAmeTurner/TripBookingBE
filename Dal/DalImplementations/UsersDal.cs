@@ -47,38 +47,42 @@ public class UsersDal : IUsersDal
     public async Task<UserDeleteDTO> DeleteUser(long id)
     {
         UserDeleteDTO dto = new();
-        using (TransactionScope scope = new TransactionScope())
+        using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
             try
             {
+                var test = await context.Routes.Where(x => x.Id == 1).FirstOrDefaultAsync();
+                test.RouteDescription = "HCMC to Nha Trang";
+                context.Update(test);
+                await context.SaveChangesAsync();
+
                 var bookingDTO = await bookingDAL.DeleteCustomerBookTripsByUser(id);
                 if (bookingDTO.StatusCode != HttpStatusCode.NoContent)
                 {
                     dto.StatusCode = bookingDTO.StatusCode;
                     dto.Message = bookingDTO.Message;
-                    throw new Exception(dto.Message);
                 }
 
                 var reviewDTO = await reviewDAL.DeleteCustomerReviewTripsByUser(id);
                 if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
                 {
                     dto.StatusCode = reviewDTO.StatusCode;
-                    dto.Message = reviewDTO.Message;
-                    throw new Exception(dto.Message);
+                    dto.Message += $"\n{reviewDTO.Message}";
                 }
 
                 var inst = await context.Users.FindAsync(id);
                 if (inst == null)
                 {
                     dto.StatusCode = System.Net.HttpStatusCode.NotFound;
-                    dto.Message = $"User with Id {id} not found!";
-                    throw new Exception(dto.Message);
+                    dto.Message += $"\nUser with Id {id} not found!";
                 }
 
                 context.Users.Remove(inst);
                 await context.SaveChangesAsync();
 
                 dto.User = inst;
+                
+                scope.Complete();
             }
             catch (Exception ex)
             {
@@ -88,7 +92,7 @@ public class UsersDal : IUsersDal
                     dto.Message = ex.Message;
                 }
             }
-            scope.Complete();
+
         }
         return dto;
     }
