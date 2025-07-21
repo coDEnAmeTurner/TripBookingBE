@@ -1,7 +1,11 @@
-@model IEnumerable<TripBookingBE.Models.User>
+@using TripBookingBE.Pagination
+@model PaginatedList<TripBookingBE.Models.User>
 
 @{
     ViewData["Title"] = "User List";
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
 @if (ViewData["statusCode"] != null && ViewData["errorMessage"] != null)
@@ -14,7 +18,7 @@
 
 <div>
     <h4>User</h4>
-    <form asp-controller="Users" asp-action="Index">
+    <form asp-controller="Users" asp-action="Index" >
         <div class="container">
             <div class="row gy-3">
                 <div class="col col-3">
@@ -26,8 +30,9 @@
                     <label for="filter-type" class="form-label">Type: </label>
                     <select class="form-select" id="filter-type" name="type">
                         <option value="">Default</option>
-                        <option value="CUSTOMER">CUSTOMER</option>
-                        <option value="DRIVER">DRIVER</option>
+    using Microsoft.Identity.Client;
+#line default
+                    <option value="DRIVER">DRIVER</option>
                         <option value="SELLER">SELLER</option>
                         <option value="ADMIN">ADMIN</option>
                     </select>
@@ -46,6 +51,8 @@
                 </div>
                 <div class="col col-5 mx-2 d-flex justify-content-space-between align-items-center">
                     <input class="btn btn-primary" type="submit" value="Filter" />
+                    <input class="btn btn-light @prevDisabled" type="submit" value="Previous" asp-route-pageNumber="@(Model.PageIndex - 1)" />
+                    <input class="btn btn-dark @nextDisabled" type="submit" value="Next" asp-route-pageNumber="@(Model.PageIndex + 1)"/>
                     <a class="btn btn-success mx-2" asp-action="CreateOrUpdate">Create</a>
                 </div>
             </div>
@@ -56,55 +63,55 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Id)
+                        Id
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.LastLogin)
+                        LastLogin
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.UserName)
+                        UserName
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FirstName)
+                        FirstName
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.LastName)
+                        LastName
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Email)
+                        Email
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Avatar)
+                        Avatar
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Name)
+                        Name
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Phone)
+                        Phone
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Type)
+                        Type
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.SellerCode)
+                        SellerCode
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.DateCreated)
+                        DateCreated
 
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.DateModified)
+                        DateModified
 
                     </th>
                     <th>
@@ -140,9 +147,8 @@
 
                         </td>
                         <td>
-                            <img style="object-fit: contain;"
-                                src=@(String.IsNullOrEmpty(model.Avatar) ? "aspnetcore-logo.png" : model.Avatar) width="170"
-                                height="320">
+                            <img style="object-fit: contain;" src=@(String.IsNullOrEmpty(model.Avatar) ?
+                                                                                          "aspnetcore-logo.png" : model.Avatar) width="170" height="320">
 
                         </td>
                         <td>

@@ -1,6 +1,7 @@
 using System.IO.MemoryMappedFiles;
 using System.Net;
 using System.Threading.Tasks;
+using System.Transactions;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.VisualBasic;
@@ -15,12 +16,16 @@ namespace TripBookingBE.Services.ServiceImplementations;
 public class UsersService : IUsersService
 {
     private readonly IUsersDal usersDAL;
+    private readonly ICustomerBookTripsDal bookingDAL;
+    private readonly ICustomerReviewTripsDal reviewDAL;
     private readonly Cloudinary cloudinary;
 
-    public UsersService(IUsersDal dal, Cloudinary cloudinary)
+    public UsersService(IUsersDal dal, Cloudinary cloudinary, ICustomerBookTripsDal bookingDAL, ICustomerReviewTripsDal reviewDAL)
     {
         this.usersDAL = dal;
         this.cloudinary = cloudinary;
+        this.bookingDAL = bookingDAL;
+        this.reviewDAL = reviewDAL;
     }
 
     public async Task<UserCreateOrUpdateDTO> CreateOrUpdate(User user)
@@ -90,7 +95,44 @@ public class UsersService : IUsersService
 
     public async Task<UserDeleteDTO> DeleteUser(long id)
     {
-        UserDeleteDTO dto = await usersDAL.DeleteUser(id);
+        UserDeleteDTO dto = new();
+        using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            try
+            {
+                var bookingDTO = await bookingDAL.DeleteCustomerBookTripsByUser(id);
+                if (bookingDTO.StatusCode != HttpStatusCode.NoContent)
+                {
+                    dto.StatusCode = bookingDTO.StatusCode;
+                    dto.Message = bookingDTO.Message;
+                }
+
+                var reviewDTO = await reviewDAL.DeleteCustomerReviewTripsByUser(id);
+                if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
+                {
+                    dto.StatusCode = reviewDTO.StatusCode;
+                    dto.Message += $"\n{reviewDTO.Message}";
+                }
+
+                var userDTO = await usersDAL.DeleteUser(id);
+                if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
+                {
+                    dto.StatusCode = reviewDTO.StatusCode;
+                    dto.Message += $"\n{reviewDTO.Message}";
+                }
+                
+                scope.Complete();
+            }
+            catch (Exception ex)
+            {
+                if (dto.StatusCode == HttpStatusCode.NoContent)
+                {
+                    dto.StatusCode = HttpStatusCode.InternalServerError;
+                    dto.Message = ex.Message;
+                }
+            }
+
+        }
         return dto;
     }
 

@@ -14,14 +14,11 @@ public class UsersDal : IUsersDal
 {
     private readonly TripBookingContext context;
 
-    private readonly ICustomerBookTripsDal bookingDAL;
-    private readonly ICustomerReviewTripsDal reviewDAL;
+    
 
-    public UsersDal(TripBookingContext context, ICustomerBookTripsDal bookingDAL, ICustomerReviewTripsDal reviewDAL)
+    public UsersDal(TripBookingContext context)
     {
         this.context = context;
-        this.bookingDAL = bookingDAL;
-        this.reviewDAL = reviewDAL;
     }
 
     public async Task<UserCreateOrUpdateDTO> Create(User user)
@@ -47,53 +44,18 @@ public class UsersDal : IUsersDal
     public async Task<UserDeleteDTO> DeleteUser(long id)
     {
         UserDeleteDTO dto = new();
-        using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+
+        var inst = await context.Users.FindAsync(id);
+        if (inst == null)
         {
-            try
-            {
-                var test = await context.Routes.Where(x => x.Id == 1).FirstOrDefaultAsync();
-                test.RouteDescription = "HCMC to Nha Trang";
-                context.Update(test);
-                await context.SaveChangesAsync();
-
-                var bookingDTO = await bookingDAL.DeleteCustomerBookTripsByUser(id);
-                if (bookingDTO.StatusCode != HttpStatusCode.NoContent)
-                {
-                    dto.StatusCode = bookingDTO.StatusCode;
-                    dto.Message = bookingDTO.Message;
-                }
-
-                var reviewDTO = await reviewDAL.DeleteCustomerReviewTripsByUser(id);
-                if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
-                {
-                    dto.StatusCode = reviewDTO.StatusCode;
-                    dto.Message += $"\n{reviewDTO.Message}";
-                }
-
-                var inst = await context.Users.FindAsync(id);
-                if (inst == null)
-                {
-                    dto.StatusCode = System.Net.HttpStatusCode.NotFound;
-                    dto.Message += $"\nUser with Id {id} not found!";
-                }
-
-                context.Users.Remove(inst);
-                await context.SaveChangesAsync();
-
-                dto.User = inst;
-                
-                scope.Complete();
-            }
-            catch (Exception ex)
-            {
-                if (dto.StatusCode == HttpStatusCode.NoContent)
-                {
-                    dto.StatusCode = HttpStatusCode.InternalServerError;
-                    dto.Message = ex.Message;
-                }
-            }
-
+            dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+            dto.Message += $"\nUser with Id {id} not found!";
         }
+
+        context.Users.Remove(inst);
+        await context.SaveChangesAsync();
+
+        dto.User = inst;
         return dto;
     }
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
+using TripBookingBE.Pagination;
 using TripBookingBE.Services.ServiceInterfaces;
 
 namespace TripBookingBE.Controllers;
@@ -16,9 +17,10 @@ public class UsersController : Controller
         this.usersService = usersService;
     }
 
-    public async Task<IActionResult> Index(string name, string type, string sellerCode, string email)
+    public async Task<IActionResult> Index(string name, string type, string sellerCode, string email, int? pageNumber)
     {
         var dto = usersService.GetUsers(name, type, sellerCode, email);
+        
         if (dto.StatusCode != HttpStatusCode.OK)
         {
             ViewData["statusCode"] = dto.StatusCode;
@@ -26,7 +28,8 @@ public class UsersController : Controller
             return View();
         }
 
-        return View(dto.Users);
+        int pageSize = 3;
+        return View(await PaginatedList<User>.CreateAsync(dto.Users.AsNoTracking(), pageNumber ?? 1, pageSize));
     }
 
     public async Task<IActionResult> Details(long? id)
@@ -44,7 +47,7 @@ public class UsersController : Controller
 
     public async Task<IActionResult> Delete(long id)
     {
-        var dto = await usersService.DeleteUser(4);
+        var dto = await usersService.DeleteUser(id);
         if (dto.StatusCode != HttpStatusCode.NoContent)
         {
             ViewData["statusCode"] = dto.StatusCode;
