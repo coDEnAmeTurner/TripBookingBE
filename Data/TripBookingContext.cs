@@ -31,38 +31,43 @@ public partial class TripBookingContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Encrypt=false;Persist Security Info=False;Server=ADMIN\\DOTNETTEST;Initial Catalog=TripBooking;User ID=sa;Password=Admin@123;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<GeneralParam>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_GeneralParam_1");
+            entity.Property(e => e.ParamKey).HasColumnType("nvarchar(100)");
+            entity.Property(e => e.ParamCode).HasColumnType("nvarchar(100)");
+            entity.Property(e => e.ParamDescription).HasColumnType("nvarchar(500)");
+        });
+
         modelBuilder.Entity<CustomerBookTrip>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_CustomerBookTrip_1");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerBookTrips)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CustomerBookTrip_User");
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerBookTrips).HasConstraintName("FK_CustomerBookTrip_User");
 
-            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerBookTrips)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CustomerBookTrip_Trip");
+            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerBookTrips).HasConstraintName("FK_CustomerBookTrip_Trip");
         });
 
         modelBuilder.Entity<CustomerReviewTrip>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_UserReviewTrip");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviewTrips)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserReviewTrip_User");
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviewTrips).HasConstraintName("FK_UserReviewTrip_User");
 
-            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerReviewTrips).HasConstraintName("FK_UserReviewTrip_Trip");
+            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerReviewTrips)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_UserReviewTrip_Trip");
         });
 
         modelBuilder.Entity<SellerTrip>(entity =>
         {
             entity.HasOne(d => d.Trip).WithMany(p => p.SellerTrips)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_SellerTrip_Trip");
         });
 
@@ -70,9 +75,9 @@ public partial class TripBookingContext : DbContext
         {
             entity.Property(e => e.CustomerBookTripId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.CustomerBookTrip).WithOne(p => p.Ticket)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Ticket_CustomerBookTrip");
+            entity.HasOne(d => d.CustomerBookTrip).WithOne(p => p.Ticket).HasConstraintName("FK_Ticket_CustomerBookTrip");
+
+            entity.HasOne(d=>d.GeneralParam).WithMany(p=>p.Tickets).HasForeignKey(t=>t.GeneralParamId).HasConstraintName("FK_Ticket_GeneralParam").OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Trip>(entity =>

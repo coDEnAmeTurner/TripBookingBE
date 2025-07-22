@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -12,48 +11,43 @@ namespace TripBookingBE.Models;
 public partial class User
 {
     [NotMapped]
+    public string? NewPassword { get; set; }
+    [NotMapped]
+    public string? ConfirmPassword { get; set; }
+
+    [NotMapped]
     public IFormFile? File { get; set; }
 
     [Key]
     [Column("id")]
     public long Id { get; set; }
 
-    [Column("password", TypeName = "varchar(255)")]
-    public string Password { get; set; }
+    [Column("password")]
+    [StringLength(255)]
+    [Unicode(false)]
+    public string Password { get; set; } = null!;
 
-    [NotMapped]
-    public string? NewPassword { get; set; }
-
-    [NotMapped]
-    public string? ConfirmPassword { get; set; }
-
-    [DisplayName("Last Login")]
     [Column("lastLogin", TypeName = "datetime")]
     public DateTime? LastLogin { get; set; }
 
-    [DisplayName("User Name")]
     [Column("userName")]
     [StringLength(150)]
     [Unicode(false)]
     public string UserName { get; set; } = null!;
 
-    [DisplayName("First Name")]
     [Column("firstName")]
     [StringLength(150)]
     [Unicode(false)]
     public string? FirstName { get; set; }
 
-    [DisplayName("Last Name")]
     [Column("lastName")]
     [StringLength(150)]
     [Unicode(false)]
     public string LastName { get; set; } = null!;
 
-    [DisplayName("Email")]
     [Column("email", TypeName = "text")]
     public string? Email { get; set; }
 
-    [DisplayName("Active")]
     [Column("active")]
     public bool Active { get; set; }
 
@@ -74,17 +68,14 @@ public partial class User
     [Unicode(false)]
     public string Type { get; set; } = null!;
 
-    [DisplayName("Seller Code")]
     [Column("sellerCode")]
     [StringLength(20)]
     [Unicode(false)]
     public string? SellerCode { get; set; }
 
-    [DisplayName("Creation Date")]
     [Column("dateCreated", TypeName = "datetime")]
     public DateTime DateCreated { get; set; }
 
-    [DisplayName("Modification Date")]
     [Column("dateModified", TypeName = "datetime")]
     public DateTime DateModified { get; set; }
 

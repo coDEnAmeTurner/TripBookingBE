@@ -5,6 +5,7 @@ using TripBookingBE.Services.ServiceInterfaces;
 using TripBookingBE.Services.ServiceImplementations;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.Dal.DalImplementations;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 //db context
-builder.Services.AddDbContext<TripBookingContext>();
+builder.Services.AddDbContext<TripBookingContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext")));
 
 //cloudinary
 DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
