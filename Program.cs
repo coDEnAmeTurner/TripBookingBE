@@ -1,15 +1,33 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using TripBookingBE.Data;
+using CloudinaryDotNet;
+using dotenv.net;
+using TripBookingBE.Services.ServiceInterfaces;
+using TripBookingBE.Services.ServiceImplementations;
+using TripBookingBE.Dal.DalInterfaces;
+using TripBookingBE.Dal.DalImplementations;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// add rest api controller
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<TripBookingContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext")));
+//db context
+builder.Services.AddDbContext<TripBookingContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext")));
 
+//cloudinary
+DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
+Cloudinary cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
+cloudinary.Api.Secure = true;
+builder.Services.AddSingleton(typeof(Cloudinary), cloudinary);
+
+//services and dals
+builder.Services.AddScoped<IUsersService,UsersService>();
+builder.Services.AddScoped<IUsersDal, UsersDal>();
+builder.Services.AddScoped<ICustomerBookTripsService,CustomerBookTripsService>();
+builder.Services.AddScoped<ICustomerBookTripsDal, CustomerBookTripsDal>();
+builder.Services.AddScoped<ICustomerReviewTripsService,CustomerReviewTripsService>();
+builder.Services.AddScoped<ICustomerReviewTripsDal,CustomerReviewTripsDal>();
 
 var app = builder.Build();
 
@@ -29,6 +47,7 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+//conventional routing
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")

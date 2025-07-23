@@ -13,6 +13,9 @@ public partial class Ticket
     [Column("customerBookTripId")]
     public long CustomerBookTripId { get; set; }
 
+    [Column("generalParamId")]
+    public long? GeneralParamId { get; set; }
+
     [Column("price", TypeName = "money")]
     public decimal? Price { get; set; }
 
@@ -30,4 +33,8 @@ public partial class Ticket
     [ForeignKey("CustomerBookTripId")]
     [InverseProperty("Ticket")]
     public virtual CustomerBookTrip CustomerBookTrip { get; set; } = null!;
+
+    [ForeignKey("GeneralParamId")]
+    [InverseProperty("Tickets")]
+    public virtual GeneralParam? GeneralParam { get; set; }
 }

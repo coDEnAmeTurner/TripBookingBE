@@ -36,34 +36,38 @@ public partial class TripBookingContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<GeneralParam>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_GeneralParam_1");
+            entity.Property(e => e.ParamKey).HasColumnType("nvarchar(100)");
+            entity.Property(e => e.ParamCode).HasColumnType("nvarchar(100)");
+            entity.Property(e => e.ParamDescription).HasColumnType("nvarchar(500)");
+        });
+
         modelBuilder.Entity<CustomerBookTrip>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_CustomerBookTrip_1");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerBookTrips)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CustomerBookTrip_User");
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerBookTrips).HasConstraintName("FK_CustomerBookTrip_User");
 
-            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerBookTrips)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CustomerBookTrip_Trip");
+            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerBookTrips).HasConstraintName("FK_CustomerBookTrip_Trip");
         });
 
         modelBuilder.Entity<CustomerReviewTrip>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_UserReviewTrip");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviewTrips)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserReviewTrip_User");
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviewTrips).HasConstraintName("FK_UserReviewTrip_User");
 
-            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerReviewTrips).HasConstraintName("FK_UserReviewTrip_Trip");
+            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerReviewTrips)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_UserReviewTrip_Trip");
         });
 
         modelBuilder.Entity<SellerTrip>(entity =>
         {
             entity.HasOne(d => d.Trip).WithMany(p => p.SellerTrips)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_SellerTrip_Trip");
         });
 
@@ -71,9 +75,9 @@ public partial class TripBookingContext : DbContext
         {
             entity.Property(e => e.CustomerBookTripId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.CustomerBookTrip).WithOne(p => p.Ticket)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Ticket_CustomerBookTrip");
+            entity.HasOne(d => d.CustomerBookTrip).WithOne(p => p.Ticket).HasConstraintName("FK_Ticket_CustomerBookTrip");
+
+            entity.HasOne(d=>d.GeneralParam).WithMany(p=>p.Tickets).HasForeignKey(t=>t.GeneralParamId).HasConstraintName("FK_Ticket_GeneralParam").OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Trip>(entity =>
@@ -98,6 +102,7 @@ public partial class TripBookingContext : DbContext
             entity.Property(e => e.LastLogin).HasDefaultValueSql("(NULL)");
             entity.Property(e => e.Phone).HasDefaultValueSql("(NULL)");
             entity.Property(e => e.Type).HasDefaultValue("CUSTOMER");
+            entity.Property(e => e.RowVersion).IsRowVersion();
         });
 
         OnModelCreatingPartial(modelBuilder);
