@@ -109,9 +109,22 @@ public class UsersDal : IUsersDal
                 users = users.Where(u => u.Email != null && u.Email.Contains(sellerCode));
             }
 
-            users = users.OrderByDescending(u => u.Id);
+            var resultusers = users.OrderByDescending(u => u.Id).ToList();
 
-            dto.Users = users;
+            foreach (var u in resultusers)
+            {
+                var cbts = context.CustomerBookTrips.Where(r => r.CustomerId == u.Id);
+                cbts.Load();
+
+                u.CustomerBookTrips = u.CustomerBookTrips.ToList();
+
+                foreach (var c in u.CustomerBookTrips)
+                {
+                    context.Trips.Where(t => t.Id == c.TripId).Load();
+                }
+            }
+
+            dto.Users = resultusers;
         }
         catch (Exception ex)
         {

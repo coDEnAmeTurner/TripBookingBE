@@ -18,7 +18,7 @@
 
 <div>
     <h4>User</h4>
-    <form asp-controller="Users" asp-action="Index" >
+    <form asp-controller="Users" asp-action="Index">
         <div class="container">
             <div class="row gy-3">
                 <div class="col col-3">
@@ -30,9 +30,9 @@
                     <label for="filter-type" class="form-label">Type: </label>
                     <select class="form-select" id="filter-type" name="type">
                         <option value="">Default</option>
-    using Microsoft.Identity.Client;
-#line default
-                    <option value="DRIVER">DRIVER</option>
+                        using Microsoft.Identity.Client;
+                        #line default
+                        <option value="DRIVER">DRIVER</option>
                         <option value="SELLER">SELLER</option>
                         <option value="ADMIN">ADMIN</option>
                     </select>
@@ -51,8 +51,10 @@
                 </div>
                 <div class="col col-5 mx-2 d-flex justify-content-space-between align-items-center">
                     <input class="btn btn-primary" type="submit" value="Filter" />
-                    <input class="btn btn-light @prevDisabled" type="submit" value="Previous" asp-route-pageNumber="@(Model.PageIndex - 1)" />
-                    <input class="btn btn-dark @nextDisabled" type="submit" value="Next" asp-route-pageNumber="@(Model.PageIndex + 1)"/>
+                    <input class="btn btn-light @prevDisabled" type="submit" value="Previous"
+                        asp-route-pageNumber="@(Model.PageIndex - 1)" />
+                    <input class="btn btn-dark @nextDisabled" type="submit" value="Next"
+                        asp-route-pageNumber="@(Model.PageIndex + 1)" />
                     <a class="btn btn-success mx-2" asp-action="CreateOrUpdate">Create</a>
                 </div>
             </div>
@@ -131,8 +133,22 @@
                             @Html.DisplayFor(item => model.LastLogin)
                         </td>
                         <td>
-                            @Html.DisplayFor(item => model.UserName)
-
+                            <div>
+                                @Html.DisplayFor(item => model.UserName)
+                            </div>
+                            <div>
+                                @* <button id="trips-popover" type="button" class="btn btn-info" data-bs-container="body"
+                                    data-bs-toggle="popover" data-bs-placement="right" data-bs-content=@(String.Join(
+                                    "\n",
+                                    model.CustomerBookTrips.Select(
+                                        cbt=>$"{cbt.Trip.RouteId} - {cbt.Trip.DepartureTime} - {cbt.Trip.RegistrationNumber}")))>
+                                    Display Trips
+                                </button> *@
+                                <button onclick="log()" data-toggle="popover" title="Popover Header" content=@(String.Join(
+                                    "\n",
+                                    model.CustomerBookTrips.Select(
+                                        cbt=>$"{cbt.Trip.RouteId} - {cbt.Trip.DepartureTime} - {cbt.Trip.RegistrationNumber}")))>Toggle popover</button>
+                            </div>
                         </td>
                         <td>
                             @Html.DisplayFor(item => model.FirstName)
@@ -188,3 +204,13 @@
         </table>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();
+    });
+
+    function log() {
+    var e = document.getElementsByClassName("popover")[0];
+    console.log(e.innerHTML);}
+</script>

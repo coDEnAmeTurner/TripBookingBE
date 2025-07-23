@@ -102,6 +102,7 @@ public partial class TripBookingContext : DbContext
             entity.Property(e => e.LastLogin).HasDefaultValueSql("(NULL)");
             entity.Property(e => e.Phone).HasDefaultValueSql("(NULL)");
             entity.Property(e => e.Type).HasDefaultValue("CUSTOMER");
+
         });
 
         OnModelCreatingPartial(modelBuilder);

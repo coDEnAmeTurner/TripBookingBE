@@ -29,7 +29,7 @@ public class UsersController : Controller
         }
 
         int pageSize = 3;
-        return View(await PaginatedList<User>.CreateAsync(dto.Users.AsNoTracking(), pageNumber ?? 1, pageSize));
+        return View(await PaginatedList<User>.CreateAsync(dto.Users, pageNumber ?? 1, pageSize));
     }
 
     public async Task<IActionResult> Details(long? id)

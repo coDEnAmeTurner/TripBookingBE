@@ -81,6 +81,7 @@ public partial class User
 
     [InverseProperty("Customer")]
     public virtual ICollection<CustomerBookTrip> CustomerBookTrips { get; set; } = new List<CustomerBookTrip>();
+    public virtual ICollection<Trip> CustomerTrips { get; set; } = new List<Trip>();
 
     [InverseProperty("Customer")]
     public virtual ICollection<CustomerReviewTrip> CustomerReviewTrips { get; set; } = new List<CustomerReviewTrip>();
