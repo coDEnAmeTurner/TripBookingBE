@@ -5,7 +5,7 @@ namespace TripBookingBE.Services.ServiceInterfaces;
 
 public interface IUsersService
 {
-    UserGetUsersDTO GetUsers(string name = null, string type= null, string sellerCode= null, string email= null);
+    Task<UserGetUsersDTO> GetUsers(string name = null, string type= null, string sellerCode= null, string email= null);
     Task<UserGetByIdDTO> GetUserById(long id);
     Task<UserGetCreateOrUpdateModelDTO> GetCreateOrUpdateModel(long? id);
     Task<UserCreateOrUpdateDTO> CreateOrUpdate(User user);

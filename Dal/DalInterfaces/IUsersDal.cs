@@ -5,7 +5,7 @@ namespace TripBookingBE.Dal.DalInterfaces;
 
 public interface IUsersDal
 {
-    UserGetUsersDTO GetUsers(string name, string type, string sellerCode, string email);
+    Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email);
     Task<UserGetByIdDTO> GetUserById(long id);
     Task<UserDeleteDTO> DeleteUser(long id);
     Task<UserCreateOrUpdateDTO> Update(User user);

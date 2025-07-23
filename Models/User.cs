@@ -10,6 +10,9 @@ namespace TripBookingBE.Models;
 [Index("UserName", Name = "UQ__User__66DCF95C55A682B1", IsUnique = true)]
 public partial class User
 {
+    [Timestamp]
+    public byte[] RowVersion { get; set; }
+
     [NotMapped]
     public string? NewPassword { get; set; }
     [NotMapped]

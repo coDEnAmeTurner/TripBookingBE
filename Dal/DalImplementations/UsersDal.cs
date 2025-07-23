@@ -80,7 +80,7 @@ public class UsersDal : IUsersDal
         return dto;
     }
 
-    public UserGetUsersDTO GetUsers(string name, string type, string sellerCode, string email)
+    public async Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email)
     {
 
         UserGetUsersDTO dto = new();
@@ -109,20 +109,7 @@ public class UsersDal : IUsersDal
                 users = users.Where(u => u.Email != null && u.Email.Contains(sellerCode));
             }
 
-            var resultusers = users.OrderByDescending(u => u.Id).ToList();
-
-            foreach (var u in resultusers)
-            {
-                var cbts = context.CustomerBookTrips.Where(r => r.CustomerId == u.Id);
-                cbts.Load();
-
-                u.CustomerBookTrips = u.CustomerBookTrips.ToList();
-
-                foreach (var c in u.CustomerBookTrips)
-                {
-                    context.Trips.Where(t => t.Id == c.TripId).Load();
-                }
-            }
+            var resultusers = await users.Include(u => u.Trips).ThenInclude(t=>t.Route).OrderByDescending(u => u.Id).ToListAsync();
 
             dto.Users = resultusers;
         }
@@ -142,6 +129,7 @@ public class UsersDal : IUsersDal
         {
             var currentState = context.Entry(user).State;
             context.Entry(user).State = EntityState.Modified;
+            // context.Entry(user).Property("RowVersion").OriginalValue = user.RowVersion;
             user.Password = user.NewPassword == null ? user.Password : user.NewPassword;
             context.Update(user);
             await context.SaveChangesAsync();

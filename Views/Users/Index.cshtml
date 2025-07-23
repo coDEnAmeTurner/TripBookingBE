@@ -136,19 +136,6 @@
                             <div>
                                 @Html.DisplayFor(item => model.UserName)
                             </div>
-                            <div>
-                                @* <button id="trips-popover" type="button" class="btn btn-info" data-bs-container="body"
-                                    data-bs-toggle="popover" data-bs-placement="right" data-bs-content=@(String.Join(
-                                    "\n",
-                                    model.CustomerBookTrips.Select(
-                                        cbt=>$"{cbt.Trip.RouteId} - {cbt.Trip.DepartureTime} - {cbt.Trip.RegistrationNumber}")))>
-                                    Display Trips
-                                </button> *@
-                                <button onclick="log()" data-toggle="popover" title="Popover Header" content=@(String.Join(
-                                    "\n",
-                                    model.CustomerBookTrips.Select(
-                                        cbt=>$"{cbt.Trip.RouteId} - {cbt.Trip.DepartureTime} - {cbt.Trip.RegistrationNumber}")))>Toggle popover</button>
-                            </div>
                         </td>
                         <td>
                             @Html.DisplayFor(item => model.FirstName)

@@ -19,7 +19,7 @@ public class UsersController : Controller
 
     public async Task<IActionResult> Index(string name, string type, string sellerCode, string email, int? pageNumber)
     {
-        var dto = usersService.GetUsers(name, type, sellerCode, email);
+        var dto = await usersService.GetUsers(name, type, sellerCode, email);
         
         if (dto.StatusCode != HttpStatusCode.OK)
         {
@@ -54,7 +54,7 @@ public class UsersController : Controller
             ViewData["errorMessage"] = dto.Message;
         }
         
-        return View("Index",model: usersService.GetUsers().Users);
+        return View("Index",model: (await usersService.GetUsers()).Users);
     }
 
     public async Task<IActionResult> CreateOrUpdate(long? id)
@@ -67,11 +67,11 @@ public class UsersController : Controller
             return View();
         }
         return View(dto.User);
-    }
+}
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateOrUpdate([Bind("Id, Password,NewPassword,ConfirmPassword,UserName,FirstName,LastName,Email,Active,Name,Phone,Type,SellerCode,File,DateCreated,DateModified,Avatar")] User user)
+    public async Task<IActionResult> CreateOrUpdate([Bind("Id, Password,NewPassword,ConfirmPassword,UserName,FirstName,LastName,Email,Active,Name,Phone,Type,SellerCode,File,DateCreated,DateModified,Avatar,RowVersion")] User user)
     {
 
         if (ModelState.IsValid)
