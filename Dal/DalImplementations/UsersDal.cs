@@ -141,7 +141,7 @@ public class UsersDal : IUsersDal
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            dto.StatusCode = HttpStatusCode.InternalServerError;
+            dto.StatusCode = HttpStatusCode.Conflict;
 
             var exceptionEntry = ex.Entries.Single();
             var clientValues = (User)exceptionEntry.Entity;

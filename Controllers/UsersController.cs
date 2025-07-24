@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
 using TripBookingBE.Pagination;
@@ -71,11 +72,10 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateOrUpdate([Bind("Id, Password,NewPassword,ConfirmPassword,UserName,FirstName,LastName,Email,Active,Name,Phone,Type,SellerCode,File,DateCreated,DateModified,Avatar")] User user, byte[] RowVersion)
+    public async Task<IActionResult> CreateOrUpdate([Bind("Id, Password,NewPassword,ConfirmPassword,UserName,FirstName,LastName,Email,Active,Name,Phone,Type,SellerCode,File,DateCreated,DateModified,Avatar,RowVersion")] User user)
     {
         if (ModelState.IsValid)
         {
-            user.RowVersion = RowVersion;
             UserCreateOrUpdateDTO targetUser = new() { User = user };
             if (String.IsNullOrEmpty(user.Password))
             {
@@ -94,6 +94,8 @@ public class UsersController : Controller
             {
                 ViewData["statusCode"] = targetUser.StatusCode;
                 ViewData["errorMessage"] = targetUser.Message;
+                if (targetUser.StatusCode == HttpStatusCode.Conflict)
+                    ModelState.Remove("RowVersion");
                 return View(targetUser.User);
             }
             return RedirectToAction(nameof(Index));

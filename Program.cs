@@ -28,6 +28,9 @@ builder.Services.AddScoped<ICustomerBookTripsService,CustomerBookTripsService>()
 builder.Services.AddScoped<ICustomerBookTripsDal, CustomerBookTripsDal>();
 builder.Services.AddScoped<ICustomerReviewTripsService,CustomerReviewTripsService>();
 builder.Services.AddScoped<ICustomerReviewTripsDal,CustomerReviewTripsDal>();
+builder.Services.AddScoped<IRouteService, RouteService>();
+builder.Services.AddScoped<IRouteDAL,RouteDAL>();
+
 
 var app = builder.Build();
 

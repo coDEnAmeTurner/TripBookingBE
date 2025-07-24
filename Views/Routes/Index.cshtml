@@ -1,0 +1,107 @@
+@using TripBookingBE.Pagination
+@model PaginatedList<TripBookingBE.Models.Route>
+
+@{
+    ViewData["Title"] = "Route List";
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+@if (ViewData["statusCode"] != null && ViewData["errorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <p><b>Status Code: @(ViewData["statusCode"].ToString())</b></p>
+        <p><b>Message: @(ViewData["errorMessage"].ToString())</b></p>
+    </div>
+}
+
+<div>
+    <h4>User</h4>
+    <form asp-controller="Routes" asp-action="Index">
+        <div class="container">
+            <div class="row gy-3">
+                <div class="col col-3">
+                    <label for="filter-Description" class="form-label">Description: </label>
+                    <input id="filter-Description" type="text" name="description" class="form-control" />
+
+                </div>
+                <div class="col col-3">
+                    <label for="filter-dateCreated" class="form-label">Date Of Creation: </label>
+                    <div class="input-group date" id="datepicker">
+                        <input type="text" name="dateCreated" class="form-control">
+                        <span class="input-group-append">
+                            <span class="input-group-text bg-white d-block">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col col-5 mx-2 d-flex justify-content-space-between align-items-center">
+                    <input class="btn btn-primary" type="submit" value="Filter" />
+                    <input class="btn btn-light @prevDisabled" type="submit" value="Previous"
+                        asp-route-pageNumber="@(Model.PageIndex - 1)" />
+                    <input class="btn btn-dark @nextDisabled" type="submit" value="Next"
+                        asp-route-pageNumber="@(Model.PageIndex + 1)" />
+                    <a class="btn btn-success mx-2" asp-action="CreateOrUpdate">Create</a>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Route Description
+                    </th>
+                    <th>
+                        Date Of Creation
+                    </th>
+                    <th>
+                        Date Of Modification
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var model in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(item => model.Id)
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(item => model.RouteDescription)
+                        </td>
+                        <td>
+                            <div>
+                                @Html.DisplayFor(item => model.DateCreated.GetValueOrDefault().ToString("dd/MM/yyyy"))
+                            </div>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(item => model.DateModified.GetValueOrDefault().ToString("dd/MM/yyyy"))
+
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-center align-items-center" style="margin-top: 8rem;">
+                                <a class="btn btn-light" asp-action="CreateOrUpdate" asp-route-id="@(model.Id)">Edit</a> |
+                                <a class="btn btn-info" asp-action="Details" asp-route-id="@(model.Id)">Details</a> |
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@(model.Id)">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $('#datepicker').datepicker();
+    });
+</script>
