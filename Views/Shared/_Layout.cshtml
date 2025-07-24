@@ -6,22 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Trip Booking</title>
     <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TripBookingBE.styles.css" asp-append-version="true" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <style>
-        .table {
-            table-layout: fixed !important;
-        }
-
-        th,
-        td {
-            width: 14rem;
-            overflow-wrap: break-word;
-            height: 7rem;
-        }
-    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 </head>
 
 <body>
@@ -56,6 +47,14 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Tickets"
                                 asp-action="Index">Ticket</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Booking"
+                                asp-action="Index">Booking</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Review"
+                                asp-action="Index">Review</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -71,7 +70,6 @@
         <span>&copy; 2025 - Trip Booking - <a class="text-white" asp-area="" asp-controller="Home"
                 asp-action="Privacy">Privacy</a></span>
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

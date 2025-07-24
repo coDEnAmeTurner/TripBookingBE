@@ -1,0 +1,10 @@
+.table {
+  table-layout: fixed !important;
+}
+
+th,
+td {
+  width: 14rem;
+  overflow-wrap: break-word;
+  height: 7rem;
+}

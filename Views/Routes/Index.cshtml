@@ -4,8 +4,19 @@
 @{
     ViewData["Title"] = "Route List";
 
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    string prevDisabled = "disabled";
+    string nextDisabled = "disabled";
+    string prevpage = "";
+    string nextpage = "";
+
+    if (Model != null)
+    {
+        prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        prevpage = $"{Model.PageIndex - 1}";
+        nextpage = $"{Model.PageIndex + 1}";
+
+    }
 }
 
 @if (ViewData["statusCode"] != null && ViewData["errorMessage"] != null)
@@ -24,30 +35,22 @@
                 <div class="col col-3">
                     <label for="filter-Description" class="form-label">Description: </label>
                     <input id="filter-Description" type="text" name="description" class="form-control" />
-
                 </div>
                 <div class="col col-3">
                     <label for="filter-dateCreated" class="form-label">Date Of Creation: </label>
-                    <div class="input-group date" id="datepicker">
-                        <input type="text" name="dateCreated" class="form-control">
-                        <span class="input-group-append">
-                            <span class="input-group-text bg-white d-block">
-                                <i class="fa fa-calendar"></i>
-                            </span>
-                        </span>
-                    </div>
+                    <input type="text" id="datepicker" name="dateCreated" class="form-control" autocomplete="off" />
                 </div>
                 <div class="col col-5 mx-2 d-flex justify-content-space-between align-items-center">
                     <input class="btn btn-primary" type="submit" value="Filter" />
-                    <input class="btn btn-light @prevDisabled" type="submit" value="Previous"
-                        asp-route-pageNumber="@(Model.PageIndex - 1)" />
+                    <input class="btn btn-light @prevDisabled" type="submit" value="Previous" asp-route-pageNumber=@prevpage />
                     <input class="btn btn-dark @nextDisabled" type="submit" value="Next"
-                        asp-route-pageNumber="@(Model.PageIndex + 1)" />
+                        asp-route-pageNumber=@nextpage />
                     <a class="btn btn-success mx-2" asp-action="CreateOrUpdate">Create</a>
                 </div>
             </div>
         </div>
     </form>
+    @if(Model!=null){
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
@@ -64,6 +67,9 @@
                     <th>
                         Date Of Modification
                     </th>
+                    <th>
+                        Action
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -71,23 +77,22 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(item => model.Id)
-
+                            @(model.Id)
                         </td>
                         <td>
-                            @Html.DisplayFor(item => model.RouteDescription)
+                            @(model.RouteDescription)
                         </td>
                         <td>
                             <div>
-                                @Html.DisplayFor(item => model.DateCreated.GetValueOrDefault().ToString("dd/MM/yyyy"))
+                                @(model.DateCreated.GetValueOrDefault().ToString("dd/MM/yyyy"))
                             </div>
                         </td>
                         <td>
-                            @Html.DisplayFor(item => model.DateModified.GetValueOrDefault().ToString("dd/MM/yyyy"))
+                            @(model.DateModified.GetValueOrDefault().ToString("dd/MM/yyyy"))
 
                         </td>
                         <td>
-                            <div class="d-flex justify-content-center align-items-center" style="margin-top: 8rem;">
+                            <div class="d-flex justify-content-center align-items-center">
                                 <a class="btn btn-light" asp-action="CreateOrUpdate" asp-route-id="@(model.Id)">Edit</a> |
                                 <a class="btn btn-info" asp-action="Details" asp-route-id="@(model.Id)">Details</a> |
                                 <a class="btn btn-danger" asp-action="Delete" asp-route-id="@(model.Id)">Delete</a>
@@ -98,10 +103,13 @@
             </tbody>
         </table>
     </div>
+    }
 </div>
 
 <script type="text/javascript">
-    $(function() {
-        $('#datepicker').datepicker();
+    $(function () {
+        $("#datepicker").datepicker({
+            dateFormat: "dd/mm/yy"
+        });
     });
 </script>
