@@ -1,5 +1,6 @@
 using System.Net;
 using System.Transactions;
+using Microsoft.Extensions.Logging.Abstractions;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.DTO.RouteDTO;
 using TripBookingBE.Services.ServiceInterfaces;
@@ -33,34 +34,21 @@ public class RouteService : IRouteService
         return dto;
     }
 
-    public Task<RouteDeleteDTO> DeleteRoute(long id)
+    public async Task<RouteDeleteDTO> DeleteRoute(long id)
     {
         RouteDeleteDTO dto = new();
         using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
             try
             {
-                var bookingDTO = await bookingDAL.DeleteCustomerBookTripsByUser(id);
-                if (bookingDTO.StatusCode != HttpStatusCode.NoContent)
+
+                var routeDTO = await routeDAL.DeleteRoute(id);
+                if (routeDTO.StatusCode != HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = bookingDTO.StatusCode;
-                    dto.Message = bookingDTO.Message;
+                    dto.StatusCode = routeDTO.StatusCode;
+                    dto.Message += $"\n{routeDTO.Message}";
                 }
 
-                var reviewDTO = await reviewDAL.DeleteCustomerReviewTripsByUser(id);
-                if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
-                {
-                    dto.StatusCode = reviewDTO.StatusCode;
-                    dto.Message += $"\n{reviewDTO.Message}";
-                }
-
-                var userDTO = await usersDAL.DeleteUser(id);
-                if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
-                {
-                    dto.StatusCode = reviewDTO.StatusCode;
-                    dto.Message += $"\n{reviewDTO.Message}";
-                }
-                
                 scope.Complete();
             }
             catch (Exception ex)

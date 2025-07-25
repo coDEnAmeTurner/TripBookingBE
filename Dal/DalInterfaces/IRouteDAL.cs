@@ -11,8 +11,9 @@ public interface IRouteDAL
 
     public Task<RouteCreateOrUpdateDTO> Create(Models.Route route);
 
-    public    Task<RouteCreateOrUpdateDTO> Update(Models.Route route);
+    public Task<RouteCreateOrUpdateDTO> Update(Models.Route route);
 
+    public Task<RouteDeleteDTO> DeleteRoute(long id);
 
     
 }

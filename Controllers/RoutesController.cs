@@ -84,7 +84,7 @@ public class RoutesController : Controller
 
     public async Task<IActionResult> Delete(long id)
     {
-        var dto = await routeService.DeleteUser(id);
+        var dto = await routeService.DeleteRoute(id);
         if (dto.StatusCode != HttpStatusCode.NoContent)
         {
             ViewData["statusCode"] = dto.StatusCode;

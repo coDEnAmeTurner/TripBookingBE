@@ -23,6 +23,11 @@
             class="form-control col col-12" />
         <span asp-validation-for="RouteDescription" class="text-danger col col-12"></span>
     </div>
+    <div class="form-group col col-12 mt-2 justify-content-center">
+        <input disabled=@(ViewData["AllowedSave"].ToString().Equals("False")) type="submit" value="Save"
+            class="btn btn-primary" />
+        <a class="btn btn-dark" asp-action="Index">Back to List</a>
+    </div>
 </form>
 
 

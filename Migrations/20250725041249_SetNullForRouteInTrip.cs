@@ -5,18 +5,14 @@
 namespace TripBookingBE.Migrations
 {
     /// <inheritdoc />
-    public partial class AddRowVersion : Migration
+    public partial class SetNullForRouteInTrip : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<byte[]>(
-                name: "RowVersion",
-                table: "User",
-                type: "rowversion",
-                rowVersion: true,
-                nullable: false,
-                defaultValue: new byte[0]);
+            migrationBuilder.DropForeignKey(
+                name: "FK_Trip_Route",
+                table: "Trip");
 
             migrationBuilder.CreateTable(
                 name: "TripUser",
@@ -46,17 +42,32 @@ namespace TripBookingBE.Migrations
                 name: "IX_TripUser_UsersId",
                 table: "TripUser",
                 column: "UsersId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Trip_Route",
+                table: "Trip",
+                column: "routeId",
+                principalTable: "Route",
+                principalColumn: "id",
+                onDelete: ReferentialAction.SetNull);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Trip_Route",
+                table: "Trip");
+
             migrationBuilder.DropTable(
                 name: "TripUser");
 
-            migrationBuilder.DropColumn(
-                name: "RowVersion",
-                table: "User");
+            migrationBuilder.AddForeignKey(
+                name: "FK_Trip_Route",
+                table: "Trip",
+                column: "routeId",
+                principalTable: "Route",
+                principalColumn: "id");
         }
     }
 }

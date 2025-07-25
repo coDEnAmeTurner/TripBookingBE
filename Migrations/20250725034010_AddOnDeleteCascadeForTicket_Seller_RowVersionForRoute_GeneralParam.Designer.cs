@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripBookingBE.Data;
 
@@ -11,9 +12,11 @@ using TripBookingBE.Data;
 namespace TripBookingBE.Migrations
 {
     [DbContext(typeof(TripBookingContext))]
-    partial class TripBookingContextModelSnapshot : ModelSnapshot
+    [Migration("20250725034010_AddOnDeleteCascadeForTicket_Seller_RowVersionForRoute_GeneralParam")]
+    partial class AddOnDeleteCascadeForTicket_Seller_RowVersionForRoute_GeneralParam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -398,21 +401,6 @@ namespace TripBookingBE.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("TripUser", b =>
-                {
-                    b.Property<long>("CustomerTripsId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UsersId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("CustomerTripsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("TripUser");
-                });
-
             modelBuilder.Entity("TripBookingBE.Models.CustomerBookTrip", b =>
                 {
                     b.HasOne("TripBookingBE.Models.User", "Customer")
@@ -495,27 +483,11 @@ namespace TripBookingBE.Migrations
                     b.HasOne("TripBookingBE.Models.Route", "Route")
                         .WithMany("Trips")
                         .HasForeignKey("RouteId")
-                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("FK_Trip_Route");
 
                     b.Navigation("Driver");
 
                     b.Navigation("Route");
-                });
-
-            modelBuilder.Entity("TripUser", b =>
-                {
-                    b.HasOne("TripBookingBE.Models.Trip", null)
-                        .WithMany()
-                        .HasForeignKey("CustomerTripsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TripBookingBE.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.CustomerBookTrip", b =>

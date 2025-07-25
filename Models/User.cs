@@ -11,7 +11,7 @@ namespace TripBookingBE.Models;
 public partial class User
 {
     [Timestamp]
-    public byte[]? RowVersion { get; set; }
+    public byte[] RowVersion { get; set; }
 
     [NotMapped]
     public string? NewPassword { get; set; }

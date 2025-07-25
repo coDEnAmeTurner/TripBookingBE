@@ -40,6 +40,24 @@ public class RouteDAL : IRouteDAL
         return dto;
     }
 
+    public async Task<RouteDeleteDTO> DeleteRoute(long id)
+    {
+        RouteDeleteDTO dto = new();
+
+        var inst = await context.Routes.FindAsync(id);
+        if (inst == null)
+        {
+            dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+            dto.Message += $"\nRoute with Id {id} not found!";
+        }
+
+        context.Routes.Remove(inst);
+        await context.SaveChangesAsync();
+
+        dto.Route = inst;
+        return dto;
+    }
+
     public async Task<RouteGetByIdDTO> GetRouteById(long id)
     {
         RouteGetByIdDTO dto = new();

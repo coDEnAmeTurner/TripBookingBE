@@ -10,7 +10,7 @@ namespace TripBookingBE.Models;
 public partial class Route
 {
     [Timestamp]
-    public byte[]? RowVersion { get; set; }
+    public byte[] RowVersion { get; set; }
 
     [Key]
     [Column("id")]

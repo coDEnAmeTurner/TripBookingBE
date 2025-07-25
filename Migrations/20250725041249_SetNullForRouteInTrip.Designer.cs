@@ -12,8 +12,8 @@ using TripBookingBE.Data;
 namespace TripBookingBE.Migrations
 {
     [DbContext(typeof(TripBookingContext))]
-    [Migration("20250723143641_AddRowVersion")]
-    partial class AddRowVersion
+    [Migration("20250725041249_SetNullForRouteInTrip")]
+    partial class SetNullForRouteInTrip
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,6 +161,12 @@ namespace TripBookingBE.Migrations
                     b.Property<string>("RouteDescription")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("routeDescription");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
@@ -417,7 +423,7 @@ namespace TripBookingBE.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("FK_CustomerBookTrip_User");
+                        .HasConstraintName("FK_CustomerBookTrip_Customer");
 
                     b.HasOne("TripBookingBE.Models.Trip", "Trip")
                         .WithMany("CustomerBookTrips")
@@ -443,7 +449,6 @@ namespace TripBookingBE.Migrations
                     b.HasOne("TripBookingBE.Models.Trip", "Trip")
                         .WithMany("CustomerReviewTrips")
                         .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("FK_UserReviewTrip_Trip");
 
                     b.Navigation("Customer");
@@ -488,11 +493,12 @@ namespace TripBookingBE.Migrations
                     b.HasOne("TripBookingBE.Models.User", "Driver")
                         .WithMany("Trips")
                         .HasForeignKey("DriverId")
-                        .HasConstraintName("FK_Trip_User");
+                        .HasConstraintName("FK_Trip_Driver");
 
                     b.HasOne("TripBookingBE.Models.Route", "Route")
                         .WithMany("Trips")
                         .HasForeignKey("RouteId")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("FK_Trip_Route");
 
                     b.Navigation("Driver");
