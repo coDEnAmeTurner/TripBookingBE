@@ -37,7 +37,12 @@ public partial class TripBookingContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Models.Route>(entity => { entity.Property(e => e.RowVersion).IsRowVersion(); });
+        modelBuilder.Entity<Models.Route>(entity =>
+        {
+            entity.Property(e => e.RowVersion).IsRowVersion();
+            entity.Property(e => e.DateCreated).HasDefaultValue(new DateTime());
+            entity.Property(e => e.DateModified).HasDefaultValue(new DateTime());
+        });
         modelBuilder.Entity<GeneralParam>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_GeneralParam_1");
