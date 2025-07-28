@@ -23,8 +23,6 @@ public partial class TripBookingContext : DbContext
 
     public virtual DbSet<Models.Route> Routes { get; set; }
 
-    public virtual DbSet<SellerTrip> SellerTrips { get; set; }
-
     public virtual DbSet<Ticket> Tickets { get; set; }
 
     public virtual DbSet<Trip> Trips { get; set; }
@@ -33,7 +31,7 @@ public partial class TripBookingContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Encrypt=false;Persist Security Info=False;Server=ADMIN\\DOTNETTEST;Initial Catalog=TripBooking;User ID=sa;Password=Admin@123;");
+        => optionsBuilder.UseSqlServer("Encrypt=false;TrustServerCertificate=true;MultipleActiveResultSets=true;Persist Security Info=False;Server=localhost\\DOTNETTEST,1433;Initial Catalog=TripBooking;User ID=sa;Password=Admin@123;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -67,14 +65,7 @@ public partial class TripBookingContext : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.CustomerId).HasConstraintName("FK_UserReviewTrip_User");
 
             entity.HasOne(d => d.Trip).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.TripId)
-                .HasConstraintName("FK_UserReviewTrip_Trip");
-        });
-
-        modelBuilder.Entity<SellerTrip>(entity =>
-        {
-            entity.HasOne(d => d.Trip).WithMany(p => p.SellerTrips)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_SellerTrip_Trip");
+                .HasConstraintName("FK_UserReviewTrip_Trip").OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<Ticket>(entity =>
@@ -110,6 +101,8 @@ public partial class TripBookingContext : DbContext
             entity.Property(e => e.Phone).HasDefaultValueSql("(NULL)");
             entity.Property(e => e.Type).HasDefaultValue("CUSTOMER");
             entity.Property(e => e.RowVersion).IsRowVersion();
+
+            entity.HasMany(e => e.SellingTrips).WithMany(e => e.Sellers).UsingEntity("SellerTrip");
         });
 
         OnModelCreatingPartial(modelBuilder);

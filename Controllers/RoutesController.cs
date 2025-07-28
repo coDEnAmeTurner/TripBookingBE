@@ -17,7 +17,7 @@ public class RoutesController : Controller
         this.routeService = routeService;
     }
 
-    public async Task<IActionResult> Index(string description, string dateCreated, int? pageNumber)
+    public async Task<IActionResult> Index(string? description, string dateCreated, int? pageNumber)
     {
         RouteGetRoutesDTO dto = new();
 
@@ -91,6 +91,6 @@ public class RoutesController : Controller
             ViewData["errorMessage"] = dto.Message;
         }
 
-        return View("Index", model: (await routeService.GetRoutes(null,null)).Routes);
+        return RedirectToAction(nameof(Index));
     }
 }
