@@ -13,11 +13,11 @@
 <hr />
 <form asp-action="CreateOrUpdate" enctype="multipart/form-data" method="post" class="container">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="hidden" asp-for="Id" />
-    <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="hidden" asp-for="Avatar" />
-    <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="hidden" asp-for="DateCreated" />
-    <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="hidden" asp-for="DateModified" />
-    <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="hidden" asp-for="RowVersion" />
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Avatar" />
+    <input type="hidden" asp-for="DateCreated" />
+    <input type="hidden" asp-for="DateModified" />
+    <input type="hidden" asp-for="RowVersion" />
     <div class="form-group col col-12">
         <label asp-for="Avatar" class="control-label col col-12" style="font-weight: bold;"></label>
         <img style="object-fit: contain;"

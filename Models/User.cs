@@ -84,11 +84,13 @@ public partial class User
 
     [InverseProperty("Customer")]
     public virtual ICollection<CustomerBookTrip> CustomerBookTrips { get; set; } = new List<CustomerBookTrip>();
-    public virtual ICollection<Trip> CustomerTrips { get; set; } = new List<Trip>();
 
     [InverseProperty("Customer")]
     public virtual ICollection<CustomerReviewTrip> CustomerReviewTrips { get; set; } = new List<CustomerReviewTrip>();
 
     [InverseProperty("Driver")]
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
+
+    [InverseProperty("Sellers")]
+    public virtual ICollection<Trip> SellingTrips { get; set; } = new List<Trip>();
 }

@@ -9,6 +9,9 @@ namespace TripBookingBE.Models;
 [Table("Route")]
 public partial class Route
 {
+    [Timestamp]
+    public byte[] RowVersion { get; set; }
+
     [Key]
     [Column("id")]
     public long Id { get; set; }

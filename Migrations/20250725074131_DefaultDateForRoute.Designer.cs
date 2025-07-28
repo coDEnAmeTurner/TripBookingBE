@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripBookingBE.Data;
 
@@ -11,9 +12,11 @@ using TripBookingBE.Data;
 namespace TripBookingBE.Migrations
 {
     [DbContext(typeof(TripBookingContext))]
-    partial class TripBookingContextModelSnapshot : ModelSnapshot
+    [Migration("20250725074131_DefaultDateForRoute")]
+    partial class DefaultDateForRoute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace TripBookingBE.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("SellerTrip", b =>
-                {
-                    b.Property<long>("SellersId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("SellingTripsId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("SellersId", "SellingTripsId");
-
-                    b.HasIndex("SellingTripsId");
-
-                    b.ToTable("SellerTrip");
-                });
 
             modelBuilder.Entity("TripBookingBE.Models.CustomerBookTrip", b =>
                 {
@@ -187,6 +175,31 @@ namespace TripBookingBE.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Route");
+                });
+
+            modelBuilder.Entity("TripBookingBE.Models.SellerTrip", b =>
+                {
+                    b.Property<long>("SellerId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("sellerId");
+
+                    b.Property<long>("TripId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("tripId");
+
+                    b.Property<DateTime?>("DateCreated")
+                        .HasColumnType("datetime")
+                        .HasColumnName("dateCreated");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime")
+                        .HasColumnName("dateModified");
+
+                    b.HasKey("SellerId", "TripId");
+
+                    b.HasIndex("TripId");
+
+                    b.ToTable("SellerTrip");
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.Ticket", b =>
@@ -392,19 +405,19 @@ namespace TripBookingBE.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("SellerTrip", b =>
+            modelBuilder.Entity("TripUser", b =>
                 {
-                    b.HasOne("TripBookingBE.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("SellersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<long>("CustomerTripsId")
+                        .HasColumnType("bigint");
 
-                    b.HasOne("TripBookingBE.Models.Trip", null)
-                        .WithMany()
-                        .HasForeignKey("SellingTripsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<long>("UsersId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CustomerTripsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("TripUser");
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.CustomerBookTrip", b =>
@@ -440,10 +453,21 @@ namespace TripBookingBE.Migrations
                     b.HasOne("TripBookingBE.Models.Trip", "Trip")
                         .WithMany("CustomerReviewTrips")
                         .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("FK_UserReviewTrip_Trip");
 
                     b.Navigation("Customer");
+
+                    b.Navigation("Trip");
+                });
+
+            modelBuilder.Entity("TripBookingBE.Models.SellerTrip", b =>
+                {
+                    b.HasOne("TripBookingBE.Models.Trip", "Trip")
+                        .WithMany("SellerTrips")
+                        .HasForeignKey("TripId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_SellerTrip_Trip");
 
                     b.Navigation("Trip");
                 });
@@ -486,6 +510,21 @@ namespace TripBookingBE.Migrations
                     b.Navigation("Route");
                 });
 
+            modelBuilder.Entity("TripUser", b =>
+                {
+                    b.HasOne("TripBookingBE.Models.Trip", null)
+                        .WithMany()
+                        .HasForeignKey("CustomerTripsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TripBookingBE.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TripBookingBE.Models.CustomerBookTrip", b =>
                 {
                     b.Navigation("Ticket");
@@ -506,6 +545,8 @@ namespace TripBookingBE.Migrations
                     b.Navigation("CustomerBookTrips");
 
                     b.Navigation("CustomerReviewTrips");
+
+                    b.Navigation("SellerTrips");
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.User", b =>
