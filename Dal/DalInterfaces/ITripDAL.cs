@@ -1,10 +1,10 @@
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NuGet.Common;
 using TripBookingBE.DTO.RouteDTO;
 using TripBookingBE.DTO.TripDTO;
 
-namespace TripBookingBE.Services.ServiceInterfaces;
+namespace  TripBookingBE.Dal.DalInterfaces;
 
-public interface ITripService
+public interface ITripDAL
 {
     public Task<TripGetTripsDTO> GetTrips(int? placeCount, int? routeId, int? driverId, string? registrationNumber, DateTime? departureTime);
 

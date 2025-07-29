@@ -84,18 +84,18 @@ public class RouteDAL : IRouteDAL
         RouteGetRoutesDTO dto = new();
         try
         {
-            var routes = await context.Routes.ToListAsync();
+            var routes = from route in context.Routes select route;
 
-            if (!String.IsNullOrEmpty(description))
-            {
-                routes = routes.Where(u => u.RouteDescription!.ToUpper().Contains(description.ToUpper())).ToList();
-            }
-            if (dateCreated != null)
-            {
-                var date = dateCreated.GetValueOrDefault().Date;
-                routes = routes.Where(u => u.DateCreated.GetValueOrDefault().Date.Equals(date)).ToList();
-            }
-
+                routes = from route in routes where description == null || (route.RouteDescription != null && route.RouteDescription.Contains(description, StringComparison.OrdinalIgnoreCase)) select route;
+                routes = from route in routes where dateCreated == null ||
+                        (
+                            route.DateCreated != null &&
+                            route.DateCreated.Value.Year == DateTime.Now.Year
+                            && route.DateCreated.Value.Month == DateTime.Now.Month
+                            && route.DateCreated.Value.Day == DateTime.Now.Day
+                            && route.DateCreated.Value.Hour == DateTime.Now.Hour
+                            && route.DateCreated.Value.Minute == DateTime.Now.Minute
+                        ) select route;
             var resultroutes = routes.OrderByDescending(u => u.Id).ToList();
 
             dto.Routes = resultroutes;

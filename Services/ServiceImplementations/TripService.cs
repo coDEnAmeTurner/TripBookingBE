@@ -3,22 +3,23 @@ using System.Transactions;
 using Microsoft.Extensions.Logging.Abstractions;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.DTO.RouteDTO;
+using TripBookingBE.DTO.TripDTO;
 using TripBookingBE.Services.ServiceInterfaces;
 
 namespace TripBookingBE.Services.ServiceImplementations;
 
-public class  : IRouteService
+public class TripService : ITripService
 {
-    private readonly IRouteDAL routeDAL;
+    private readonly ITripDAL tripDAL;
 
-    public RouteService(IRouteDAL routeDAL)
+    public TripService(ITripDAL tripDAL)
     {
-        this.routeDAL = routeDAL;
+        this.tripDAL = tripDAL;
     }
 
-    public async Task<RouteGetRoutesDTO> GetRoutes(string? description, DateTime? dateCreated)
+    public async Task<TripGetTripsDTO> GetTrips(int? placeCount, int? routeId, int? driverId, string? registrationNumber, DateTime? departureTime)
     {
-        var dto = await routeDAL.GetRoutes(description, dateCreated);
+        var dto = await tripDAL.GetTrips( placeCount,  routeId,  driverId,  registrationNumber, departureTime);
         return dto;
     }
 }

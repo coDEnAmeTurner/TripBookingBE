@@ -525,3 +525,33 @@ INFO: ConnectionID:4 ClientConnectionId: b945c1ec-e8e5-4045-9abf-175a70108cb8: S
 (DBeaver:11768): Gtk-WARNING **: 10:59:42.600: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
 
 (DBeaver:11768): Gtk-WARNING **: 10:59:42.600: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:11768): Gtk-WARNING **: 11:02:12.478: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:11768): Gtk-WARNING **: 11:02:12.478: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:11768): Gtk-WARNING **: 11:02:12.478: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:11768): Gtk-WARNING **: 11:02:12.479: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:11768): Gtk-WARNING **: 11:02:12.479: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:11768): Gtk-WARNING **: 11:02:14.147: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:11768): Gtk-WARNING **: 11:02:14.147: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:11768): Gtk-WARNING **: 11:02:14.147: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:11768): Gtk-WARNING **: 11:02:14.148: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:11768): Gtk-WARNING **: 11:02:14.148: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+2025-07-29 11:02:16.807 - Dispose navigator model
+2025-07-29 11:02:16.842 - DBeaver is stopping
+2025-07-29 11:02:16.843 - Stop instance server
+2025-07-29 11:02:17.844 - Instance server has been stopped
+2025-07-29 11:02:17.844 - DBeaver shutdown completed
+2025-07-29 11:02:17.895 - Shutdown desktop platform...
+2025-07-29 11:02:17.911 - Execution context closed (master, 2)
+2025-07-29 11:02:17.921 - Execution context closed (master, 3)
+2025-07-29 11:02:17.922 - Disconnected (microsoft-198504f9161-2708ab4509e92398)
+2025-07-29 11:02:18.021 - Platform shutdown completed (126ms)

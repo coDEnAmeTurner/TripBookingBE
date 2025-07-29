@@ -29,7 +29,9 @@ builder.Services.AddScoped<ICustomerBookTripsDal, CustomerBookTripsDal>();
 builder.Services.AddScoped<ICustomerReviewTripsService,CustomerReviewTripsService>();
 builder.Services.AddScoped<ICustomerReviewTripsDal,CustomerReviewTripsDal>();
 builder.Services.AddScoped<IRouteService, RouteService>();
-builder.Services.AddScoped<IRouteDAL,RouteDAL>();
+builder.Services.AddScoped<IRouteDAL, RouteDAL>();
+builder.Services.AddScoped<ITripService, TripService>();
+builder.Services.AddScoped<ITripDAL,TripDAL>();
 
 
 var app = builder.Build();
