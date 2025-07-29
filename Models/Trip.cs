@@ -9,12 +9,18 @@ namespace TripBookingBE.Models;
 [Table("Trip")]
 public partial class Trip
 {
+
+    [Timestamp]
+    public byte[]? RowVersion { get; set; }
     [Key]
     [Column("id")]
     public long Id { get; set; }
 
     [Column("departureTime", TypeName = "datetime")]
     public DateTime? DepartureTime { get; set; }
+
+    [NotMapped]
+    public string DepartureTimeStr { get; set; }
 
     [Column("placeCount")]
     public int? PlaceCount { get; set; }

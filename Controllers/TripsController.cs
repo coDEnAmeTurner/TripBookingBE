@@ -37,69 +37,77 @@ public class TripsController : Controller
             return View();
         }
 
-        ViewBag.RouteOptions = new SelectList( (await routeService.GetRoutes(null, null)).Routes, "Id", "RouteDescription");
-        ViewBag.DriverOptions = new SelectList( (await usersService.GetUsers(type:"DRIVER")).Users, "Id", "Name");
+        ViewBag.RouteOptions = new SelectList((await routeService.GetRoutes(null, null)).Routes, "Id", "RouteDescription");
+        ViewBag.DriverOptions = new SelectList((await usersService.GetUsers(type: "DRIVER")).Users, "Id", "Name");
 
         int pageSize = 3;
         return View(await PaginatedList<Trip>.CreateAsync(dto.Trips, pageNumber ?? 1, pageSize));
     }
 
-    // public async Task<IActionResult> CreateOrUpdate(long? id)
-    // {
-    //     var dto = await routeService.GetCreateOrUpdateModel(id);
-    //     if (dto.StatusCode != HttpStatusCode.OK)
-    //     {
-    //         ViewData["statusCode"] = dto.StatusCode;
-    //         ViewData["errorMessage"] = dto.Message;
-    //         return View();
-    //     }
-    //     return View(dto.Route);
-    // }
+    public async Task<IActionResult> CreateOrUpdate(long? id)
+    {
+        var dto = await tripService.GetCreateOrUpdateModel(id);
+        if (dto.StatusCode != HttpStatusCode.OK)
+        {
+            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["errorMessage"] = dto.Message;
+            return View();
+        }
+        ViewBag.RouteOptions = new SelectList((await routeService.GetRoutes(null, null)).Routes, "Id", "RouteDescription");
+        ViewBag.DriverOptions = new SelectList((await usersService.GetUsers(type: "DRIVER")).Users, "Id", "Name");
+        return View(dto.Trip);
+    }
 
-    // [HttpPost]
-    // [ValidateAntiForgeryToken]
-    // public async Task<IActionResult> CreateOrUpdate([Bind("Id,RouteDescription,RowVersion")] Models.Route route)
-    // {
-    //     if (ModelState.IsValid)
-    //     {
-    //         RouteCreateOrUpdateDTO targetRoute = new() { Route = route };
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateOrUpdate([Bind("Id,DepartureTimeStr,PlaceCount,RegistrationNumber,DriverId,RouteId,RowVersion")] Models.Trip trip)
+    {
+        if (ModelState.IsValid)
+        {
+            trip.DepartureTime = DateTime.ParseExact(trip.DepartureTimeStr, "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+            TripCreateOrUpdateDTO targetTrip = new() { Trip = trip };
 
-    //         targetRoute = await routeService.CreateOrUpdate(route);
-    //         if (targetRoute.StatusCode != HttpStatusCode.Created)
-    //         {
-    //             ViewData["statusCode"] = targetRoute.StatusCode;
-    //             ViewData["errorMessage"] = targetRoute.Message;
-    //             if (targetRoute.StatusCode == HttpStatusCode.Conflict)
-    //                 ModelState.Remove("RowVersion");
-    //             return View(targetRoute.Route);
-    //         }
-    //         return RedirectToAction(nameof(Index));
-    //     }
-    //     return View(route);
-    // }
+            targetTrip = await tripService.CreateOrUpdate(trip);
+            if (targetTrip.StatusCode != HttpStatusCode.Created)
+            {
+                ViewData["statusCode"] = targetTrip.StatusCode;
+                ViewData["errorMessage"] = targetTrip.Message;
+                if (targetTrip.StatusCode == HttpStatusCode.Conflict)
+                    ModelState.Remove("RowVersion");
+                ViewBag.RouteOptions = new SelectList((await routeService.GetRoutes(null, null)).Routes, "Id", "RouteDescription");
+                ViewBag.DriverOptions = new SelectList((await usersService.GetUsers(type: "DRIVER")).Users, "Id", "Name");
+                return View(targetTrip.Trip);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        ViewBag.RouteOptions = new SelectList((await routeService.GetRoutes(null, null)).Routes, "Id", "RouteDescription");
+        ViewBag.DriverOptions = new SelectList((await usersService.GetUsers(type: "DRIVER")).Users, "Id", "Name");
+        return View(trip);
+    }
 
-    // public async Task<IActionResult> Details(long? id)
-    // {
-    //     var dto = await routeService.GetRouteById(id.GetValueOrDefault());
-    //     if (dto.StatusCode != HttpStatusCode.OK || dto.Route == null)
-    //     {
-    //         ViewData["statusCode"] = dto.StatusCode;
-    //         ViewData["errorMessage"] = dto.Message;
-    //         return View("Index");
-    //     }
+    public async Task<IActionResult> Details(long? id)
+    {
+        var dto = await tripService.GetTripById(id.GetValueOrDefault());
+        if (dto.StatusCode != HttpStatusCode.OK || dto.Trip == null)
+        {
+            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["errorMessage"] = dto.Message;
+            return View("Index");
+        }
 
-    //     return View(dto.Route);
-    // }
+        return View(dto.Trip);
+    }
 
-    // public async Task<IActionResult> Delete(long id)
-    // {
-    //     var dto = await routeService.DeleteRoute(id);
-    //     if (dto.StatusCode != HttpStatusCode.NoContent)
-    //     {
-    //         ViewData["statusCode"] = dto.StatusCode;
-    //         ViewData["errorMessage"] = dto.Message;
-    //     }
+    public async Task<IActionResult> Delete(long id)
+    {
+        var dto = await tripService.DeleteTrip(id);
+        if (dto.StatusCode != HttpStatusCode.NoContent)
+        {
+            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["errorMessage"] = dto.Message;
+        }
 
-    //     return RedirectToAction(nameof(Index));
-    // }
+        return RedirectToAction(nameof(Index));
+    }
 }

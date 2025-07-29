@@ -8,4 +8,11 @@ public interface ITripDAL
 {
     public Task<TripGetTripsDTO> GetTrips(int? placeCount, int? routeId, int? driverId, string? registrationNumber, DateTime? departureTime);
 
+    public Task<TripGetByIdDTO> GetTripById(long id);
+
+    public Task<TripCreateOrUpdateDTO> Create(Models.Trip trip);
+
+    public Task<TripCreateOrUpdateDTO> Update(Models.Trip trip);
+
+    public Task<TripDeleteDTO> DeleteTrip(long id);
 }

@@ -60,7 +60,8 @@
                 </div>
                 <div class="col col-5 mx-2 d-flex justify-content-space-between align-items-center">
                     <input class="btn btn-primary" type="submit" value="Filter" />
-                    <input class="btn btn-light @prevDisabled" type="submit" value="Previous" asp-route-pageNumber=@prevpage />
+                    <input class="btn btn-light @prevDisabled" type="submit" value="Previous"
+                        asp-route-pageNumber=@prevpage />
                     <input class="btn btn-dark @nextDisabled" type="submit" value="Next"
                         asp-route-pageNumber=@nextpage />
                     <a class="btn btn-success mx-2" asp-action="CreateOrUpdate">Create</a>
@@ -68,59 +69,88 @@
             </div>
         </div>
     </form>
-    @if(Model!=null){
-    @* <div class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>
-                        Id
-                    </th>
-                    <th>
-                        Route Description
-                    </th>
-                    <th>
-                        Date Of Creation
-                    </th>
-                    <th>
-                        Date Of Modification
-                    </th>
-                    <th>
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var model in Model)
-                {
+    @if (Model != null)
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <td>
-                            @(model.Id)
-                        </td>
-                        <td>
-                            @(model.RouteDescription)
-                        </td>
-                        <td>
-                            <div>
-                                @(model.DateCreated.GetValueOrDefault().ToString("dd/MM/yyyy"))
-                            </div>
-                        </td>
-                        <td>
-                            @(model.DateModified.GetValueOrDefault().ToString("dd/MM/yyyy"))
-
-                        </td>
-                        <td>
-                            <div class="d-flex justify-content-center align-items-center">
-                                <a class="btn btn-light" asp-action="CreateOrUpdate" asp-route-id="@(model.Id)">Edit</a> |
-                                <a class="btn btn-info" asp-action="Details" asp-route-id="@(model.Id)">Details</a> |
-                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@(model.Id)">Delete</a>
-                            </div>
-                        </td>
+                        <th>
+                            Id
+                        </th>
+                        <th>
+                            Departure Time
+                        </th>
+                        <th>
+                            Place Count
+                        </th>
+                        <th>
+                            Registration Number
+                        </th>
+                        <th>
+                            Driver
+                        </th>
+                        <th>
+                            Route
+                        </th>
+                        <th>
+                            Date Of Creation
+                        </th>
+                        <th>
+                            Date Of Modification
+                        </th>
+                        <th>
+                            Action
+                        </th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div> *@
+                </thead>
+                <tbody>
+                    @foreach (var model in Model)
+                    {
+                        <tr>
+                            <td>
+                                @(model.Id)
+                            </td>
+                            <td>
+                                <div>
+                                    @(model.DepartureTime.Value.ToString("dd/MM/yyyy"))
+                                </div>
+                            </td>
+                            <td>
+                                @(model.PlaceCount)
+                            </td>
+                            <td>
+                                @(model.RegistrationNumber)
+                            </td>
+                            <td>
+                                @(model.Driver?.Name)
+                            </td>
+                            <td>
+                                @(model.Route?.RouteDescription)
+
+                            </td>
+                            <td>
+                                <div>
+                                    @(model.DateCreated.Value.ToString("dd/MM/yyyy"))
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    @(model.DateModified.Value.ToString("dd/MM/yyyy"))
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a class="btn btn-light" asp-action="CreateOrUpdate" asp-route-id="@(model.Id)">Edit</a> |
+                                    <a class="btn btn-info" asp-action="Details" asp-route-id="@(model.Id)">Details</a> |
+                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@(model.Id)">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
 </div>
 

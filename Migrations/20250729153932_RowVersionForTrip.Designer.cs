@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripBookingBE.Data;
 
@@ -11,9 +12,11 @@ using TripBookingBE.Data;
 namespace TripBookingBE.Migrations
 {
     [DbContext(typeof(TripBookingContext))]
-    partial class TripBookingContextModelSnapshot : ModelSnapshot
+    [Migration("20250729153932_RowVersionForTrip")]
+    partial class RowVersionForTrip
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,20 +237,18 @@ namespace TripBookingBE.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime?>("DateCreated")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("dateCreated")
-                        .HasDefaultValueSql("(getdate())");
+                        .HasColumnName("dateCreated");
 
                     b.Property<DateTime?>("DateModified")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("dateModified")
-                        .HasDefaultValueSql("(getdate())");
+                        .HasColumnName("dateModified");
 
                     b.Property<DateTime?>("DepartureTime")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("departureTime");
+                        .HasColumnName("departureTime")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<long?>("DriverId")
                         .HasColumnType("bigint")
@@ -271,6 +272,7 @@ namespace TripBookingBE.Migrations
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
