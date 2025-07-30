@@ -1,8 +1,8 @@
 @using TripBookingBE.Pagination
-@model PaginatedList<TripBookingBE.Models.Trip>;
+@model PaginatedList<TripBookingBE.Models.Ticket>;
 
 @{
-    ViewData["Title"] = "Trip List";
+    ViewData["Title"] = "Ticket List";
 
     string prevDisabled = "disabled";
     string nextDisabled = "disabled";
@@ -28,28 +28,27 @@
 }
 
 <div>
-    <h4>Trip</h4>
-    <form asp-controller="Trips" asp-action="Index">
+    <h4>Ticket</h4>
+    <form asp-controller="Tickets" asp-action="Index">
         <div class="container">
             <div class="row gy-3">
                 <div class="col col-3">
-                    <label for="filter-placeCount" class="form-label">Place Count: </label>
-                    <input id="filter-placeCount" type="number" name="placeCount" class="form-control" />
-                </div>
-                <div class="col col-3">
-                    <label for="filter-regisNumber" class="form-label">Registration Number: </label>
-                    <input id="filter-regisNumber" type="text" name="registrationNumber" class="form-control" />
-                </div>
-                <div class="col col-3">
-                    <label for="filter-routeId" class="form-label">Route: </label>
-                    <select class="form-select" id="filter-routeId" name="routeId" asp-items="ViewBag.RouteOptions">
+                    <label for="filter-customerId" class="form-label">Customer: </label>
+                    <select class="form-select" id="filter-customerId" name="customerId" asp-items="ViewBag.CustomerOptions">
                         <option value=@(null)>Default</option>
                     </select>
 
                 </div>
                 <div class="col col-3">
-                    <label for="filter-driverId" class="form-label">Driver: </label>
-                    <select class="form-select" id="filter-driverId" name="driverId" asp-items="ViewBag.DriverOptions">
+                    <label for="filter-tripId" class="form-label">Trip: </label>
+                    <select class="form-select" id="filter-tripId" name="tripId" asp-items="ViewBag.TripOptions">
+                        <option value=@(null)>Default</option>
+                    </select>
+
+                </div>
+                <div class="col col-3">
+                    <label for="filter-generalParamId" class="form-label">General Param: </label>
+                    <select class="form-select" id="filter-generalParamId" name="generalParamId" asp-items="ViewBag.GeneralParamOptions">
                         <option value=@(null)>Default</option>
                     </select>
 
@@ -79,19 +78,19 @@
                             Id
                         </th>
                         <th>
-                            Departure Time
+                            Customer
                         </th>
                         <th>
-                            Place Count
+                            Trip
                         </th>
                         <th>
-                            Registration Number
+                            Price
                         </th>
                         <th>
-                            Driver
+                            Seller Code
                         </th>
                         <th>
-                            Route
+                            General Param
                         </th>
                         <th>
                             Date Of Creation
@@ -109,24 +108,20 @@
                     {
                         <tr>
                             <td>
-                                @(model.Id)
+                                @(model.CustomerBookTripId)
                             </td>
                             <td>
-                                <div>
-                                    @(model.DepartureTime.Value.ToString("dd/MM/yyyy"))
-                                </div>
+                                @(model.CustomerBookTrip.Customer.Name)
+
                             </td>
                             <td>
-                                @(model.PlaceCount)
+                                @(model.CustomerBookTrip.Trip.Route.RouteDescription + " - " + model.CustomerBookTrip.Trip.RegistrationNumber)
                             </td>
                             <td>
-                                @(model.RegistrationNumber)
+                                @(model.Price)
                             </td>
                             <td>
-                                @(model.Driver?.Name)
-                            </td>
-                            <td>
-                                @(model.Route?.RouteDescription)
+                                @(model.SellerCode)
 
                             </td>
                             <td>
@@ -140,10 +135,13 @@
                                 </div>
                             </td>
                             <td>
+                                @(model.GeneralParam.ParamDescription)
+                            </td>
+                            <td>
                                 <div class="d-flex justify-content-center align-items-center">
-                                    <a class="btn btn-light" asp-action="CreateOrUpdate" asp-route-id="@(model.Id)">Edit</a> |
-                                    <a class="btn btn-info" asp-action="Details" asp-route-id="@(model.Id)">Details</a> |
-                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@(model.Id)">Delete</a>
+                                    <a class="btn btn-light" asp-action="CreateOrUpdate" asp-route-id="@(model.CustomerBookTripId)">Edit</a> |
+                                    <a class="btn btn-info" asp-action="Details" asp-route-id="@(model.CustomerBookTripId)">Details</a> |
+                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@(model.CustomerBookTripId)">Delete</a>
                                 </div>
                             </td>
                         </tr>

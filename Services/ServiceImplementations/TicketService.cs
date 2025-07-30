@@ -1,3 +1,4 @@
+using TripBookingBE.Dal.DalImplementations;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.DTO.TicketDTO;
 using TripBookingBE.Services.ServiceInterfaces;
@@ -82,9 +83,10 @@ public class TicketService : ITicketService
     //     return dto;
     // }
 
-    public async Task<TicketGetTicketsDTO> GetTickets(long? customerId, long? tripId,  decimal? fromPrice, decimal? toPrice, string? sellerCode, DateTime? dateCreated, long? generalParamId)
+    public async Task<TicketGetTicketsDTO> GetTickets(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, DateTime? dateCreated, long? generalParamId)
     {
-        var dto = await ticketDAL.GetTickets(customerId, tripId, fromPrice,  toPrice, sellerCode, dateCreated, generalParamId);
+        var dto = await ticketDAL.GetTickets(customerId, tripId, fromPrice, toPrice, sellerCode, dateCreated, generalParamId);
         return dto;
     }
+
 }

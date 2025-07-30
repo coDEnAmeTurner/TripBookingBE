@@ -25,10 +25,10 @@ public partial class Ticket
     public string? SellerCode { get; set; }
 
     [Column("dateCreated", TypeName = "datetime")]
-    public DateTime? DateCreated { get; set; }
+    public DateTime? DateCreated { get; set; }=null;
 
     [Column("dateModified", TypeName = "datetime")]
-    public DateTime? DateModified { get; set; }
+    public DateTime? DateModified { get; set; }=null;
 
     [ForeignKey("CustomerBookTripId")]
     [InverseProperty("Ticket")]

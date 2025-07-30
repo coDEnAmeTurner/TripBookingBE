@@ -1,8 +1,10 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using TripBookingBE.DTO.TicketDTO;
 using TripBookingBE.Models;
 using TripBookingBE.Pagination;
+using TripBookingBE.Services.ServiceImplementations;
 using TripBookingBE.Services.ServiceInterfaces;
 
 namespace TripBookingBE.Controllers;
@@ -10,9 +12,16 @@ namespace TripBookingBE.Controllers;
 public class TicketsController : Controller
 {
     private readonly ITicketService ticketService;
+    private readonly ITripService tripService;
+    private readonly IUsersService usersService;
+    private readonly IGeneralParamService generalParamService;
 
-    public TicketsController()
+    public TicketsController(ITicketService ticketService, ITripService tripService, IUsersService usersService, IGeneralParamService generalParamService)
     {
+        this.ticketService = ticketService;
+        this.tripService = tripService;
+        this.usersService = usersService;
+        this.generalParamService = generalParamService;
     }
 
     public async Task<IActionResult> Index(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, string? dateCreated, long? generalParamId, int? pageNumber)
@@ -20,7 +29,7 @@ public class TicketsController : Controller
         TicketGetTicketsDTO dto = new();
 
         dto = await ticketService.GetTickets(customerId, tripId, fromPrice, toPrice, sellerCode, dateCreated == null ? null : DateTime.ParseExact(dateCreated, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture), generalParamId);
-
+        await PopulateDropDownList();
         if (dto.StatusCode != HttpStatusCode.OK)
         {
             ViewData["statusCode"] = dto.StatusCode;
@@ -107,4 +116,15 @@ public class TicketsController : Controller
 
     //     return RedirectToAction(nameof(Index));
     // }
+
+    async Task PopulateDropDownList()
+    {
+        var trips = await tripService.GetTrips(null, null, null, null, null);
+        var customers = await usersService.GetUsers();
+        var generalParams = await generalParamService.GetGeneralParams();
+
+        ViewBag.TripOptions = new SelectList(trips.Trips, "Id", "RegistrationNumber");
+        ViewBag.CustomerOptions = new SelectList(customers.Users, "Id", "Name");;
+        ViewBag.GeneralParamOptions = new SelectList(generalParams.GeneralParams, "Id", "ParamDescription");;
+    }
 }

@@ -38,10 +38,10 @@ public partial class Trip
     public long? RouteId { get; set; }
 
     [Column("dateCreated", TypeName = "datetime")]
-    public DateTime? DateCreated { get; set; } = DateTime.Now;
+    public DateTime? DateCreated { get; set; } = null;
 
     [Column("dateModified", TypeName = "datetime")]
-    public DateTime? DateModified { get; set; } = DateTime.Now;
+    public DateTime? DateModified { get; set; } =null;
 
     [InverseProperty("Trip")]
     public virtual ICollection<CustomerBookTrip> CustomerBookTrips { get; set; } = new List<CustomerBookTrip>();

@@ -61,28 +61,43 @@ public class TicketDAL : ITicketDAL
     public async Task<TicketGetTicketsDTO> GetTickets(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, DateTime? dateCreated, long? generalParamId)
     {
         TicketGetTicketsDTO dto = new();
+        try
+        {
 
-        var tickets = from t in context.Tickets select t;
-        tickets = from t in tickets where customerId == null || customerId == 0 || t.CustomerBookTrip.CustomerId == customerId select t;
-        tickets = from t in tickets where tripId == null || tripId == 0 || t.CustomerBookTrip.TripId == tripId select t;
-        tickets = from t in tickets where generalParamId == null || generalParamId == 0 || t.GeneralParamId == generalParamId select t;
-        tickets = from t in tickets where (fromPrice == 0 && toPrice == 0) || (t.Price >= fromPrice && t.Price <= toPrice) select t;
-        tickets = from t in tickets
-                  where dateCreated == null || (
-            t.DateCreated != null && t.DateCreated.HasValue &&
-            t.DateCreated.Value.Year == dateCreated.Value.Year &&
-            t.DateCreated.Value.Month == dateCreated.Value.Month &&
-            t.DateCreated.Value.Date == dateCreated.Value.Date
+            var tickets = from t in context.Tickets select t;
+            tickets = from t in tickets where customerId == null || customerId == 0 || t.CustomerBookTrip.CustomerId == customerId select t;
+            tickets = from t in tickets where tripId == null || tripId == 0 || t.CustomerBookTrip.TripId == tripId select t;
+            tickets = from t in tickets where generalParamId == null || generalParamId == 0 || t.GeneralParamId == generalParamId select t;
+            tickets = from t in tickets where (fromPrice == null && toPrice == null)|| (fromPrice == 0 && toPrice == 0) || (t.Price >= fromPrice && t.Price <= toPrice) select t;
+            tickets = from t in tickets
+                      where dateCreated == null || (
+                t.DateCreated != null && t.DateCreated.HasValue &&
+                t.DateCreated.Value.Year == dateCreated.Value.Year &&
+                t.DateCreated.Value.Month == dateCreated.Value.Month &&
+                t.DateCreated.Value.Date == dateCreated.Value.Date
 
-            )
-                  orderby t.DateCreated descending
-                  select t;
-        var list_tickets = await tickets.ToListAsync();
-        list_tickets = list_tickets.Where(t => String.IsNullOrEmpty(sellerCode) || (t.SellerCode != null && t.SellerCode.Contains(sellerCode))).ToList();
-        dto.Tickets = list_tickets;
+                )
+                      orderby t.DateCreated descending
+                      select t;
+            var list_tickets = await tickets
+            .Include(t => t.GeneralParam)
+            .Include(t => t.CustomerBookTrip)
+                .ThenInclude(t => t.Customer)
+            .Include(t => t.CustomerBookTrip)
+                .ThenInclude(t => t.Trip)
+                    .ThenInclude(e => e.Route)
+            .ToListAsync();
+            list_tickets = list_tickets.Where(t => String.IsNullOrEmpty(sellerCode) || (t.SellerCode != null && t.SellerCode.Contains(sellerCode))).ToList();
+            dto.Tickets = list_tickets;
+        }
+        catch (Exception ex)
+        {
+            dto.StatusCode = HttpStatusCode.InternalServerError;
+            dto.Message = ex.Message;
+        }
 
         return dto;
-        
+
     }
 
     // public async Task<TripGetByIdDTO> GetTripById(long id)

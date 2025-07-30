@@ -32,6 +32,10 @@ builder.Services.AddScoped<IRouteService, RouteService>();
 builder.Services.AddScoped<IRouteDAL, RouteDAL>();
 builder.Services.AddScoped<ITripService, TripService>();
 builder.Services.AddScoped<ITripDAL,TripDAL>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<ITicketDAL, TicketDAL>();
+builder.Services.AddScoped<IGeneralParamService, GeneralParamService>();
+builder.Services.AddScoped<IGeneralParamDal,GeneralParamDal>();
 
 
 var app = builder.Build();
