@@ -19,9 +19,16 @@
     <input type="hidden" asp-for="RowVersion" />
     <div class="form-group col col-12">
         <label asp-for="DepartureTimeStr" class="control-label col col-12" style="font-weight: bold;"></label>
-        <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) asp-for="DepartureTimeStr" type="text"
-            id="datepicker" class="form-control" autocomplete="off"
-            class="form-control col col-12" />
+        @if (!ViewData["AllowedSave"].ToString().Equals("False"))
+        {
+            <input asp-for="DepartureTimeStr" type="text" id="datepicker" class="form-control" autocomplete="off"
+                class="form-control col col-12" />
+        }
+        else
+        {
+            <input readonly=@(true) asp-for="DepartureTime.Value.Date" type="text"
+                id="datepicker" class="form-control" autocomplete="off" class="form-control col col-12" />
+        }
         <span asp-validation-for="DepartureTimeStr" class="text-danger col col-12"></span>
     </div>
     <div class="form-group col col-12">
@@ -37,15 +44,19 @@
         <span asp-validation-for="RegistrationNumber" class="text-danger col col-12"></span>
     </div>
     <div class="form-group col col-12">
-        <label for="filter-routeId" class="form-label"style="font-weight: bold;">Route: </label>
-        <select readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) class="form-control col col-12 form-select" asp-for="RouteId"  id="filter-routeId" asp-items="ViewBag.RouteOptions">
+        <label for="filter-routeId" class="form-label" style="font-weight: bold;">Route: </label>
+        <select readonly=@(ViewData["AllowedSave"].ToString().Equals("False"))
+            class="form-control col col-12 form-select" asp-for="RouteId" id="filter-routeId"
+            asp-items="ViewBag.RouteOptions">
             <option value=@(null)>Default</option>
         </select>
 
     </div>
     <div class="form-group col col-12">
-        <label for="filter-driverId" class="form-label"style="font-weight: bold;">Driver: </label>
-        <select readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) class="form-control col col-12 form-select" asp-for="DriverId" id="filter-driverId" asp-items="ViewBag.DriverOptions">
+        <label for="filter-driverId" class="form-label" style="font-weight: bold;">Driver: </label>
+        <select readonly=@(ViewData["AllowedSave"].ToString().Equals("False"))
+            class="form-control col col-12 form-select" asp-for="DriverId" id="filter-driverId"
+            asp-items="ViewBag.DriverOptions">
             <option value=@(null)>Default</option>
         </select>
 

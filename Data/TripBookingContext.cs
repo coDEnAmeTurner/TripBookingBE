@@ -53,16 +53,16 @@ public partial class TripBookingContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_CustomerBookTrip_1");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerBookTrips).HasForeignKey(b => b.CustomerId).HasConstraintName("FK_CustomerBookTrip_Customer");
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerBookTrips).HasForeignKey(b => b.CustomerId).HasConstraintName("FK_CustomerBookTrip_Customer").OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerBookTrips).HasForeignKey(b => b.TripId).HasConstraintName("FK_CustomerBookTrip_Trip");
+            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerBookTrips).HasForeignKey(b => b.TripId).HasConstraintName("FK_CustomerBookTrip_Trip").OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<CustomerReviewTrip>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_UserReviewTrip");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.CustomerId).HasConstraintName("FK_UserReviewTrip_User");
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.CustomerId).HasConstraintName("FK_UserReviewTrip_User").OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.Trip).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.TripId)
                 .HasConstraintName("FK_UserReviewTrip_Trip").OnDelete(DeleteBehavior.SetNull);
@@ -80,8 +80,8 @@ public partial class TripBookingContext : DbContext
 
         modelBuilder.Entity<Trip>(entity =>
         {
-            entity.Property(e => e.DateCreated).HasDefaultValueSql("(getdate())");
-            entity.Property(e => e.DateModified).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.DateCreated).HasDefaultValueSql("getdate()");
+            entity.Property(e => e.DateModified).HasDefaultValueSql("getdate()");
             entity.Property(e => e.PlaceCount).HasDefaultValue(1);
 
             entity.HasOne(d => d.Driver).WithMany(p => p.Trips).HasForeignKey(t => t.DriverId).HasConstraintName("FK_Trip_Driver");

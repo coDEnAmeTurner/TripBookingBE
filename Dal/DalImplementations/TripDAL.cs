@@ -89,20 +89,18 @@ public class TripDAL : ITripDAL
             trips = from trip in trips where placeCount == null || trip.PlaceCount == placeCount.Value select trip;
             trips = from trip in trips where routeId == null || trip.RouteId == routeId.Value select trip;
             trips = from trip in trips where driverId == null || trip.DriverId == driverId.Value select trip;
-            trips = from trip in trips where registrationNumber == null || (trip.RegistrationNumber != null && trip.RegistrationNumber.Contains(registrationNumber, StringComparison.OrdinalIgnoreCase)) select trip;
             trips = from trip in trips
                     where departureTime == null ||
             (
                 trip.DepartureTime != null &&
-                trip.DepartureTime.Value.Year == DateTime.Now.Year
-                && trip.DepartureTime.Value.Month == DateTime.Now.Month
-                && trip.DepartureTime.Value.Day == DateTime.Now.Day
-                && trip.DepartureTime.Value.Hour == DateTime.Now.Hour
-                && trip.DepartureTime.Value.Minute == DateTime.Now.Minute
+                trip.DepartureTime.Value.Year == departureTime.Value.Year
+                && trip.DepartureTime.Value.Month == departureTime.Value.Month
+                && trip.DepartureTime.Value.Date == departureTime.Value.Date
             )
                     select trip;
 
             var resulttrips = trips.OrderByDescending(u => u.Id).Include(e=>e.Driver).Include(e=>e.Route).ToList();
+            resulttrips = (from trip in resulttrips where registrationNumber == null || (trip.RegistrationNumber != null && trip.RegistrationNumber.Contains(registrationNumber, StringComparison.OrdinalIgnoreCase)) select trip).ToList();
 
             dto.Trips = resulttrips;
         }

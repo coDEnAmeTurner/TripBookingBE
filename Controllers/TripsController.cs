@@ -30,6 +30,7 @@ public class TripsController : Controller
         dto = await tripService.GetTrips(placeCount, routeId, driverId, registrationNumber, String.IsNullOrEmpty(departureTime) ? null : DateTime.ParseExact(departureTime, "dd/MM/yyyy",
                                        System.Globalization.CultureInfo.InvariantCulture));
 
+        await PopulateDropdownList();
         if (dto.StatusCode != HttpStatusCode.OK)
         {
             ViewData["statusCode"] = dto.StatusCode;
@@ -37,11 +38,15 @@ public class TripsController : Controller
             return View();
         }
 
-        ViewBag.RouteOptions = new SelectList((await routeService.GetRoutes(null, null)).Routes, "Id", "RouteDescription");
-        ViewBag.DriverOptions = new SelectList((await usersService.GetUsers(type: "DRIVER")).Users, "Id", "Name");
 
         int pageSize = 3;
         return View(await PaginatedList<Trip>.CreateAsync(dto.Trips, pageNumber ?? 1, pageSize));
+    }
+
+    private async Task PopulateDropdownList()
+    {
+        ViewBag.RouteOptions = new SelectList((await routeService.GetRoutes(null, null)).Routes, "Id", "RouteDescription");
+        ViewBag.DriverOptions = new SelectList((await usersService.GetUsers(type: "DRIVER")).Users, "Id", "Name");
     }
 
     public async Task<IActionResult> CreateOrUpdate(long? id)
@@ -53,8 +58,11 @@ public class TripsController : Controller
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
-        ViewBag.RouteOptions = new SelectList((await routeService.GetRoutes(null, null)).Routes, "Id", "RouteDescription");
-        ViewBag.DriverOptions = new SelectList((await usersService.GetUsers(type: "DRIVER")).Users, "Id", "Name");
+        if (dto.Trip.Id != 0 && dto.Trip.DepartureTime.HasValue)
+        {
+            dto.Trip.DepartureTimeStr = dto.Trip.DepartureTime.Value.ToString("dd/MM/yyyy");
+        }
+        await PopulateDropdownList();
         return View(dto.Trip);
     }
 
@@ -75,20 +83,19 @@ public class TripsController : Controller
                 ViewData["errorMessage"] = targetTrip.Message;
                 if (targetTrip.StatusCode == HttpStatusCode.Conflict)
                     ModelState.Remove("RowVersion");
-                ViewBag.RouteOptions = new SelectList((await routeService.GetRoutes(null, null)).Routes, "Id", "RouteDescription");
-                ViewBag.DriverOptions = new SelectList((await usersService.GetUsers(type: "DRIVER")).Users, "Id", "Name");
+                await PopulateDropdownList();
                 return View(targetTrip.Trip);
             }
             return RedirectToAction(nameof(Index));
         }
-        ViewBag.RouteOptions = new SelectList((await routeService.GetRoutes(null, null)).Routes, "Id", "RouteDescription");
-        ViewBag.DriverOptions = new SelectList((await usersService.GetUsers(type: "DRIVER")).Users, "Id", "Name");
+        await PopulateDropdownList();
         return View(trip);
     }
 
     public async Task<IActionResult> Details(long? id)
     {
         var dto = await tripService.GetTripById(id.GetValueOrDefault());
+        await PopulateDropdownList();
         if (dto.StatusCode != HttpStatusCode.OK || dto.Trip == null)
         {
             ViewData["statusCode"] = dto.StatusCode;
