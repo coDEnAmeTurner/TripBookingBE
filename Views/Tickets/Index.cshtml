@@ -54,6 +54,14 @@
 
                 </div>
                 <div class="col col-3">
+                    <label for="filter-fromPrice" class="form-label">From Price: </label>
+                    <input type="number" id="fromPrice" name="fromPrice" class="form-control" autocomplete="off" />
+                </div>
+                <div class="col col-3">
+                    <label for="filter-toPrice" class="form-label">To Price: </label>
+                    <input type="number" id="toPrice" name="toPrice" class="form-control" autocomplete="off" />
+                </div>
+                <div class="col col-3">
                     <label for="filter-departureTime" class="form-label">Time for Departure: </label>
                     <input type="text" id="datepicker" name="departureTime" class="form-control" autocomplete="off" />
                 </div>
@@ -125,6 +133,9 @@
 
                             </td>
                             <td>
+                                @(model.GeneralParam?.ParamDescription)
+                            </td>
+                            <td>
                                 <div>
                                     @(model.DateCreated.Value.ToString("dd/MM/yyyy"))
                                 </div>
@@ -134,9 +145,7 @@
                                     @(model.DateModified.Value.ToString("dd/MM/yyyy"))
                                 </div>
                             </td>
-                            <td>
-                                @(model.GeneralParam.ParamDescription)
-                            </td>
+                            
                             <td>
                                 <div class="d-flex justify-content-center align-items-center">
                                     <a class="btn btn-light" asp-action="CreateOrUpdate" asp-route-id="@(model.CustomerBookTripId)">Edit</a> |

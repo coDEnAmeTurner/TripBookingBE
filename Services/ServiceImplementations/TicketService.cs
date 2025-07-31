@@ -1,6 +1,7 @@
 using TripBookingBE.Dal.DalImplementations;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.DTO.TicketDTO;
+using TripBookingBE.Models;
 using TripBookingBE.Services.ServiceInterfaces;
 
 namespace TripBookingBE.Services.ServiceImplementations;
@@ -14,22 +15,21 @@ public class TicketService : ITicketService
         this.ticketDAL = ticketDAL;
     }
 
-    // public async Task<TripCreateOrUpdateDTO> CreateOrUpdate(Trip trip)
-    // {
-    //     TripCreateOrUpdateDTO dto = new();
+    public async Task<TicketCreateOrUpdateDTO> CreateOrUpdate(Ticket ticket)
+    {
+        TicketCreateOrUpdateDTO dto = new();
 
-    //     if (trip.Id == 0)
-    //     {
+        if (ticket.CustomerBookTripId == 0)
+        {
 
-    //         dto = await tripDAL.Create(trip);
-    //     }
-    //     else
-    //     {
-    //         //check for password, with jwt configured
-    //         dto = await tripDAL.Update(trip);
-    //     }
-    //     return dto;
-    // }
+            dto = await ticketDAL.Create(ticket);
+        }
+        else
+        {
+            dto = await ticketDAL.Update(ticket);
+        }
+        return dto;
+    }
 
     // public async Task<TripDeleteDTO> DeleteTrip(long id)
     // {
@@ -61,21 +61,21 @@ public class TicketService : ITicketService
     //     return dto;
     // }
 
-    // public async Task<TripGetCreateOrUpdateDTO> GetCreateOrUpdateModel(long? id)
-    // {
-    //     TripGetCreateOrUpdateDTO dto = new();
-    //     if (id == null)
-    //         dto.Trip = new Models.Trip();
-    //     else
-    //     {
-    //         var dtoDAL = await tripDAL.GetTripById(id.GetValueOrDefault());
-    //         dto.Trip = dtoDAL.Trip;
-    //         dto.StatusCode = dtoDAL.StatusCode;
-    //         dto.Message = dtoDAL.Message;
-    //     }
+    public async Task<TicketGetCreateOrUpdateDTO> GetCreateOrUpdateModel(long? id)
+    {
+        TicketGetCreateOrUpdateDTO dto = new();
+        if (id == null)
+            dto.Ticket = new Models.Ticket();
+        else
+        {
+            var dtoDAL = await ticketDAL.GetTicketById(id.GetValueOrDefault());
+            dto.Ticket = dtoDAL.Ticket;
+            dto.StatusCode = dtoDAL.StatusCode;
+            dto.Message = dtoDAL.Message;
+        }
 
-    //     return dto;
-    // }
+        return dto;
+    }
 
     // public async Task<TripGetByIdDTO> GetTripById(long id)
     // {
@@ -83,9 +83,9 @@ public class TicketService : ITicketService
     //     return dto;
     // }
 
-    public async Task<TicketGetTicketsDTO> GetTickets(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, DateTime? dateCreated, long? generalParamId)
+    public async Task<TicketGetTicketsDTO> GetTickets(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, DateTime? departureTime, long? generalParamId)
     {
-        var dto = await ticketDAL.GetTickets(customerId, tripId, fromPrice, toPrice, sellerCode, dateCreated, generalParamId);
+        var dto = await ticketDAL.GetTickets(customerId, tripId, fromPrice, toPrice, sellerCode, departureTime, generalParamId);
         return dto;
     }
 

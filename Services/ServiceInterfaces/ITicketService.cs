@@ -5,11 +5,11 @@ namespace TripBookingBE.Services.ServiceInterfaces;
 
 public interface ITicketService
 {
-    Task<TicketGetTicketsDTO> GetTickets(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, DateTime? dateCreated, long? generalParamId);
+    Task<TicketGetTicketsDTO> GetTickets(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, DateTime? departureTime, long? generalParamId);
 
-    // Task<TripGetCreateOrUpdateDTO> GetCreateOrUpdateModel(long? id);
+    Task<TicketGetCreateOrUpdateDTO> GetCreateOrUpdateModel(long? id);
 
-    // Task<TripCreateOrUpdateDTO> CreateOrUpdate(Trip trip);
+    Task<TicketCreateOrUpdateDTO> CreateOrUpdate(Ticket trip);
 
     // Task<TripGetByIdDTO> GetTripById(long id);
 

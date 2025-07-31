@@ -13,6 +13,27 @@ public class GeneralParamDal : IGeneralParamDal
         this.context = context;
     }
 
+    public async Task<GeneralParamGetByIdDTO> GetGeneralParamById(long? id)
+    {
+        GeneralParamGetByIdDTO dto = new();
+        try
+        {
+            var gp = await context.GeneralParams.FirstOrDefaultAsync(x => x.Id == id);
+            if (gp == null)
+            {
+                dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.Message = $"User with Id {id} not found!";
+            }
+            dto.GeneralParam = gp;
+        }
+        catch (Exception ex)
+        {
+            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.Message = ex.Message;
+        }
+        return dto;
+    }
+
     public async Task<GeneralParamGetGeneralParamsDTO> GetGeneralParams(string? paramKey = null, string? paramCode = null)
     {
         GeneralParamGetGeneralParamsDTO dto = new();

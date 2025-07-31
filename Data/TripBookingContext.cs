@@ -77,6 +77,8 @@ public partial class TripBookingContext : DbContext
             entity.HasOne(d => d.CustomerBookTrip).WithOne(p => p.Ticket).HasConstraintName("FK_Ticket_CustomerBookTrip").OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.GeneralParam).WithMany(p => p.Tickets).HasForeignKey(t => t.GeneralParamId).HasConstraintName("FK_Ticket_GeneralParam").OnDelete(DeleteBehavior.Cascade);
+
+            entity.Property(e => e.RowVersion).IsRowVersion();
         });
 
         modelBuilder.Entity<Trip>(entity =>

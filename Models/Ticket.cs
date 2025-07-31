@@ -9,9 +9,18 @@ namespace TripBookingBE.Models;
 [Table("Ticket")]
 public partial class Ticket
 {
+    [Timestamp]
+    public byte[]? RowVersion { get; set; } = null;
+
     [Key]
     [Column("customerBookTripId")]
     public long CustomerBookTripId { get; set; }
+
+    [NotMapped]
+    public long CustomerId { get; set; } = 0;
+
+    [NotMapped]
+    public long TripId { get; set; } = 0;
 
     [Column("generalParamId")]
     public long? GeneralParamId { get; set; }
@@ -25,14 +34,14 @@ public partial class Ticket
     public string? SellerCode { get; set; }
 
     [Column("dateCreated", TypeName = "datetime")]
-    public DateTime? DateCreated { get; set; }=null;
+    public DateTime? DateCreated { get; set; } = null;
 
     [Column("dateModified", TypeName = "datetime")]
-    public DateTime? DateModified { get; set; }=null;
+    public DateTime? DateModified { get; set; } = null;
 
     [ForeignKey("CustomerBookTripId")]
     [InverseProperty("Ticket")]
-    public virtual CustomerBookTrip CustomerBookTrip { get; set; } = null!;
+    public virtual CustomerBookTrip? CustomerBookTrip { get; set; }
 
     [ForeignKey("GeneralParamId")]
     [InverseProperty("Tickets")]

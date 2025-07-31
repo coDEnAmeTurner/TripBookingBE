@@ -24,11 +24,11 @@ public class TicketsController : Controller
         this.generalParamService = generalParamService;
     }
 
-    public async Task<IActionResult> Index(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, string? dateCreated, long? generalParamId, int? pageNumber)
+    public async Task<IActionResult> Index(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, string? departureTime, long? generalParamId, int? pageNumber)
     {
         TicketGetTicketsDTO dto = new();
 
-        dto = await ticketService.GetTickets(customerId, tripId, fromPrice, toPrice, sellerCode, dateCreated == null ? null : DateTime.ParseExact(dateCreated, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture), generalParamId);
+        dto = await ticketService.GetTickets(customerId, tripId, fromPrice, toPrice, sellerCode, departureTime == null ? null : DateTime.ParseExact(departureTime, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture), generalParamId);
         await PopulateDropDownList();
         if (dto.StatusCode != HttpStatusCode.OK)
         {
@@ -42,54 +42,55 @@ public class TicketsController : Controller
         return View(await PaginatedList<Ticket>.CreateAsync(dto.Tickets, pageNumber ?? 1, pageSize));
     }
 
-    // private async Task PopulateDropdownList()
-    // {
-    //     ViewBag.RouteOptions = new SelectList((await routeService.GetRoutes(null, null)).Routes, "Id", "RouteDescription");
-    //     ViewBag.DriverOptions = new SelectList((await usersService.GetUsers(type: "DRIVER")).Users, "Id", "Name");
-    // }
+    public async Task<IActionResult> CreateOrUpdate(long? id)
+    {
+        var dto = await ticketService.GetCreateOrUpdateModel(id);
+        await PopuplateSellerCode();
+        await PopulateDropDownList();
+        if (dto.StatusCode != HttpStatusCode.OK)
+        {
+            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["errorMessage"] = dto.Message;
+            return View();
+        }
 
-    // public async Task<IActionResult> CreateOrUpdate(long? id)
-    // {
-    //     var dto = await tripService.GetCreateOrUpdateModel(id);
-    //     if (dto.StatusCode != HttpStatusCode.OK)
-    //     {
-    //         ViewData["statusCode"] = dto.StatusCode;
-    //         ViewData["errorMessage"] = dto.Message;
-    //         return View();
-    //     }
-    //     if (dto.Trip.Id != 0 && dto.Trip.DepartureTime.HasValue)
-    //     {
-    //         dto.Trip.DepartureTimeStr = dto.Trip.DepartureTime.Value.ToString("dd/MM/yyyy");
-    //     }
-    //     await PopulateDropdownList();
-    //     return View(dto.Trip);
-    // }
+        if (dto.Ticket.CustomerBookTripId != 0)
+        {
+            dto.Ticket.CustomerId = dto.Ticket.CustomerBookTrip.CustomerId;
+            dto.Ticket.TripId = dto.Ticket.CustomerBookTrip.TripId;
+        }
+        return View(dto.Ticket);
+    }
 
-    // [HttpPost]
-    // [ValidateAntiForgeryToken]
-    // public async Task<IActionResult> CreateOrUpdate([Bind("Id,DepartureTimeStr,PlaceCount,RegistrationNumber,DriverId,RouteId,RowVersion")] Models.Trip trip)
-    // {
-    //     if (ModelState.IsValid)
-    //     {
-    //         trip.DepartureTime = DateTime.ParseExact(trip.DepartureTimeStr, "dd/MM/yyyy",
-    //                                    System.Globalization.CultureInfo.InvariantCulture);
-    //         TripCreateOrUpdateDTO targetTrip = new() { Trip = trip };
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateOrUpdate([Bind("CustomerBookTripId,CustomerId,TripId,Price,SellerCode,RegistrationNumber,GeneralParamId,RowVersion")] Models.Ticket ticket)
+    {
+        ticket.CustomerBookTrip = new();
+        ticket.CustomerBookTrip.CustomerId = ticket.CustomerId;
+        ticket.CustomerBookTrip.TripId = ticket.TripId;
 
-    //         targetTrip = await tripService.CreateOrUpdate(trip);
-    //         if (targetTrip.StatusCode != HttpStatusCode.Created)
-    //         {
-    //             ViewData["statusCode"] = targetTrip.StatusCode;
-    //             ViewData["errorMessage"] = targetTrip.Message;
-    //             if (targetTrip.StatusCode == HttpStatusCode.Conflict)
-    //                 ModelState.Remove("RowVersion");
-    //             await PopulateDropdownList();
-    //             return View(targetTrip.Trip);
-    //         }
-    //         return RedirectToAction(nameof(Index));
-    //     }
-    //     await PopulateDropdownList();
-    //     return View(trip);
-    // }
+        if (ModelState.IsValid)
+        {
+            TicketCreateOrUpdateDTO targetTicket = new() { Ticket = ticket };
+
+            targetTicket = await ticketService.CreateOrUpdate(ticket);
+            if (targetTicket.StatusCode != HttpStatusCode.Created)
+            {
+                ViewData["statusCode"] = targetTicket.StatusCode;
+                ViewData["errorMessage"] = targetTicket.Message;
+                if (targetTicket.StatusCode == HttpStatusCode.Conflict)
+                    ModelState.Remove("RowVersion");
+                await PopuplateSellerCode();
+                await PopulateDropDownList();
+                return View(targetTicket.Ticket);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        await PopuplateSellerCode();
+        await PopulateDropDownList();
+        return View(ticket);
+    }
 
     // public async Task<IActionResult> Details(long? id)
     // {
@@ -117,14 +118,22 @@ public class TicketsController : Controller
     //     return RedirectToAction(nameof(Index));
     // }
 
+    async Task PopuplateSellerCode()
+    {
+        var sellers = from s in (await usersService.GetUsers(type: "SELLER")).Users select new { Id = s.Id, SellerCode = s.SellerCode };
+        ViewBag.SellerCodeOptions = new SelectList(sellers, "SellerCode", "SellerCode");
+    }
+
     async Task PopulateDropDownList()
     {
         var trips = await tripService.GetTrips(null, null, null, null, null);
-        var customers = await usersService.GetUsers();
+        var customers = await usersService.GetUsers(type: "CUSTOMER");
         var generalParams = await generalParamService.GetGeneralParams();
 
-        ViewBag.TripOptions = new SelectList(trips.Trips, "Id", "RegistrationNumber");
-        ViewBag.CustomerOptions = new SelectList(customers.Users, "Id", "Name");;
-        ViewBag.GeneralParamOptions = new SelectList(generalParams.GeneralParams, "Id", "ParamDescription");;
+        var tripOptions = from t in trips.Trips select new { Id = t.Id, Description = $"{t.Route?.RouteDescription} - {t.RegistrationNumber}" };
+
+        ViewBag.TripOptions = new SelectList(tripOptions, "Id", "Description");
+        ViewBag.CustomerOptions = new SelectList(customers.Users, "Id", "Name");
+        ViewBag.GeneralParamOptions = new SelectList(generalParams.GeneralParams, "Id", "ParamDescription");
     }
 }

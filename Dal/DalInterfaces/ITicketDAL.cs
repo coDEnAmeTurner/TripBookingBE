@@ -4,13 +4,13 @@ namespace  TripBookingBE.Dal.DalInterfaces;
 
 public interface ITicketDAL
 {
-    public Task<TicketGetTicketsDTO> GetTickets(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, DateTime? dateCreated, long? generalParamId);
+    public Task<TicketGetTicketsDTO> GetTickets(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, DateTime? departureTime, long? generalParamId);
 
-    // public Task<TripGetByIdDTO> GetTripById(long id);
+    public Task<TicketGetByIdDTO> GetTicketById(long id);
 
-    // public Task<TripCreateOrUpdateDTO> Create(Models.Trip trip);
+    public Task<TicketCreateOrUpdateDTO> Create(Models.Ticket ticket);
 
-    // public Task<TripCreateOrUpdateDTO> Update(Models.Trip trip);
+    public Task<TicketCreateOrUpdateDTO> Update(Models.Ticket ticket);
 
     // public Task<TripDeleteDTO> DeleteTrip(long id);
 }
