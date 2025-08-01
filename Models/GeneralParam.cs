@@ -19,9 +19,9 @@ namespace TripBookingBE.Models
         public string? ParamDescription { get; set; }
 
         [Column("dateCreated")]
-        public DateTime DateCreated { get; set; }
+        public DateTime? DateCreated { get; set; }=null;
         [Column("dateModified")]
-        public DateTime DateModified { get; set; }
+        public DateTime? DateModified { get; set; }=null;
 
         [InverseProperty("GeneralParam")]
         public virtual IEnumerable<Ticket>? Tickets { get; set; }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripBookingBE.Data;
 
@@ -11,9 +12,11 @@ using TripBookingBE.Data;
 namespace TripBookingBE.Migrations
 {
     [DbContext(typeof(TripBookingContext))]
-    partial class TripBookingContextModelSnapshot : ModelSnapshot
+    [Migration("20250729153932_RowVersionForTrip")]
+    partial class RowVersionForTrip
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("SellingTripsId");
 
-                    b.ToTable("SellerTrip", (string)null);
+                    b.ToTable("SellerTrip");
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.CustomerBookTrip", b =>
@@ -74,7 +77,7 @@ namespace TripBookingBE.Migrations
                     b.HasIndex(new[] { "CustomerId", "TripId" }, "IX_CustomerBookTrip")
                         .IsUnique();
 
-                    b.ToTable("CustomerBookTrip", (string)null);
+                    b.ToTable("CustomerBookTrip");
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.CustomerReviewTrip", b =>
@@ -114,7 +117,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.ToTable("CustomerReviewTrip", (string)null);
+                    b.ToTable("CustomerReviewTrip");
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.GeneralParam", b =>
@@ -126,11 +129,11 @@ namespace TripBookingBE.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime?>("DateCreated")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2")
                         .HasColumnName("dateCreated");
 
-                    b.Property<DateTime?>("DateModified")
+                    b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2")
                         .HasColumnName("dateModified");
 
@@ -150,7 +153,7 @@ namespace TripBookingBE.Migrations
                     b.HasKey("Id")
                         .HasName("PK_GeneralParam_1");
 
-                    b.ToTable("GeneralParams", (string)null);
+                    b.ToTable("GeneralParam");
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.Route", b =>
@@ -186,7 +189,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Route", (string)null);
+                    b.ToTable("Route");
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.Ticket", b =>
@@ -211,11 +214,6 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("money")
                         .HasColumnName("price");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
                     b.Property<string>("SellerCode")
                         .HasMaxLength(20)
                         .IsUnicode(false)
@@ -226,7 +224,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("GeneralParamId");
 
-                    b.ToTable("Ticket", (string)null);
+                    b.ToTable("Ticket");
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.Trip", b =>
@@ -239,20 +237,18 @@ namespace TripBookingBE.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime?>("DateCreated")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("dateCreated")
-                        .HasDefaultValueSql("getdate()");
+                        .HasColumnName("dateCreated");
 
                     b.Property<DateTime?>("DateModified")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("dateModified")
-                        .HasDefaultValueSql("getdate()");
+                        .HasColumnName("dateModified");
 
                     b.Property<DateTime?>("DepartureTime")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("departureTime");
+                        .HasColumnName("departureTime")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<long?>("DriverId")
                         .HasColumnType("bigint")
@@ -276,6 +272,7 @@ namespace TripBookingBE.Migrations
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
@@ -285,7 +282,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("RouteId");
 
-                    b.ToTable("Trip", (string)null);
+                    b.ToTable("Trip");
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.User", b =>
@@ -309,13 +306,13 @@ namespace TripBookingBE.Migrations
                         .HasColumnName("avatar")
                         .HasDefaultValueSql("(NULL)");
 
-                    b.Property<DateTime?>("DateCreated")
+                    b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasColumnName("dateCreated")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<DateTime?>("DateModified")
+                    b.Property<DateTime>("DateModified")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasColumnName("dateModified")
@@ -401,7 +398,7 @@ namespace TripBookingBE.Migrations
                     b.HasIndex(new[] { "UserName" }, "UQ__User__66DCF95C55A682B1")
                         .IsUnique();
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("SellerTrip", b =>
@@ -431,7 +428,7 @@ namespace TripBookingBE.Migrations
                     b.HasOne("TripBookingBE.Models.Trip", "Trip")
                         .WithMany("CustomerBookTrips")
                         .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_CustomerBookTrip_Trip");
 

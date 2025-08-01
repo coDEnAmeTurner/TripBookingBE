@@ -16,11 +16,11 @@ namespace TripBookingBE.Services.ServiceImplementations;
 public class UsersService : IUsersService
 {
     private readonly IUsersDal usersDAL;
-    private readonly ICustomerBookTripsDal bookingDAL;
+    private readonly IBookingsDal bookingDAL;
     private readonly ICustomerReviewTripsDal reviewDAL;
     private readonly Cloudinary cloudinary;
 
-    public UsersService(IUsersDal dal, Cloudinary cloudinary, ICustomerBookTripsDal bookingDAL, ICustomerReviewTripsDal reviewDAL)
+    public UsersService(IUsersDal dal, Cloudinary cloudinary, IBookingsDal bookingDAL, ICustomerReviewTripsDal reviewDAL)
     {
         this.usersDAL = dal;
         this.cloudinary = cloudinary;
@@ -100,7 +100,7 @@ public class UsersService : IUsersService
         {
             try
             {
-                var bookingDTO = await bookingDAL.DeleteCustomerBookTripsByUser(id);
+                var bookingDTO = await bookingDAL.DeleteBookingsByUser(id);
                 if (bookingDTO.StatusCode != HttpStatusCode.NoContent)
                 {
                     dto.StatusCode = bookingDTO.StatusCode;

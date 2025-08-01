@@ -24,10 +24,10 @@ public partial class CustomerReviewTrip
     public string? Content { get; set; }
 
     [Column("dateCreated", TypeName = "datetime")]
-    public DateTime? DateCreated { get; set; }
+    public DateTime? DateCreated { get; set; }=null;
 
     [Column("dateModified", TypeName = "datetime")]
-    public DateTime? DateModified { get; set; }
+    public DateTime? DateModified { get; set; }=null;
 
     [ForeignKey("CustomerId")]
     [InverseProperty("CustomerReviewTrips")]

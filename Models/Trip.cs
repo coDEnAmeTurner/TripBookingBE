@@ -9,12 +9,19 @@ namespace TripBookingBE.Models;
 [Table("Trip")]
 public partial class Trip
 {
+
+    [Timestamp]
+    public byte[]? RowVersion { get; set; }
     [Key]
     [Column("id")]
     public long Id { get; set; }
 
     [Column("departureTime", TypeName = "datetime")]
     public DateTime? DepartureTime { get; set; }
+
+    [NotMapped]
+    [Display(Name = "DepartureTime")]
+    public string DepartureTimeStr { get; set; }
 
     [Column("placeCount")]
     public int? PlaceCount { get; set; }
@@ -31,10 +38,10 @@ public partial class Trip
     public long? RouteId { get; set; }
 
     [Column("dateCreated", TypeName = "datetime")]
-    public DateTime? DateCreated { get; set; }
+    public DateTime? DateCreated { get; set; } = null;
 
     [Column("dateModified", TypeName = "datetime")]
-    public DateTime? DateModified { get; set; }
+    public DateTime? DateModified { get; set; } =null;
 
     [InverseProperty("Trip")]
     public virtual ICollection<CustomerBookTrip> CustomerBookTrips { get; set; } = new List<CustomerBookTrip>();

@@ -24,12 +24,18 @@ builder.Services.AddSingleton(typeof(Cloudinary), cloudinary);
 //services and dals
 builder.Services.AddScoped<IUsersService,UsersService>();
 builder.Services.AddScoped<IUsersDal, UsersDal>();
-builder.Services.AddScoped<ICustomerBookTripsService,CustomerBookTripsService>();
-builder.Services.AddScoped<ICustomerBookTripsDal, CustomerBookTripsDal>();
+builder.Services.AddScoped<IBookingsService,BookingsService>();
+builder.Services.AddScoped<IBookingsDal, BookingsDal>();
 builder.Services.AddScoped<ICustomerReviewTripsService,CustomerReviewTripsService>();
 builder.Services.AddScoped<ICustomerReviewTripsDal,CustomerReviewTripsDal>();
 builder.Services.AddScoped<IRouteService, RouteService>();
-builder.Services.AddScoped<IRouteDAL,RouteDAL>();
+builder.Services.AddScoped<IRouteDAL, RouteDAL>();
+builder.Services.AddScoped<ITripService, TripService>();
+builder.Services.AddScoped<ITripDAL,TripDAL>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<ITicketDAL, TicketDAL>();
+builder.Services.AddScoped<IGeneralParamService, GeneralParamService>();
+builder.Services.AddScoped<IGeneralParamDal,GeneralParamDal>();
 
 
 var app = builder.Build();

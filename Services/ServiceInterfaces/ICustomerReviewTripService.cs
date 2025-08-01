@@ -1,5 +1,5 @@
 using TripBookingBE.DTO;
-using TripBookingBE.DTO.CustomerBookTripDTO;
+using TripBookingBE.DTO.BookingDTO;
 using TripBookingBE.DTO.CustomerReviewTripDTO;
 using TripBookingBE.Models;
 

@@ -28,6 +28,7 @@ public partial class TripBookingContext : DbContext
     public virtual DbSet<Trip> Trips { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<GeneralParam> GeneralParams { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -53,16 +54,16 @@ public partial class TripBookingContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_CustomerBookTrip_1");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerBookTrips).HasForeignKey(b => b.CustomerId).HasConstraintName("FK_CustomerBookTrip_Customer");
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerBookTrips).HasForeignKey(b => b.CustomerId).HasConstraintName("FK_CustomerBookTrip_Customer").OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerBookTrips).HasForeignKey(b => b.TripId).HasConstraintName("FK_CustomerBookTrip_Trip");
+            entity.HasOne(d => d.Trip).WithMany(p => p.CustomerBookTrips).HasForeignKey(b => b.TripId).HasConstraintName("FK_CustomerBookTrip_Trip").OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<CustomerReviewTrip>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_UserReviewTrip");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.CustomerId).HasConstraintName("FK_UserReviewTrip_User");
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.CustomerId).HasConstraintName("FK_UserReviewTrip_User").OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.Trip).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.TripId)
                 .HasConstraintName("FK_UserReviewTrip_Trip").OnDelete(DeleteBehavior.SetNull);
@@ -76,16 +77,21 @@ public partial class TripBookingContext : DbContext
             entity.HasOne(d => d.CustomerBookTrip).WithOne(p => p.Ticket).HasConstraintName("FK_Ticket_CustomerBookTrip").OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.GeneralParam).WithMany(p => p.Tickets).HasForeignKey(t => t.GeneralParamId).HasConstraintName("FK_Ticket_GeneralParam").OnDelete(DeleteBehavior.Cascade);
+
+            entity.Property(e => e.RowVersion).IsRowVersion();
         });
 
         modelBuilder.Entity<Trip>(entity =>
         {
-            entity.Property(e => e.DepartureTime).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.DateCreated).HasDefaultValueSql("getdate()");
+            entity.Property(e => e.DateModified).HasDefaultValueSql("getdate()");
             entity.Property(e => e.PlaceCount).HasDefaultValue(1);
 
             entity.HasOne(d => d.Driver).WithMany(p => p.Trips).HasForeignKey(t => t.DriverId).HasConstraintName("FK_Trip_Driver");
 
             entity.HasOne(d => d.Route).WithMany(p => p.Trips).HasForeignKey(t => t.RouteId).HasConstraintName("FK_Trip_Route").OnDelete(DeleteBehavior.SetNull);
+
+            entity.Property(e => e.RowVersion).IsRowVersion();
         });
 
         modelBuilder.Entity<User>(entity =>
