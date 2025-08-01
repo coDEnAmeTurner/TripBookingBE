@@ -11,10 +11,10 @@ public class TicketDAL : ITicketDAL
 {
     private readonly TripBookingContext context;
 
-    private readonly ICustomerBookTripsDal customerBookTripsDal;
+    private readonly IBookingsDal customerBookTripsDal;
     private readonly IGeneralParamDal generalParamDal;
 
-    public TicketDAL(TripBookingContext context, ICustomerBookTripsDal customerBookTripsDal, IGeneralParamDal generalParamDal)
+    public TicketDAL(TripBookingContext context, IBookingsDal customerBookTripsDal, IGeneralParamDal generalParamDal)
     {
         this.context = context;
         this.customerBookTripsDal = customerBookTripsDal;
@@ -45,24 +45,6 @@ public class TicketDAL : ITicketDAL
         return dto;
     }
 
-    // public async Task<TripDeleteDTO> DeleteTrip(long id)
-    // {
-    //     TripDeleteDTO dto = new();
-
-    //     var inst = await context.Trips.FindAsync(id);
-    //     if (inst == null)
-    //     {
-    //         dto.StatusCode = System.Net.HttpStatusCode.NotFound;
-    //         dto.Message += $"\nTrip with Id {id} not found!";
-    //     }
-
-    //     context.Trips.Remove(inst);
-    //     await context.SaveChangesAsync();
-
-    //     dto.Trip = inst;
-    //     return dto;
-    // }
-
     public async Task<TicketGetTicketsDTO> GetTickets(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, DateTime? departureTime, long? generalParamId)
     {
         TicketGetTicketsDTO dto = new();
@@ -73,7 +55,7 @@ public class TicketDAL : ITicketDAL
             tickets = from t in tickets where customerId == null || customerId == 0 || t.CustomerBookTrip.CustomerId == customerId select t;
             tickets = from t in tickets where tripId == null || tripId == 0 || t.CustomerBookTrip.TripId == tripId select t;
             tickets = from t in tickets where generalParamId == null || generalParamId == 0 || t.GeneralParamId == generalParamId select t;
-            tickets = from t in tickets where (fromPrice == null && toPrice == null)|| (fromPrice == 0 && toPrice == 0) || (t.Price >= fromPrice && t.Price <= toPrice) select t;
+            tickets = from t in tickets where (fromPrice == null && toPrice == null) || (fromPrice == 0 && toPrice == 0) || (t.Price >= fromPrice && t.Price <= toPrice) select t;
             tickets = from t in tickets
                       where departureTime == null || (
                 t.DateCreated != null && t.DateCreated.HasValue &&
@@ -116,7 +98,7 @@ public class TicketDAL : ITicketDAL
                 .ThenInclude(x => x.Customer)
             .Include(x => x.CustomerBookTrip)
                 .ThenInclude(x => x.Trip)
-                    .ThenInclude(x=>x.Route)
+                    .ThenInclude(x => x.Route)
             .FirstOrDefaultAsync();
             if (ticket == null)
             {
@@ -161,10 +143,10 @@ public class TicketDAL : ITicketDAL
             {
                 var databaseValues = (Models.Ticket)databaseEntry.ToObject();
 
-                var cbt = await customerBookTripsDal.GetCustomerBookTripById(databaseValues.CustomerBookTripId);
+                var cbt = await customerBookTripsDal.GetBookingById(databaseValues.CustomerBookTripId);
                 var customer = cbt.CustomerBookTrip.Customer;
                 var trip = cbt.CustomerBookTrip.Trip;
-                var generalParam = databaseValues.GeneralParamId.HasValue?await generalParamDal.GetGeneralParamById(databaseValues.GeneralParamId.GetValueOrDefault()):null;
+                var generalParam = databaseValues.GeneralParamId.HasValue ? await generalParamDal.GetGeneralParamById(databaseValues.GeneralParamId.GetValueOrDefault()) : null;
                 if (databaseValues.CustomerBookTripId != clientValues.CustomerBookTripId)
                 {
                     dto.Message = $"Customer and Trip - Current value: {customer.Name} currently books {trip.Route?.RouteDescription} - {trip.RegistrationNumber}";
@@ -204,6 +186,27 @@ public class TicketDAL : ITicketDAL
 
         }
 
+        return dto;
+    }
+
+    public async Task<TicketDeleteDTO> DeleteTicket(long id)
+    {
+        TicketDeleteDTO dto = new();
+
+        var inst = await context.Tickets.Where(x=>x.CustomerBookTripId == id).Include(x=>x.CustomerBookTrip).FirstOrDefaultAsync();
+
+        if (inst == null)
+        {
+            dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+            dto.Message += $"\nTicket with Id {id} not found!";
+        }
+        else
+        {
+            context.Tickets.Remove(inst);
+            await context.SaveChangesAsync();
+        }
+
+        dto.Ticket = inst;
         return dto;
     }
 }

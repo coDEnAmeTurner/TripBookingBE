@@ -19,7 +19,7 @@
     <input type="hidden" asp-for="RowVersion" />
     <div class="form-group col col-12">
         <label for="filter-customerId" class="form-label" style="font-weight: bold;">Customer: </label>
-        <select readonly=@(ViewData["AllowedSave"].ToString().Equals("False"))
+        <select disabled=@(ViewData["AllowedSave"].ToString().Equals("False"))
             class="form-control col col-12 form-select" asp-for="CustomerId" id="filter-customerId"
             asp-items="ViewBag.CustomerOptions">
             <option value=@(null)>Default</option>
@@ -27,7 +27,7 @@
     </div>
     <div class="form-group col col-12">
         <label for="filter-tripId" class="form-label" style="font-weight: bold;">Trip: </label>
-        <select readonly=@(ViewData["AllowedSave"].ToString().Equals("False"))
+        <select disabled=@(ViewData["AllowedSave"].ToString().Equals("False"))
             class="form-control col col-12 form-select" asp-for="TripId" id="filter-tripId"
             asp-items="ViewBag.TripOptions">
             <option value=@(null)>Default</option>
@@ -41,7 +41,7 @@
     </div>
     <div class="form-group col col-12">
         <label asp-for="SellerCode" class="control-label col col-12" style="font-weight: bold;"></label>
-        <select readonly=@(ViewData["AllowedSave"].ToString().Equals("False"))
+        <select disabled=@(ViewData["AllowedSave"].ToString().Equals("False"))
             class="form-control col col-12 form-select" asp-for="SellerCode" id="filter-setllerCode"
             asp-items="ViewBag.SellerCodeOptions">
             <option value=@(null)>Default</option>
@@ -50,7 +50,7 @@
     </div>
     <div class="form-group col col-12">
         <label for="filter-generalParamId" class="form-label" style="font-weight: bold;">General Param: </label>
-        <select readonly=@(ViewData["AllowedSave"].ToString().Equals("False"))
+        <select disabled=@(ViewData["AllowedSave"].ToString().Equals("False"))
             class="form-control col col-12 form-select" asp-for="GeneralParamId" id="filter-generalParamId"
             asp-items="ViewBag.GeneralParamOptions">
             <option value=@(null)>Default</option>

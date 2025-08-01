@@ -12,5 +12,5 @@ public interface ITicketDAL
 
     public Task<TicketCreateOrUpdateDTO> Update(Models.Ticket ticket);
 
-    // public Task<TripDeleteDTO> DeleteTrip(long id);
+    public Task<TicketDeleteDTO> DeleteTicket(long id);
 }

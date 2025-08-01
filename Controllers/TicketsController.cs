@@ -88,31 +88,34 @@ public class TicketsController : Controller
         return View(ticket);
     }
 
-    // public async Task<IActionResult> Details(long? id)
-    // {
-    //     var dto = await tripService.GetTripById(id.GetValueOrDefault());
-    //     await PopulateDropdownList();
-    //     if (dto.StatusCode != HttpStatusCode.OK || dto.Trip == null)
-    //     {
-    //         ViewData["statusCode"] = dto.StatusCode;
-    //         ViewData["errorMessage"] = dto.Message;
-    //         return View("Index");
-    //     }
+    public async Task<IActionResult> Details(long? id)
+    {
+        var dto = await ticketService.GetTicketById(id.GetValueOrDefault());
+        dto.Ticket.CustomerId = dto.Ticket.CustomerBookTrip.Customer.Id;
+        dto.Ticket.TripId = dto.Ticket.CustomerBookTrip.Trip.Id;
+        await PopuplateSellerCode();
+        await PopulateDropDownList();
+        if (dto.StatusCode != HttpStatusCode.OK || dto.Ticket == null)
+        {
+            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["errorMessage"] = dto.Message;
+            return View("Index");
+        }
 
-    //     return View(dto.Trip);
-    // }
+        return View(dto.Ticket);
+    }
 
-    // public async Task<IActionResult> Delete(long id)
-    // {
-    //     var dto = await tripService.DeleteTrip(id);
-    //     if (dto.StatusCode != HttpStatusCode.NoContent)
-    //     {
-    //         ViewData["statusCode"] = dto.StatusCode;
-    //         ViewData["errorMessage"] = dto.Message;
-    //     }
+    public async Task<IActionResult> Delete(long id)
+    {
+        var dto = await ticketService.DeleteTicket(id);
+        if (dto.StatusCode != HttpStatusCode.NoContent)
+        {
+            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["errorMessage"] = dto.Message;
+        }
 
-    //     return RedirectToAction(nameof(Index));
-    // }
+        return RedirectToAction(nameof(Index));
+    }
 
     async Task PopuplateSellerCode()
     {

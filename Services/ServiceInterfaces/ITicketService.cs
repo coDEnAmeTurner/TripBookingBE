@@ -11,8 +11,8 @@ public interface ITicketService
 
     Task<TicketCreateOrUpdateDTO> CreateOrUpdate(Ticket trip);
 
-    // Task<TripGetByIdDTO> GetTripById(long id);
+    Task<TicketGetByIdDTO> GetTicketById(long id);
 
-    // Task<TripDeleteDTO> DeleteTrip(long id);
+    Task<TicketDeleteDTO> DeleteTicket(long id);
 
 }

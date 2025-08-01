@@ -24,8 +24,8 @@ builder.Services.AddSingleton(typeof(Cloudinary), cloudinary);
 //services and dals
 builder.Services.AddScoped<IUsersService,UsersService>();
 builder.Services.AddScoped<IUsersDal, UsersDal>();
-builder.Services.AddScoped<ICustomerBookTripsService,CustomerBookTripsService>();
-builder.Services.AddScoped<ICustomerBookTripsDal, CustomerBookTripsDal>();
+builder.Services.AddScoped<IBookingsService,BookingsService>();
+builder.Services.AddScoped<IBookingsDal, BookingsDal>();
 builder.Services.AddScoped<ICustomerReviewTripsService,CustomerReviewTripsService>();
 builder.Services.AddScoped<ICustomerReviewTripsDal,CustomerReviewTripsDal>();
 builder.Services.AddScoped<IRouteService, RouteService>();

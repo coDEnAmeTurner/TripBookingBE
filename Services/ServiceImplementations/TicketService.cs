@@ -1,3 +1,5 @@
+using System.Net;
+using System.Transactions;
 using TripBookingBE.Dal.DalImplementations;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.DTO.TicketDTO;
@@ -9,9 +11,9 @@ namespace TripBookingBE.Services.ServiceImplementations;
 public class TicketService : ITicketService
 {
     private readonly ITicketDAL ticketDAL;
-    private readonly ICustomerBookTripsDal bookingDAL ;
+    private readonly IBookingsDal bookingDAL ;
 
-    public TicketService(ITicketDAL ticketDAL, ICustomerBookTripsDal bookingDAL)
+    public TicketService(ITicketDAL ticketDAL, IBookingsDal bookingDAL)
     {
         this.ticketDAL = ticketDAL;
         this.bookingDAL = bookingDAL;
@@ -52,35 +54,37 @@ public class TicketService : ITicketService
         return dto;
     }
 
-    // public async Task<TripDeleteDTO> DeleteTrip(long id)
-    // {
-    //     TripDeleteDTO dto = new();
-    //     using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-    //     {
-    //         try
-    //         {
+    public async Task<TicketDeleteDTO> DeleteTicket(long id)
+    {
+        TicketDeleteDTO dto = new();
+        using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            try
+            {
 
-    //             var tripDTO = await tripDAL.DeleteTrip(id);
-    //             if (tripDTO.StatusCode != HttpStatusCode.NoContent)
-    //             {
-    //                 dto.StatusCode = tripDTO.StatusCode;
-    //                 dto.Message += $"\n{tripDTO.Message}";
-    //             }
+                var ticketDTO = await ticketDAL.DeleteTicket(id);
+                if (ticketDTO.StatusCode != HttpStatusCode.NoContent)
+                {
+                    dto.StatusCode = ticketDTO.StatusCode;
+                    dto.Message += $"\n{ticketDTO.Message}";
+                }
 
-    //             scope.Complete();
-    //         }
-    //         catch (Exception ex)
-    //         {
-    //             if (dto.StatusCode == HttpStatusCode.NoContent)
-    //             {
-    //                 dto.StatusCode = HttpStatusCode.InternalServerError;
-    //                 dto.Message = ex.Message;
-    //             }
-    //         }
+                await bookingDAL.DeleteBooking(ticketDTO.Ticket.CustomerBookTrip);
 
-    //     }
-    //     return dto;
-    // }
+                scope.Complete();
+            }
+            catch (Exception ex)
+            {
+                if (dto.StatusCode == HttpStatusCode.NoContent)
+                {
+                    dto.StatusCode = HttpStatusCode.InternalServerError;
+                    dto.Message = ex.Message;
+                }
+            }
+
+        }
+        return dto;
+    }
 
     public async Task<TicketGetCreateOrUpdateDTO> GetCreateOrUpdateModel(long? id)
     {
@@ -98,11 +102,11 @@ public class TicketService : ITicketService
         return dto;
     }
 
-    // public async Task<TripGetByIdDTO> GetTripById(long id)
-    // {
-    //     var dto = await tripDAL.GetTripById(id);
-    //     return dto;
-    // }
+    public async Task<TicketGetByIdDTO> GetTicketById(long id)
+    {
+        var dto = await ticketDAL.GetTicketById(id);
+        return dto;
+    }
 
     public async Task<TicketGetTicketsDTO> GetTickets(long? customerId, long? tripId, decimal? fromPrice, decimal? toPrice, string? sellerCode, DateTime? departureTime, long? generalParamId)
     {

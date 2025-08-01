@@ -1,11 +1,11 @@
 using System.Net;
 using TripBookingBE.Models;
 
-namespace TripBookingBE.DTO.CustomerBookTripDTO;
+namespace TripBookingBE.DTO.BookingDTO;
 
-public class CustomerBookTripGetByIdDTO
+public class BookingDeleteByUserDTO
 {
-    public CustomerBookTrip CustomerBookTrip = null;
+    public IQueryable<CustomerBookTrip> CustomerBookTrips = null;
 
     public HttpStatusCode StatusCode = HttpStatusCode.NoContent;
 

@@ -1,9 +1,9 @@
 using System.Net;
 using TripBookingBE.Models;
 
-namespace TripBookingBE.DTO.CustomerBookTripDTO;
+namespace TripBookingBE.DTO.BookingDTO;
 
-public class CustomerBookTripGetIdByCustomerIdAndTripIdDTO
+public class BookingGetIdByCustomerIdAndTripIdDTO
 {
     public List<long> Ids = null;
 
