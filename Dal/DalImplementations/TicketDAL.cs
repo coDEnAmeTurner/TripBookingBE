@@ -34,7 +34,7 @@ public class TicketDAL : ITicketDAL
         catch (Exception ex)
         {
             dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
-            dto.Message = ex.Message;
+            dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
         finally
         {
@@ -110,11 +110,18 @@ public class TicketDAL : ITicketDAL
         TicketGetByIdDTO dto = new();
         try
         {
-            var ticket = await context.Tickets.FirstOrDefaultAsync(x => x.CustomerBookTripId == id);
+            var ticket = await context.Tickets
+            .Where(x => x.CustomerBookTripId == id)
+            .Include(x => x.CustomerBookTrip)
+                .ThenInclude(x => x.Customer)
+            .Include(x => x.CustomerBookTrip)
+                .ThenInclude(x => x.Trip)
+                    .ThenInclude(x=>x.Route)
+            .FirstOrDefaultAsync();
             if (ticket == null)
             {
                 dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
-                dto.Message = $"User with Id {id} not found!";
+                dto.Message = $"Ticket with Id {id} not found!";
             }
             dto.Ticket = ticket;
         }

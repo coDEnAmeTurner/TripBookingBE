@@ -9,10 +9,12 @@ namespace TripBookingBE.Services.ServiceImplementations;
 public class TicketService : ITicketService
 {
     private readonly ITicketDAL ticketDAL;
+    private readonly ICustomerBookTripsDal bookingDAL ;
 
-    public TicketService(ITicketDAL ticketDAL)
+    public TicketService(ITicketDAL ticketDAL, ICustomerBookTripsDal bookingDAL)
     {
         this.ticketDAL = ticketDAL;
+        this.bookingDAL = bookingDAL;
     }
 
     public async Task<TicketCreateOrUpdateDTO> CreateOrUpdate(Ticket ticket)
@@ -21,6 +23,25 @@ public class TicketService : ITicketService
 
         if (ticket.CustomerBookTripId == 0)
         {
+            var idDTO = await bookingDAL.GetIdByCustIdAndTripId(ticket.CustomerId, ticket.TripId);
+            if (idDTO == null || idDTO.Ids == null || idDTO.Ids.Count == 0)
+            {
+                dto.Ticket = ticket;
+                dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+                dto.Message = $"Customer {ticket.CustomerId} doesn't book Tirp {ticket.TripId}";
+                return dto;
+            }
+
+            var already_exist = await ticketDAL.GetTicketById(idDTO.Ids.FirstOrDefault());
+            if (already_exist.Ticket != null)
+            {
+                dto.Ticket = ticket;
+                dto.StatusCode = System.Net.HttpStatusCode.Conflict;
+                dto.Message = $"{already_exist.Ticket.CustomerBookTrip?.Customer.Name} already has a Ticket for {already_exist.Ticket.CustomerBookTrip?.Trip.Route?.RouteDescription} - {already_exist.Ticket.CustomerBookTrip?.Trip.DepartureTime.GetValueOrDefault().ToString("dd/MM/yyyy",System.Globalization.CultureInfo.InvariantCulture)}";
+                return dto;
+            }
+
+            ticket.CustomerBookTripId = idDTO.Ids.FirstOrDefault();
 
             dto = await ticketDAL.Create(ticket);
         }

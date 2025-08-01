@@ -66,10 +66,6 @@ public class TicketsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateOrUpdate([Bind("CustomerBookTripId,CustomerId,TripId,Price,SellerCode,RegistrationNumber,GeneralParamId,RowVersion")] Models.Ticket ticket)
     {
-        ticket.CustomerBookTrip = new();
-        ticket.CustomerBookTrip.CustomerId = ticket.CustomerId;
-        ticket.CustomerBookTrip.TripId = ticket.TripId;
-
         if (ModelState.IsValid)
         {
             TicketCreateOrUpdateDTO targetTicket = new() { Ticket = ticket };

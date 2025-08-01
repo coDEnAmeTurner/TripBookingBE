@@ -55,4 +55,27 @@ public class CustomerBookTripsDal : ICustomerBookTripsDal
         }
         return dto;
     }
+
+    public async Task<CustomerBookTripGetIdByCustomerIdAndTripIdDTO> GetIdByCustIdAndTripId(long? custId, long? tripId)
+    {
+        CustomerBookTripGetIdByCustomerIdAndTripIdDTO dto = new();
+        try
+        {
+            var ids = from cbt in context.CustomerBookTrips
+                      where (tripId == null || tripId == cbt.TripId)
+                      && (custId == null || custId == cbt.CustomerId)
+                      select cbt.Id;
+            var result = await ids.ToListAsync();
+
+            dto.Ids = result;
+
+        }
+        catch (Exception ex)
+        {
+            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
+        }
+
+        return dto;
+    }
 }

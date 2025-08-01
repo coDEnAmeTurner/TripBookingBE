@@ -34,7 +34,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("SellingTripsId");
 
-                    b.ToTable("SellerTrip");
+                    b.ToTable("SellerTrip", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.CustomerBookTrip", b =>
@@ -74,7 +74,7 @@ namespace TripBookingBE.Migrations
                     b.HasIndex(new[] { "CustomerId", "TripId" }, "IX_CustomerBookTrip")
                         .IsUnique();
 
-                    b.ToTable("CustomerBookTrip");
+                    b.ToTable("CustomerBookTrip", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.CustomerReviewTrip", b =>
@@ -114,7 +114,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.ToTable("CustomerReviewTrip");
+                    b.ToTable("CustomerReviewTrip", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.GeneralParam", b =>
@@ -150,7 +150,7 @@ namespace TripBookingBE.Migrations
                     b.HasKey("Id")
                         .HasName("PK_GeneralParam_1");
 
-                    b.ToTable("GeneralParams");
+                    b.ToTable("GeneralParams", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.Route", b =>
@@ -186,7 +186,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Route");
+                    b.ToTable("Route", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.Ticket", b =>
@@ -226,7 +226,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("GeneralParamId");
 
-                    b.ToTable("Ticket");
+                    b.ToTable("Ticket", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.Trip", b =>
@@ -285,7 +285,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("RouteId");
 
-                    b.ToTable("Trip");
+                    b.ToTable("Trip", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.User", b =>
@@ -401,7 +401,7 @@ namespace TripBookingBE.Migrations
                     b.HasIndex(new[] { "UserName" }, "UQ__User__66DCF95C55A682B1")
                         .IsUnique();
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("SellerTrip", b =>

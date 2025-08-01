@@ -17,4 +17,9 @@ public class CustomerBookTripsService : ICustomerBookTripsService
         
         return await bookingDAL.DeleteCustomerBookTripsByUser(userId);
     }
+
+    public async Task<CustomerBookTripGetIdByCustomerIdAndTripIdDTO> GetIdByCustIdAndTripId(long? custId, long? tripId)
+    {
+        return await bookingDAL.GetIdByCustIdAndTripId(custId, tripId);
+    }
 }
