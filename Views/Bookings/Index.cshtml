@@ -90,6 +90,9 @@
                             Departure Time
                         </th>
                         <th>
+                            Seat Number
+                        </th>
+                        <th>
                             Date Of Creation
                         </th>
                         <th>
@@ -128,6 +131,9 @@
                                 <div>
                                     @(model.Trip?.DepartureTime.Value.ToString("dd/MM/yyyy"))
                                 </div>
+                            </td>
+                            <td>
+                                @(model.PlaceNumber)
                             </td>
                             <td>
                                 <div>

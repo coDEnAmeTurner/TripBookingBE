@@ -63,7 +63,7 @@ public class TripDAL : ITripDAL
         TripGetByIdDTO dto = new();
         try
         {
-            var trip = await context.Trips.FirstOrDefaultAsync(x => x.Id == id);
+            var trip = await context.Trips.Include(t=>t.Route).FirstOrDefaultAsync(x => x.Id == id);
             if (trip == null)
             {
                 dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;

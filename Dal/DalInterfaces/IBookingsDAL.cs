@@ -13,4 +13,8 @@ public interface IBookingsDal
 
     Task<BookingGetBookingsDTO> GetBookings(string? customerName, string? registrationNumber, DateTime? departureTime, string? routeDescription);
 
+    public Task<BookingCreateOrUpdateDTO> Create(Models.CustomerBookTrip booking);
+
+    public Task<BookingCreateOrUpdateDTO> Update(Models.CustomerBookTrip booking);
+
 }
