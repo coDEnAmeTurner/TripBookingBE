@@ -69,6 +69,8 @@ public partial class TripBookingContext : DbContext
 
             entity.HasOne(d => d.Trip).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.TripId)
                 .HasConstraintName("FK_UserReviewTrip_Trip").OnDelete(DeleteBehavior.SetNull);
+
+            entity.Property(e => e.RowVersion).IsRowVersion();
         });
 
         modelBuilder.Entity<Ticket>(entity =>

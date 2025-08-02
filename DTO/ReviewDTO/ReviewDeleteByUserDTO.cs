@@ -1,9 +1,9 @@
 using System.Net;
 using TripBookingBE.Models;
 
-namespace TripBookingBE.DTO.CustomerReviewTripDTO;
+namespace TripBookingBE.DTO.ReviewDTO;
 
-public class CustomerReviewTripDeleteByUserDTO
+public class ReviewDeleteByUserDTO
 {
     public IQueryable<CustomerReviewTrip> CustomerReviewTrips = null;
 
