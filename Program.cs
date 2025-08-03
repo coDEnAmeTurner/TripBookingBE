@@ -6,6 +6,9 @@ using TripBookingBE.Services.ServiceImplementations;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.Dal.DalImplementations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity.Data;
+using TripBookingBE.security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,12 @@ DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
 Cloudinary cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
 cloudinary.Api.Secure = true;
 builder.Services.AddSingleton(typeof(Cloudinary), cloudinary);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
+        options => builder.Configuration.Bind("JwtSettings", options));
+
+builder.Services.AddSingleton<TokenGenerator>();
 
 //services and dals
 builder.Services.AddScoped<IUsersService,UsersService>();

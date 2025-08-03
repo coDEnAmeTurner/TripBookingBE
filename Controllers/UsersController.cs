@@ -1,10 +1,13 @@
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
 using TripBookingBE.Pagination;
+using TripBookingBE.security;
 using TripBookingBE.Services.ServiceInterfaces;
 
 namespace TripBookingBE.Controllers;
@@ -12,10 +15,32 @@ namespace TripBookingBE.Controllers;
 public class UsersController : Controller
 {
     private IUsersService usersService;
+    private TokenGenerator generator;
 
-    public UsersController(IUsersService usersService)
+    public UsersController(IUsersService usersService, TokenGenerator generator)
     {
         this.usersService = usersService;
+        this.generator = generator;
+    }
+
+    public async Task<IActionResult> Login(LoginRequest request)
+    {
+        var user = await usersService.GetUsers(username: request.Email, password: request.Password);
+        if (user == null || user.Users == null || user.Users.Count == 0)
+        {
+            return new ContentResult()
+            {
+                Content = "Check your username and password! Login failed!",
+                StatusCode = (int)HttpStatusCode.Unauthorized
+            };
+        }
+        var obj = user.Users.FirstOrDefault();
+        UserLoginDTO dto = new()
+        {
+            AccessToken = generator.GenerateToken(obj.UserName, obj.Phone, obj.Email)
+
+        };
+        return new JsonResult(obj);
     }
 
     public async Task<IActionResult> Index(string name, string type, string sellerCode, string email, int? pageNumber)

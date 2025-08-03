@@ -84,7 +84,7 @@ public class UsersDal : IUsersDal
         return dto;
     }
 
-    public async Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email)
+    public async Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email, string username, string password)
     {
 
         UserGetUsersDTO dto = new();
@@ -111,6 +111,12 @@ public class UsersDal : IUsersDal
             if (!String.IsNullOrEmpty(email))
             {
                 users = users.Where(u => u.Email != null && u.Email.Contains(sellerCode));
+            }
+            if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
+            {
+                users = users.Where(u => u.UserName != null
+                && u.UserName.Equals(username)
+                && u.Password.Equals(password));
             }
 
             var resultusers = await users.Include(u => u.Trips).ThenInclude(t => t.Route).OrderByDescending(u => u.Id).ToListAsync();

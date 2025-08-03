@@ -158,8 +158,8 @@ public class UsersService : IUsersService
         return dto;
     }
 
-    public async Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email)
+    public async Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email, string username = null, string password = null)
     {
-        return await usersDAL.GetUsers(name, type, sellerCode, email);
+        return await usersDAL.GetUsers(name, type, sellerCode, email, username, password);
     }
 }
