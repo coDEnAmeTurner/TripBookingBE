@@ -6,10 +6,10 @@ namespace TripBookingBE.security;
 
 public class TokenGenerator
 {
+    public static byte[] key = "893u498423-n2u8y07134pjoigvrew0y82453jpir-e90135 kjsdfg"u8.ToArray();
     public string GenerateToken(string username, string phone,string email)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = "893u498423-n2u8y07134pjoigvrew0y82453jpir-e90135 kjsdfg"u8.ToArray();
 
         var claims = new List<Claim>()
         {

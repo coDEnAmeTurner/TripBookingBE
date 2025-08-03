@@ -1,0 +1,34 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+@if (ViewData["statusCode"] != null && ViewData["errorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <p><b>Status Code: @(ViewData["statusCode"].ToString())</b></p>
+        <p><b>Message: @(ViewData["errorMessage"].ToString())</b></p>
+    </div>
+}
+
+<div>
+    <form asp-controller="Users" asp-action="Login" method="post">
+        <div class="container">
+            <div class="col col-12">
+                <label for="filter-username" class="form-label">User Name: </label>
+                <input id="filter-username" type="text" name="Email" class="form-control" />
+
+            </div>
+
+            <div class="col col-12">
+                <label for="filter-password" class="form-label">Password: </label>
+                <input id="filter-password" type="text" name="Password" class="form-control" />
+
+            </div>
+            <div class="form-group col col-12 mt-2 justify-content-center">
+                <input type="submit" value="Submit"
+                    class="btn btn-primary" />
+                <a class="btn btn-dark" asp-controller="Trips" asp-action="Index">Back to List</a>
+            </div>
+        </div>
+    </form>
+</div>
