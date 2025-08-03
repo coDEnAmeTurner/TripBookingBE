@@ -1,10 +1,12 @@
 using System.Net;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
 using TripBookingBE.Pagination;
+using TripBookingBE.security;
 using TripBookingBE.Services.ServiceInterfaces;
 
 namespace TripBookingBE.Controllers;
@@ -13,9 +15,39 @@ public class UsersController : Controller
 {
     private IUsersService usersService;
 
-    public UsersController(IUsersService usersService)
+    public UsersController(IUsersService usersService
+    )
     {
         this.usersService = usersService;
+    }
+    public async Task<IActionResult> Login()
+    {
+        return View();
+    }
+
+    public async Task<IActionResult> Logout()
+    {
+        HttpContext.Session.Clear();
+
+        return RedirectToAction(nameof(Login));
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginRequest request)
+    {
+        var user = await usersService.GetUsers(username: request.Email, password: request.Password);
+        if (user == null || user.Users == null || user.Users.Count == 0)
+        {
+            ViewData["errorMessage"] = "Login failed! Check your username and password!";
+            ViewData["statusCode"] = HttpStatusCode.Unauthorized;
+            return View();
+        }
+        var obj = user.Users.FirstOrDefault();
+        HttpContext.Session.SetString("UserName", obj.UserName);
+        HttpContext.Session.SetString("Phone", obj.Phone);
+        HttpContext.Session.SetString("Email", obj.Email);
+        return RedirectToAction(nameof(Index));
     }
 
     public async Task<IActionResult> Index(string name, string type, string sellerCode, string email, int? pageNumber)

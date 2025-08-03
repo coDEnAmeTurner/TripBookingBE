@@ -9,6 +9,8 @@ namespace TripBookingBE.Models;
 [Table("CustomerReviewTrip")]
 public partial class CustomerReviewTrip
 {
+    [Timestamp]
+    public byte[]? RowVersion { get; set; }
     [Key]
     [Column("id")]
     public long Id { get; set; }
@@ -24,14 +26,14 @@ public partial class CustomerReviewTrip
     public string? Content { get; set; }
 
     [Column("dateCreated", TypeName = "datetime")]
-    public DateTime? DateCreated { get; set; }=null;
+    public DateTime? DateCreated { get; set; }=DateTime.Now;
 
     [Column("dateModified", TypeName = "datetime")]
-    public DateTime? DateModified { get; set; }=null;
+    public DateTime? DateModified { get; set; }=DateTime.Now;
 
     [ForeignKey("CustomerId")]
     [InverseProperty("CustomerReviewTrips")]
-    public virtual User Customer { get; set; } = null!;
+    public virtual User? Customer { get; set; }
 
     [ForeignKey("TripId")]
     [InverseProperty("CustomerReviewTrips")]

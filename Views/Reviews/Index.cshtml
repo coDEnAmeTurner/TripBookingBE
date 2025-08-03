@@ -1,8 +1,8 @@
 @using TripBookingBE.Pagination
-@model PaginatedList<TripBookingBE.Models.CustomerBookTrip>;
+@model PaginatedList<TripBookingBE.Models.CustomerReviewTrip>;
 
 @{
-    ViewData["Title"] = "Booking List";
+    ViewData["Title"] = "Review List";
 
     string prevDisabled = "disabled";
     string nextDisabled = "disabled";
@@ -28,8 +28,8 @@
 }
 
 <div>
-    <h4>Bookings</h4>
-    <form asp-controller="Bookings" asp-action="Index">
+    <h4>Reviews</h4>
+    <form asp-controller="Reviews" asp-action="Index">
         <div class="container">
             <div class="row gy-3">
                 <div class="col col-3">
@@ -49,6 +49,11 @@
                 <div class="col col-3">
                     <label for="filter-routeDescription" class="form-label">Route Description: </label>
                     <input type="text" id="routeDescription" name="routeDescription" class="form-control"
+                        autocomplete="off" />
+                </div>
+                <div class="col col-3">
+                    <label for="filter-content" class="form-label">Content: </label>
+                    <input type="text" id="content" name="content" class="form-control"
                         autocomplete="off" />
                 </div>
                 <div class="col col-5 mx-2 d-flex justify-content-space-between align-items-center">
@@ -90,7 +95,7 @@
                             Departure Time
                         </th>
                         <th>
-                            Seat Number
+                            Content
                         </th>
                         <th>
                             Date Of Creation
@@ -133,7 +138,7 @@
                                 </div>
                             </td>
                             <td>
-                                @(model.PlaceNumber)
+                                @(model.Content)
                             </td>
                             <td>
                                 <div>

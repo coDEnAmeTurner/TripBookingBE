@@ -10,6 +10,10 @@ namespace TripBookingBE.Models;
 [Index("CustomerId", "TripId", Name = "IX_CustomerBookTrip", IsUnique = true)]
 public partial class CustomerBookTrip
 {
+
+    [Timestamp]
+    public byte[]? RowVersion { get; set; }
+
     [Key]
     [Column("id")]
     public long Id { get; set; }
@@ -20,23 +24,24 @@ public partial class CustomerBookTrip
     [Column("tripId")]
     public long TripId { get; set; }
 
+    [Display(Name ="Place Number")]
     [Column("placeNumber")]
     public int? PlaceNumber { get; set; }
 
     [Column("dateCreated", TypeName = "datetime")]
-    public DateTime? DateCreated { get; set; } = null;
+    public DateTime? DateCreated { get; set; } = DateTime.Now;
 
     [Column("dateModified", TypeName = "datetime")]
-    public DateTime? DateModified { get; set; }= null;
+    public DateTime? DateModified { get; set; }=  DateTime.Now;
 
     [ForeignKey("CustomerId")]
     [InverseProperty("CustomerBookTrips")]
-    public virtual User Customer { get; set; } = null!;
+    public virtual User? Customer { get; set; }
 
     [InverseProperty("CustomerBookTrip")]
     public virtual Ticket? Ticket { get; set; }
 
     [ForeignKey("TripId")]
     [InverseProperty("CustomerBookTrips")]
-    public virtual Trip Trip { get; set; } = null!;
+    public virtual Trip? Trip { get; set; }
 }

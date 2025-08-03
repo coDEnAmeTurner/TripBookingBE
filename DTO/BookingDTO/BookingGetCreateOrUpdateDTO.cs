@@ -3,7 +3,7 @@ using TripBookingBE.Models;
 
 namespace TripBookingBE.DTO.BookingDTO;
 
-public class BookingGetByIdDTO
+public class BookingGetCreateOrUpdateDTO
 {
     public CustomerBookTrip CustomerBookTrip = null;
 

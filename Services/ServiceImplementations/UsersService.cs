@@ -17,10 +17,10 @@ public class UsersService : IUsersService
 {
     private readonly IUsersDal usersDAL;
     private readonly IBookingsDal bookingDAL;
-    private readonly ICustomerReviewTripsDal reviewDAL;
+    private readonly IReviewsDal reviewDAL;
     private readonly Cloudinary cloudinary;
 
-    public UsersService(IUsersDal dal, Cloudinary cloudinary, IBookingsDal bookingDAL, ICustomerReviewTripsDal reviewDAL)
+    public UsersService(IUsersDal dal, Cloudinary cloudinary, IBookingsDal bookingDAL, IReviewsDal reviewDAL)
     {
         this.usersDAL = dal;
         this.cloudinary = cloudinary;
@@ -107,7 +107,7 @@ public class UsersService : IUsersService
                     dto.Message = bookingDTO.Message;
                 }
 
-                var reviewDTO = await reviewDAL.DeleteCustomerReviewTripsByUser(id);
+                var reviewDTO = await reviewDAL.DeleteReviewsByUser(id);
                 if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
                 {
                     dto.StatusCode = reviewDTO.StatusCode;
@@ -158,8 +158,8 @@ public class UsersService : IUsersService
         return dto;
     }
 
-    public async Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email)
+    public async Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email, string username = null, string password = null)
     {
-        return await usersDAL.GetUsers(name, type, sellerCode, email);
+        return await usersDAL.GetUsers(name, type, sellerCode, email, username, password);
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripBookingBE.Data;
 
@@ -11,9 +12,11 @@ using TripBookingBE.Data;
 namespace TripBookingBE.Migrations
 {
     [DbContext(typeof(TripBookingContext))]
-    partial class TripBookingContextModelSnapshot : ModelSnapshot
+    [Migration("20250802072001_RowVersionForBooking")]
+    partial class RowVersionForBooking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,11 +110,6 @@ namespace TripBookingBE.Migrations
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime")
                         .HasColumnName("dateModified");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.Property<long?>("TripId")
                         .HasColumnType("bigint")

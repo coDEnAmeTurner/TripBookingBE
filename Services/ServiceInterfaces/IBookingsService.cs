@@ -9,4 +9,13 @@ public interface IBookingsService
     Task<BookingDeleteByUserDTO> DeleteBookingsByUser(long userId);
     Task<BookingGetIdByCustomerIdAndTripIdDTO> GetIdByCustIdAndTripId(long? custId, long? tripId);
     Task<BookingGetBookingsDTO> GetBookings(string? customerName, string? registrationNumber, DateTime? departureTime, string? routeDescription);
+
+    Task<BookingGetCreateOrUpdateDTO> GetCreateOrUpdateModel(long? id);
+
+    Task<BookingCreateOrUpdateDTO> CreateOrUpdate(Models.CustomerBookTrip booking);
+
+    Task<BookingGetByIdDTO> GetBookingById(long id);
+
+    Task<BookingDeleteByIdDTO> DeleteBooking(long id);
+
 }

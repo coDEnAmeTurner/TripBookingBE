@@ -1,11 +1,11 @@
 using System.Net;
 using TripBookingBE.Models;
 
-namespace TripBookingBE.DTO.BookingDTO;
+namespace TripBookingBE.DTO.ReviewDTO;
 
-public class BookingGetByIdDTO
+public class ReviewGetCreateOrUpdateDTO
 {
-    public CustomerBookTrip CustomerBookTrip = null;
+    public CustomerReviewTrip Review = null;
 
     public HttpStatusCode StatusCode = HttpStatusCode.OK;
 

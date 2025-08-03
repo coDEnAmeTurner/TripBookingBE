@@ -57,6 +57,8 @@ public partial class TripBookingContext : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.CustomerBookTrips).HasForeignKey(b => b.CustomerId).HasConstraintName("FK_CustomerBookTrip_Customer").OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.Trip).WithMany(p => p.CustomerBookTrips).HasForeignKey(b => b.TripId).HasConstraintName("FK_CustomerBookTrip_Trip").OnDelete(DeleteBehavior.SetNull);
+
+            entity.Property(e => e.RowVersion).IsRowVersion();
         });
 
         modelBuilder.Entity<CustomerReviewTrip>(entity =>
@@ -67,6 +69,8 @@ public partial class TripBookingContext : DbContext
 
             entity.HasOne(d => d.Trip).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.TripId)
                 .HasConstraintName("FK_UserReviewTrip_Trip").OnDelete(DeleteBehavior.SetNull);
+
+            entity.Property(e => e.RowVersion).IsRowVersion();
         });
 
         modelBuilder.Entity<Ticket>(entity =>

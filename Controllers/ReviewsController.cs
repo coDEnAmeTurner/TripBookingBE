@@ -2,30 +2,31 @@ using System.Globalization;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using TripBookingBE.DTO.BookingDTO;
+using TripBookingBE.DTO.ReviewDTO;
 using TripBookingBE.Models;
 using TripBookingBE.Pagination;
 using TripBookingBE.Services.ServiceInterfaces;
 
 namespace TripBookingBE.Controllers;
 
-public class BookingsController : Controller
+public class ReviewsController : Controller
 {
-    private readonly IBookingsService bookingService;
+    private readonly IReviewService reviewService;
+    private readonly IUsersService userService;
     private readonly ITripService tripService;
-    private readonly IUsersService usersService;
-    public BookingsController(IBookingsService bookingService, ITripService tripService, IUsersService usersService)
+
+    public ReviewsController(IReviewService reviewService, IUsersService userService, ITripService tripService)
     {
-        this.bookingService = bookingService;
+        this.reviewService = reviewService;
+        this.userService = userService;
         this.tripService = tripService;
-        this.usersService = usersService;
     }
 
-    public async Task<IActionResult> Index(string? customerName, string? registrationNumber, string? departureTimeStr, string? routeDescription, int? pageNumber)
+    public async Task<IActionResult> Index(string? customerName, string? registrationNumber, string? departureTimeStr, string? routeDescription, string? content, int? pageNumber)
     {
-        BookingGetBookingsDTO dto = new();
+        ReviewGetReviewsDTO dto = new();
 
-        dto = await bookingService.GetBookings(customerName, registrationNumber, departureTimeStr == null ? null : DateTime.ParseExact(departureTimeStr, "dd/MM/yyyy", CultureInfo.InvariantCulture), routeDescription);
+        dto = await reviewService.GetReviews(customerName, registrationNumber, departureTimeStr == null ? null : DateTime.ParseExact(departureTimeStr, "dd/MM/yyyy", CultureInfo.InvariantCulture), routeDescription, content);
         if (dto.StatusCode != HttpStatusCode.OK)
         {
             ViewData["statusCode"] = dto.StatusCode;
@@ -35,12 +36,12 @@ public class BookingsController : Controller
 
 
         int pageSize = 3;
-        return View(await PaginatedList<CustomerBookTrip>.CreateAsync(dto.Bookings, pageNumber ?? 1, pageSize));
+        return View(await PaginatedList<CustomerReviewTrip>.CreateAsync(dto.Reviews, pageNumber ?? 1, pageSize));
     }
 
     public async Task<IActionResult> CreateOrUpdate(long? id)
     {
-        var dto = await bookingService.GetCreateOrUpdateModel(id);
+        var dto = await reviewService.GetCreateOrUpdateModel(id);
         await PopulateDropDownList();
         if (dto.StatusCode != HttpStatusCode.OK)
         {
@@ -49,50 +50,50 @@ public class BookingsController : Controller
             return View();
         }
 
-        return View(dto.CustomerBookTrip);
+        return View(dto.Review);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateOrUpdate([Bind("Id,CustomerId,TripId,PlaceNumber,RowVersion")] Models.CustomerBookTrip booking)
+    public async Task<IActionResult> CreateOrUpdate([Bind("Id,CustomerId,TripId,Content,RowVersion")] Models.CustomerReviewTrip review)
     {
         if (ModelState.IsValid)
         {
-            BookingCreateOrUpdateDTO targetBooking = new() { CustomerBookTrip = booking };
+            ReviewCreateOrUpdateDTO targetReview = new() { Review = review };
 
-            targetBooking = await bookingService.CreateOrUpdate(booking);
-            if (targetBooking.StatusCode != HttpStatusCode.Created)
+            targetReview = await reviewService.CreateOrUpdate(review);
+            if (targetReview.StatusCode != HttpStatusCode.Created)
             {
-                ViewData["statusCode"] = targetBooking.StatusCode;
-                ViewData["errorMessage"] = targetBooking.Message;
-                if (targetBooking.StatusCode == HttpStatusCode.Conflict)
+                ViewData["statusCode"] = targetReview.StatusCode;
+                ViewData["errorMessage"] = targetReview.Message;
+                if (targetReview.StatusCode == HttpStatusCode.Conflict)
                     ModelState.Remove("RowVersion");
                 await PopulateDropDownList();
-                return View(targetBooking.CustomerBookTrip);
+                return View(targetReview.Review);
             }
             return RedirectToAction(nameof(Index));
         }
         await PopulateDropDownList();
-        return View(booking);
+        return View(review);
     }
 
     public async Task<IActionResult> Details(long? id)
     {
-        var dto = await bookingService.GetBookingById(id.GetValueOrDefault());
+        var dto = await reviewService.GetReviewById(id.GetValueOrDefault());
         await PopulateDropDownList();
-        if (dto.StatusCode != HttpStatusCode.OK || dto.CustomerBookTrip == null)
+        if (dto.StatusCode != HttpStatusCode.OK || dto.Review == null)
         {
             ViewData["statusCode"] = dto.StatusCode;
             ViewData["errorMessage"] = dto.Message;
             return View("Index");
         }
 
-        return View(dto.CustomerBookTrip);
+        return View(dto.Review);
     }
 
     public async Task<IActionResult> Delete(long id)
     {
-        var dto = await bookingService.DeleteBooking(id);
+        var dto = await reviewService.DeleteReview(id);
         if (dto.StatusCode != HttpStatusCode.NoContent)
         {
             ViewData["statusCode"] = dto.StatusCode;
@@ -105,7 +106,7 @@ public class BookingsController : Controller
     async Task PopulateDropDownList()
     {
         var trips = await tripService.GetTrips(null, null, null, null, null);
-        var customers = await usersService.GetUsers(type: "CUSTOMER");
+        var customers = await userService.GetUsers(type: "CUSTOMER");
 
         var tripOptions = from t in trips.Trips select new { Id = t.Id, Description = $"{t.Route?.RouteDescription} - {t.RegistrationNumber}" };
 

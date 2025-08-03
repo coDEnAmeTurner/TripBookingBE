@@ -6,6 +6,11 @@ using TripBookingBE.Services.ServiceImplementations;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.Dal.DalImplementations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity.Data;
+using TripBookingBE.security;
+using Microsoft.IdentityModel.Tokens;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +18,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 //db context
-builder.Services.AddDbContext<TripBookingContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext")));
+builder.Services.AddDbContext<TripBookingContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext")));
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(TokenGenerator.key),
+            ValidIssuer = "https://id.dotnettrain.com",
+            ValidAudience = "https://donettrain.com",
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
+            ValidateAudience = true,
+            ValidateIssuer = true
+        };
+    });
 
 //cloudinary
 DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
@@ -21,22 +42,33 @@ Cloudinary cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUD
 cloudinary.Api.Secure = true;
 builder.Services.AddSingleton(typeof(Cloudinary), cloudinary);
 
+builder.Services.AddSingleton<TokenGenerator>();
+builder.Services.AddHttpContextAccessor();
+
 //services and dals
-builder.Services.AddScoped<IUsersService,UsersService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IUsersDal, UsersDal>();
-builder.Services.AddScoped<IBookingsService,BookingsService>();
+builder.Services.AddScoped<IBookingsService, BookingsService>();
 builder.Services.AddScoped<IBookingsDal, BookingsDal>();
-builder.Services.AddScoped<ICustomerReviewTripsService,CustomerReviewTripsService>();
-builder.Services.AddScoped<ICustomerReviewTripsDal,CustomerReviewTripsDal>();
+builder.Services.AddScoped<IReviewService, ReviewsService>();
+builder.Services.AddScoped<IReviewsDal, ReviewsDal>();
 builder.Services.AddScoped<IRouteService, RouteService>();
 builder.Services.AddScoped<IRouteDAL, RouteDAL>();
 builder.Services.AddScoped<ITripService, TripService>();
-builder.Services.AddScoped<ITripDAL,TripDAL>();
+builder.Services.AddScoped<ITripDAL, TripDAL>();
 builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<ITicketDAL, TicketDAL>();
 builder.Services.AddScoped<IGeneralParamService, GeneralParamService>();
-builder.Services.AddScoped<IGeneralParamDal,GeneralParamDal>();
+builder.Services.AddScoped<IGeneralParamDal, GeneralParamDal>();
 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options=>
+{
+    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -48,11 +80,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSession();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 
 app.UseRouting();
-
-app.UseAuthorization();
 
 app.MapStaticAssets();
 

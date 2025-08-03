@@ -13,8 +13,9 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        await HttpContext.Session.LoadAsync();
         return View();
     }
 
