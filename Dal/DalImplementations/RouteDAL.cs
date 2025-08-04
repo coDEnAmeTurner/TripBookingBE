@@ -28,7 +28,7 @@ public class RouteDAL : IRouteDAL
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         finally
@@ -47,7 +47,7 @@ public class RouteDAL : IRouteDAL
         var inst = await context.Routes.FindAsync(id);
         if (inst == null)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+            dto.RespCode = System.Net.HttpStatusCode.NotFound;
             dto.Message += $"\nRoute with Id {id} not found!";
         }
 
@@ -66,14 +66,14 @@ public class RouteDAL : IRouteDAL
             var route = await context.Routes.FirstOrDefaultAsync(x => x.Id == id);
             if (route == null)
             {
-                dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
                 dto.Message = $"User with Id {id} not found!";
             }
             dto.Route = route;
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         return dto;
@@ -102,7 +102,7 @@ public class RouteDAL : IRouteDAL
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
 
@@ -123,7 +123,7 @@ public class RouteDAL : IRouteDAL
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            dto.StatusCode = HttpStatusCode.Conflict;
+            dto.RespCode = HttpStatusCode.Conflict;
 
             var exceptionEntry = ex.Entries.Single();
             var clientValues = (Models.Route)exceptionEntry.Entity;
@@ -153,7 +153,7 @@ public class RouteDAL : IRouteDAL
         catch (Exception ex)
         {
             dto.Message = ex.Message;
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
         }
         finally
         {

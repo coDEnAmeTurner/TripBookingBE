@@ -43,9 +43,9 @@ public class RouteService : IRouteService
             {
 
                 var routeDTO = await routeDAL.DeleteRoute(id);
-                if (routeDTO.StatusCode != HttpStatusCode.NoContent)
+                if (routeDTO.RespCode != HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = routeDTO.StatusCode;
+                    dto.RespCode = routeDTO.RespCode;
                     dto.Message += $"\n{routeDTO.Message}";
                 }
 
@@ -53,9 +53,9 @@ public class RouteService : IRouteService
             }
             catch (Exception ex)
             {
-                if (dto.StatusCode == HttpStatusCode.NoContent)
+                if (dto.RespCode == HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = HttpStatusCode.InternalServerError;
+                    dto.RespCode = HttpStatusCode.InternalServerError;
                     dto.Message = ex.Message;
                 }
             }
@@ -73,7 +73,7 @@ public class RouteService : IRouteService
         {
             var dtoDAL = await routeDAL.GetRouteById(id.GetValueOrDefault());
             dto.Route = dtoDAL.Route;
-            dto.StatusCode = dtoDAL.StatusCode;
+            dto.RespCode = dtoDAL.RespCode;
             dto.Message = dtoDAL.Message;
         }
 

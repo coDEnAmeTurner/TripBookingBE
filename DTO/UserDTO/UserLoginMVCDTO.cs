@@ -4,9 +4,9 @@ using TripBookingBE.Models;
 namespace TripBookingBE.DTO.UserDTO;
 
 
-public class UserLoginDTO
+public class UserLoginMVCDTO
 {
-    public string AccessToken { get; set;} = null;
+    public User User { get; set;} = null;
     public int RespCode { get; set; } = 200;
     public string Message { get; set; } = string.Empty;
 }

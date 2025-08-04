@@ -7,7 +7,7 @@ public class ReviewDeleteByUserDTO
 {
     public IQueryable<CustomerReviewTrip> CustomerReviewTrips = null;
 
-    public HttpStatusCode StatusCode = HttpStatusCode.NoContent;
+    public HttpStatusCode RespCode = HttpStatusCode.NoContent;
 
     public string Message = string.Empty;
 }

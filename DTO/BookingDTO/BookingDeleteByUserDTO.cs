@@ -7,7 +7,7 @@ public class BookingDeleteByUserDTO
 {
     public IQueryable<CustomerBookTrip> CustomerBookTrips = null;
 
-    public HttpStatusCode StatusCode = HttpStatusCode.NoContent;
+    public HttpStatusCode RespCode = HttpStatusCode.NoContent;
 
     public string Message = string.Empty;
 }

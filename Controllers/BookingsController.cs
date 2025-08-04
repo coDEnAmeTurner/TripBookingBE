@@ -26,9 +26,9 @@ public class BookingsController : Controller
         BookingGetBookingsDTO dto = new();
 
         dto = await bookingService.GetBookings(customerName, registrationNumber, departureTimeStr == null ? null : DateTime.ParseExact(departureTimeStr, "dd/MM/yyyy", CultureInfo.InvariantCulture), routeDescription);
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -42,9 +42,9 @@ public class BookingsController : Controller
     {
         var dto = await bookingService.GetCreateOrUpdateModel(id);
         await PopulateDropDownList();
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -61,11 +61,11 @@ public class BookingsController : Controller
             BookingCreateOrUpdateDTO targetBooking = new() { CustomerBookTrip = booking };
 
             targetBooking = await bookingService.CreateOrUpdate(booking);
-            if (targetBooking.StatusCode != HttpStatusCode.Created)
+            if (targetBooking.RespCode != HttpStatusCode.Created)
             {
-                ViewData["statusCode"] = targetBooking.StatusCode;
+                ViewData["statusCode"] = targetBooking.RespCode;
                 ViewData["errorMessage"] = targetBooking.Message;
-                if (targetBooking.StatusCode == HttpStatusCode.Conflict)
+                if (targetBooking.RespCode == HttpStatusCode.Conflict)
                     ModelState.Remove("RowVersion");
                 await PopulateDropDownList();
                 return View(targetBooking.CustomerBookTrip);
@@ -80,9 +80,9 @@ public class BookingsController : Controller
     {
         var dto = await bookingService.GetBookingById(id.GetValueOrDefault());
         await PopulateDropDownList();
-        if (dto.StatusCode != HttpStatusCode.OK || dto.CustomerBookTrip == null)
+        if (dto.RespCode != HttpStatusCode.OK || dto.CustomerBookTrip == null)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View("Index");
         }
@@ -93,9 +93,9 @@ public class BookingsController : Controller
     public async Task<IActionResult> Delete(long id)
     {
         var dto = await bookingService.DeleteBooking(id);
-        if (dto.StatusCode != HttpStatusCode.NoContent)
+        if (dto.RespCode != HttpStatusCode.NoContent)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
         }
 

@@ -7,7 +7,7 @@ public class BookingGetByIdDTO
 {
     public CustomerBookTrip CustomerBookTrip = null;
 
-    public HttpStatusCode StatusCode = HttpStatusCode.OK;
+    public HttpStatusCode RespCode = HttpStatusCode.OK;
 
     public string Message = string.Empty;
 }

@@ -7,7 +7,7 @@ public class ReviewGetCreateOrUpdateDTO
 {
     public CustomerReviewTrip Review = null;
 
-    public HttpStatusCode StatusCode = HttpStatusCode.OK;
+    public HttpStatusCode RespCode = HttpStatusCode.OK;
 
     public string Message = string.Empty;
 }

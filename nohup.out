@@ -1498,3 +1498,937 @@ INFO: ConnectionID:2 ClientConnectionId: 58f609a6-a5cb-41cd-bc94-d43be01647a2: S
 (DBeaver:27539): Gtk-WARNING **: 16:23:50.157: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
 
 (DBeaver:27539): Gtk-WARNING **: 16:23:50.157: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+2025-08-04 20:23:52.029 - Execution context closed (master, 0)
+2025-08-04 20:23:52.040 - Execution context closed (master, 1)
+2025-08-04 20:23:52.041 - Disconnected (microsoft-198504f9161-2708ab4509e92398)
+2025-08-04 22:00:19.404 - Connect with 'master' (microsoft-198504f9161-2708ab4509e92398)
+2025-08-04 22:00:19.409 - Execution context opened (master; Main; 2)
+2025-08-04 22:00:19.534 - Execution context opened (master; Metadata; 3)
+Aug 04, 2025 10:00:19 PM com.microsoft.sqlserver.jdbc.TDSTokenHandler onColMetaData
+INFO: ConnectionID:4 ClientConnectionId: d0aa1c95-acb0-4227-b5c2-baa775a7aef5: SQLServerConnection.supportsTransactions: Discarding extra metadata which can be a result of SHOWPLAN settings:  TDS_COLMETADATA (0x81)
+2025-08-04 22:00:19.680 - Connected (microsoft-198504f9161-2708ab4509e92398, Microsoft JDBC Driver 12.8 for SQL Server [12.8.0.0])
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:19.961: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:19.965: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:19.974: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:19.984: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:19.989: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.008: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.009: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.009: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.009: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.009: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): IBUS-WARNING **: 22:00:20.053: DBeaver has no capability of surrounding-text feature
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.307: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.308: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.308: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.309: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.309: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.327: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.328: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.328: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.328: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.329: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.357: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.357: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.357: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.358: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.358: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): IBUS-WARNING **: 22:00:20.366: DBeaver has no capability of surrounding-text feature
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.378: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.379: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.379: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.379: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.379: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.402: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.402: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.403: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.403: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:20.403: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:22.944: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:22.945: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:22.945: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:22.945: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:22.946: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:22.949: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:22.949: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:22.949: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:22.950: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:22.950: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:23.969: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:23.970: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:23.971: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:23.972: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:23.973: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:23.979: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:23.979: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:23.980: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:23.980: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:23.981: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:24.533: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:24.534: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:24.535: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:24.536: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:24.536: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:24.545: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:24.545: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:24.546: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:24.546: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:24.547: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:25.673: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:25.673: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:25.673: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:25.674: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:25.674: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.249: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.250: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.250: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.250: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.250: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.350: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.350: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.351: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.351: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.351: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.464: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.464: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.464: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.465: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.465: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.507: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.507: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.507: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.507: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:27.507: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:29.149: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:29.150: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:29.150: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:29.151: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:29.151: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:43.822: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:43.823: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:43.823: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:43.823: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:43.823: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:49.396: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:49.397: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:49.397: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:49.398: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 22:00:49.398: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:06.699: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:06.700: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:06.700: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:06.700: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:06.701: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:08.773: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:08.775: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:08.776: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:08.777: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:08.778: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:08.786: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:08.787: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:08.787: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:08.787: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:08.788: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:09.420: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:09.421: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:09.421: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:09.422: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:09.422: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:09.426: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:09.426: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:09.426: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:09.427: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:09.427: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:10.749: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:10.749: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:10.749: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:10.750: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:10.751: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:10.755: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:10.755: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:10.755: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:10.756: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:10.756: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:13.617: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:13.618: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:13.618: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:13.619: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:13.619: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:14.827: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:14.827: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:14.827: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:14.828: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:14.828: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:14.922: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:14.922: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:14.922: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:14.923: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:14.923: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.045: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.045: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.045: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.046: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.046: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.088: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.088: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.089: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.089: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.089: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.859: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.860: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.860: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.860: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:17:15.860: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:25:09.040: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:25:09.041: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:25:09.041: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:25:09.041: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:25:09.042: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:25:20.717: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:25:20.718: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:25:20.718: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:25:20.719: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:25:20.719: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:27:17.615: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:27:17.616: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:27:17.616: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:27:17.617: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:27:17.617: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:27:31.521: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:27:31.522: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:27:31.522: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:27:31.522: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:27:31.523: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:19.081: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:19.082: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:19.082: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:19.082: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:19.083: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:24.007: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:24.007: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:24.008: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:24.008: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:24.008: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:24.539: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:24.540: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:24.541: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:24.541: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:24.542: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:25.207: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:25.208: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:25.208: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:25.209: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:25.210: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:30.411: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:30.413: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:30.413: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:30.414: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:30.415: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.077: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.078: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.079: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.080: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.080: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.275: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.276: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.277: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.277: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.278: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.467: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.467: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.467: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.467: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:31.467: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:32.001: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:32.002: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:32.003: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:32.003: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:32.004: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:32.703: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:32.704: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:32.704: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:32.704: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:32.705: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:38.846: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:38.847: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:38.847: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:38.847: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:38.848: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:38.891: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:38.891: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:38.891: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:38.892: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:38.892: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:41.911: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:41.912: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:41.912: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:41.912: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:41.913: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:41.930: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:41.930: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:41.930: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:41.930: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:41.931: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:44.947: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:44.948: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:44.949: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:44.949: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:44.949: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:47.879: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:47.880: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:47.881: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:47.882: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:47.882: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:47.909: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:47.909: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:47.909: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:47.910: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:47.910: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.488: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.488: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.488: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.488: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.489: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.492: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.492: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.493: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.493: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.493: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.851: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.851: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.852: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.852: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.852: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.854: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.854: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.854: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.855: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:30:50.855: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+> Start DBeaver Data Transfer [org.jkiss.dbeaver.data.transfer 2.0.144.202508031529]
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:06.778: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:07.639: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:07.640: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:07.641: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:07.642: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:12.877: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:12.877: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:12.878: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:12.878: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:12.878: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:12.881: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:12.881: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:12.881: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:12.881: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:12.882: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.488: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.489: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.489: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.490: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.491: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.499: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.500: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.500: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.501: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.502: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.980: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.981: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.981: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.981: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.982: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.985: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.985: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.985: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.986: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:13.986: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:15.914: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:15.914: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:15.914: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:15.914: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:15.915: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.146: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.147: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.147: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.147: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.148: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.253: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.253: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.253: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.254: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.254: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.368: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.368: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.368: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.368: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.368: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.413: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.413: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.414: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.414: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:17.414: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:20.259: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:20.259: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:20.260: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:20.260: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:20.260: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:21.221: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:21.222: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:21.222: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:21.222: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:21.223: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:26.200: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:26.200: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:26.201: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:26.201: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:26.202: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:26.318: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:26.318: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:26.319: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:26.319: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:26.319: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:28.980: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:28.981: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:28.982: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:28.982: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:31:28.982: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:39.469: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:39.470: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:39.470: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:39.470: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:39.471: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:41.348: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:41.349: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:41.349: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:41.349: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:41.349: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:41.398: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:41.398: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:41.398: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:41.399: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:41.399: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:42.797: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:42.798: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:42.798: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:42.798: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:33:42.799: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:08.022: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:08.023: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:08.023: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:08.024: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:08.024: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:09.183: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:09.184: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:09.184: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:09.185: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:09.185: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:09.229: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:09.229: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:09.229: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:09.229: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:09.229: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:18.781: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:18.782: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:18.782: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:18.783: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:34:18.783: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:33.814: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:33.814: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:33.815: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:33.815: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:33.815: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:36.696: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:36.697: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:36.697: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:36.698: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:36.698: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:40.656: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:40.657: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:40.657: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:40.658: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:40.658: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:40.743: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:40.744: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:40.744: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:40.744: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:44:40.745: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:50:12.821: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:50:12.821: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:50:12.821: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:50:12.822: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:50:12.822: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:50:20.139: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:50:20.139: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:50:20.139: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:50:20.140: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:50:20.140: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:51:04.202: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:51:04.202: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:51:04.203: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:51:04.203: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:51:04.203: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:51:06.048: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:51:06.048: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:51:06.048: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:51:06.049: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:27539): Gtk-WARNING **: 23:51:06.049: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)

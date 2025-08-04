@@ -6,6 +6,6 @@ namespace TripBookingBE.DTO.TripDTO;
 public class TripCreateOrUpdateDTO
 {
     public Models.Trip Trip { get; set; } = null;
-    public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.Created;
+    public HttpStatusCode RespCode { get; set; } = HttpStatusCode.Created;
     public string Message { get; set; } = string.Empty;
 }

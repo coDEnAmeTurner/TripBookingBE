@@ -44,9 +44,9 @@ public class TripService : ITripService
             {
 
                 var tripDTO = await tripDAL.DeleteTrip(id);
-                if (tripDTO.StatusCode != HttpStatusCode.NoContent)
+                if (tripDTO.RespCode != HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = tripDTO.StatusCode;
+                    dto.RespCode = tripDTO.RespCode;
                     dto.Message += $"\n{tripDTO.Message}";
                 }
 
@@ -54,9 +54,9 @@ public class TripService : ITripService
             }
             catch (Exception ex)
             {
-                if (dto.StatusCode == HttpStatusCode.NoContent)
+                if (dto.RespCode == HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = HttpStatusCode.InternalServerError;
+                    dto.RespCode = HttpStatusCode.InternalServerError;
                     dto.Message = ex.Message;
                 }
             }
@@ -74,7 +74,7 @@ public class TripService : ITripService
         {
             var dtoDAL = await tripDAL.GetTripById(id.GetValueOrDefault());
             dto.Trip = dtoDAL.Trip;
-            dto.StatusCode = dtoDAL.StatusCode;
+            dto.RespCode = dtoDAL.RespCode;
             dto.Message = dtoDAL.Message;
         }
 

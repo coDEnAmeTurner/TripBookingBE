@@ -33,7 +33,7 @@ public class TicketDAL : ITicketDAL
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
         finally
@@ -79,7 +79,7 @@ public class TicketDAL : ITicketDAL
         }
         catch (Exception ex)
         {
-            dto.StatusCode = HttpStatusCode.InternalServerError;
+            dto.RespCode = HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
 
@@ -102,14 +102,14 @@ public class TicketDAL : ITicketDAL
             .FirstOrDefaultAsync();
             if (ticket == null)
             {
-                dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
                 dto.Message = $"Ticket with Id {id} not found!";
             }
             dto.Ticket = ticket;
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         return dto;
@@ -129,7 +129,7 @@ public class TicketDAL : ITicketDAL
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            dto.StatusCode = HttpStatusCode.Conflict;
+            dto.RespCode = HttpStatusCode.Conflict;
 
             var exceptionEntry = ex.Entries.Single();
             var clientValues = (Models.Ticket)exceptionEntry.Entity;
@@ -178,7 +178,7 @@ public class TicketDAL : ITicketDAL
         catch (Exception ex)
         {
             dto.Message = ex.Message;
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
         }
         finally
         {
@@ -197,7 +197,7 @@ public class TicketDAL : ITicketDAL
 
         if (inst == null)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+            dto.RespCode = System.Net.HttpStatusCode.NotFound;
             dto.Message += $"\nTicket with Id {id} not found!";
         }
         else

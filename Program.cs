@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using TripBookingBE.security;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
+using TripBookingBE.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +60,7 @@ builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<ITicketDAL, TicketDAL>();
 builder.Services.AddScoped<IGeneralParamService, GeneralParamService>();
 builder.Services.AddScoped<IGeneralParamDal, GeneralParamDal>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddDistributedMemoryCache();
 
@@ -89,12 +92,13 @@ app.UseRouting();
 
 app.MapStaticAssets();
 
+
 //conventional routing
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 app.MapControllers();
+
 
 app.Run();

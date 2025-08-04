@@ -7,7 +7,7 @@ namespace TripBookingBE.DTO.RouteDTO;
 public class RouteGetRoutesDTO
 {
     public List<Models.Route> Routes { get; set; } = null;
-    public HttpStatusCode StatusCode = HttpStatusCode.OK;
+    public HttpStatusCode RespCode = HttpStatusCode.OK;
 
     public string Message = string.Empty;
 }

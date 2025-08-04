@@ -27,7 +27,7 @@ public class ReviewsDal : IReviewsDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
         finally
@@ -50,7 +50,7 @@ public class ReviewsDal : IReviewsDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = HttpStatusCode.InternalServerError;
+            dto.RespCode = HttpStatusCode.InternalServerError;
             dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
 
@@ -72,7 +72,7 @@ public class ReviewsDal : IReviewsDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         return dto;
@@ -94,7 +94,7 @@ public class ReviewsDal : IReviewsDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
 
@@ -113,14 +113,14 @@ public class ReviewsDal : IReviewsDal
             .FirstOrDefaultAsync(x=>x.Id == id);
             if (review == null)
             {
-                dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
                 dto.Message = $"Review with Id {id} not found!";
             }
             dto.Review = review;
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         return dto;
@@ -159,7 +159,7 @@ public class ReviewsDal : IReviewsDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = HttpStatusCode.InternalServerError;
+            dto.RespCode = HttpStatusCode.InternalServerError;
             dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
 
@@ -179,7 +179,7 @@ public class ReviewsDal : IReviewsDal
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            dto.StatusCode = HttpStatusCode.Conflict;
+            dto.RespCode = HttpStatusCode.Conflict;
 
             var exceptionEntry = ex.Entries.Single();
             var clientValues = (CustomerReviewTrip)exceptionEntry.Entity;
@@ -213,7 +213,7 @@ public class ReviewsDal : IReviewsDal
         catch (Exception ex)
         {
             dto.Message = ex.Message;
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
         }
         finally
         {

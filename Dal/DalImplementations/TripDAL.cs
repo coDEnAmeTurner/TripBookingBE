@@ -28,7 +28,7 @@ public class TripDAL : ITripDAL
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         finally
@@ -47,7 +47,7 @@ public class TripDAL : ITripDAL
         var inst = await context.Trips.FindAsync(id);
         if (inst == null)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+            dto.RespCode = System.Net.HttpStatusCode.NotFound;
             dto.Message += $"\nTrip with Id {id} not found!";
         }
 
@@ -66,14 +66,14 @@ public class TripDAL : ITripDAL
             var trip = await context.Trips.Include(t=>t.Route).FirstOrDefaultAsync(x => x.Id == id);
             if (trip == null)
             {
-                dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
                 dto.Message = $"User with Id {id} not found!";
             }
             dto.Trip = trip;
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         return dto;
@@ -106,7 +106,7 @@ public class TripDAL : ITripDAL
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
 
@@ -127,7 +127,7 @@ public class TripDAL : ITripDAL
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            dto.StatusCode = HttpStatusCode.Conflict;
+            dto.RespCode = HttpStatusCode.Conflict;
 
             var exceptionEntry = ex.Entries.Single();
             var clientValues = (Models.Trip)exceptionEntry.Entity;
@@ -177,7 +177,7 @@ public class TripDAL : ITripDAL
         catch (Exception ex)
         {
             dto.Message = ex.Message;
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
         }
         finally
         {

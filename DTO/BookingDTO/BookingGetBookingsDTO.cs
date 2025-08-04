@@ -7,7 +7,7 @@ public class BookingGetBookingsDTO
 {
     public List<CustomerBookTrip> Bookings { get; set; } = null;
 
-    public HttpStatusCode StatusCode {get;set;} = HttpStatusCode.OK;
+    public HttpStatusCode RespCode {get;set;} = HttpStatusCode.OK;
 
     public string Message {get;set;}
 }

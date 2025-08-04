@@ -35,14 +35,14 @@ public class UsersController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        var user = await usersService.GetUsers(username: request.Email, password: request.Password);
-        if (user == null || user.Users == null || user.Users.Count == 0)
+        var user = await usersService.LogUserInMVC(username: request.Email, password: request.Password);
+        if (user == null || user.User == null)
         {
-            ViewData["errorMessage"] = "Login failed! Check your username and password!";
-            ViewData["statusCode"] = HttpStatusCode.Unauthorized;
+            ViewData["errorMessage"] = user.Message;
+            ViewData["statusCode"] = user.RespCode;
             return View();
         }
-        var obj = user.Users.FirstOrDefault();
+        var obj = user.User;
         HttpContext.Session.SetString("UserName", obj.UserName);
         HttpContext.Session.SetString("Phone", obj.Phone);
         HttpContext.Session.SetString("Email", obj.Email);
@@ -53,9 +53,9 @@ public class UsersController : Controller
     {
         var dto = await usersService.GetUsers(name, type, sellerCode, email);
 
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -67,9 +67,9 @@ public class UsersController : Controller
     public async Task<IActionResult> Details(long? id)
     {
         var dto = await usersService.GetUserById(id.GetValueOrDefault());
-        if (dto.StatusCode != HttpStatusCode.OK || dto.User == null)
+        if (dto.RespCode != HttpStatusCode.OK || dto.User == null)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View("Index");
         }
@@ -80,9 +80,9 @@ public class UsersController : Controller
     public async Task<IActionResult> Delete(long id)
     {
         var dto = await usersService.DeleteUser(id);
-        if (dto.StatusCode != HttpStatusCode.NoContent)
+        if (dto.RespCode != HttpStatusCode.NoContent)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
         }
 
@@ -92,9 +92,9 @@ public class UsersController : Controller
     public async Task<IActionResult> CreateOrUpdate(long? id)
     {
         var dto = await usersService.GetCreateOrUpdateModel(id);
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -121,11 +121,11 @@ public class UsersController : Controller
             }
 
             targetUser = await usersService.CreateOrUpdate(user);
-            if (targetUser.StatusCode != HttpStatusCode.Created)
+            if (targetUser.RespCode != HttpStatusCode.Created)
             {
-                ViewData["statusCode"] = targetUser.StatusCode;
+                ViewData["statusCode"] = targetUser.RespCode;
                 ViewData["errorMessage"] = targetUser.Message;
-                if (targetUser.StatusCode == HttpStatusCode.Conflict)
+                if (targetUser.RespCode == HttpStatusCode.Conflict)
                     ModelState.Remove("RowVersion");
                 return View(targetUser.User);
             }

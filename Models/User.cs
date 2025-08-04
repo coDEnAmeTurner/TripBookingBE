@@ -26,7 +26,7 @@ public partial class User
     public long Id { get; set; }
 
     [Column("password")]
-    [StringLength(255)]
+    [StringLength(500)]
     [Unicode(false)]
     public string Password { get; set; } = null!;
 

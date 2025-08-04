@@ -29,7 +29,7 @@ public class TicketService : ITicketService
             if (idDTO == null || idDTO.Ids == null || idDTO.Ids.Count == 0)
             {
                 dto.Ticket = ticket;
-                dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+                dto.RespCode = System.Net.HttpStatusCode.NotFound;
                 dto.Message = $"Customer {ticket.CustomerId} doesn't book Tirp {ticket.TripId}";
                 return dto;
             }
@@ -38,7 +38,7 @@ public class TicketService : ITicketService
             if (already_exist.Ticket != null)
             {
                 dto.Ticket = ticket;
-                dto.StatusCode = System.Net.HttpStatusCode.Conflict;
+                dto.RespCode = System.Net.HttpStatusCode.Conflict;
                 dto.Message = $"{already_exist.Ticket.CustomerBookTrip?.Customer.Name} already has a Ticket for {already_exist.Ticket.CustomerBookTrip?.Trip.Route?.RouteDescription} - {already_exist.Ticket.CustomerBookTrip?.Trip.DepartureTime.GetValueOrDefault().ToString("dd/MM/yyyy",System.Globalization.CultureInfo.InvariantCulture)}";
                 return dto;
             }
@@ -63,9 +63,9 @@ public class TicketService : ITicketService
             {
 
                 var ticketDTO = await ticketDAL.DeleteTicket(id);
-                if (ticketDTO.StatusCode != HttpStatusCode.NoContent)
+                if (ticketDTO.RespCode != HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = ticketDTO.StatusCode;
+                    dto.RespCode = ticketDTO.RespCode;
                     dto.Message += $"\n{ticketDTO.Message}";
                 }
 
@@ -75,9 +75,9 @@ public class TicketService : ITicketService
             }
             catch (Exception ex)
             {
-                if (dto.StatusCode == HttpStatusCode.NoContent)
+                if (dto.RespCode == HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = HttpStatusCode.InternalServerError;
+                    dto.RespCode = HttpStatusCode.InternalServerError;
                     dto.Message = ex.Message;
                 }
             }
@@ -95,7 +95,7 @@ public class TicketService : ITicketService
         {
             var dtoDAL = await ticketDAL.GetTicketById(id.GetValueOrDefault());
             dto.Ticket = dtoDAL.Ticket;
-            dto.StatusCode = dtoDAL.StatusCode;
+            dto.RespCode = dtoDAL.RespCode;
             dto.Message = dtoDAL.Message;
         }
 

@@ -21,14 +21,14 @@ public class GeneralParamDal : IGeneralParamDal
             var gp = await context.GeneralParams.FirstOrDefaultAsync(x => x.Id == id);
             if (gp == null)
             {
-                dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
                 dto.Message = $"User with Id {id} not found!";
             }
             dto.GeneralParam = gp;
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         return dto;
@@ -51,7 +51,7 @@ public class GeneralParamDal : IGeneralParamDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
 
