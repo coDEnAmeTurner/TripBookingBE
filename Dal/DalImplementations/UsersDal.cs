@@ -115,8 +115,7 @@ public class UsersDal : IUsersDal
             if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
             {
                 users = users.Where(u => u.UserName != null
-                && u.UserName.Equals(username)
-                && u.Password.Equals(password));
+                && u.UserName.Equals(username));
             }
 
             var resultusers = await users.Include(u => u.Trips).ThenInclude(t => t.Route).OrderByDescending(u => u.Id).ToListAsync();

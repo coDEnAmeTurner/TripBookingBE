@@ -1,12 +1,8 @@
-using System.IO.MemoryMappedFiles;
 using System.Net;
-using System.Threading.Tasks;
 using System.Transactions;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using Microsoft.VisualBasic;
 using TripBookingBE.Dal.DalInterfaces;
-using TripBookingBE.Data;
 using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
 using TripBookingBE.Services.ServiceInterfaces;
@@ -160,6 +156,10 @@ public class UsersService : IUsersService
 
     public async Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email, string username = null, string password = null)
     {
-        return await usersDAL.GetUsers(name, type, sellerCode, email, username, password);
+        var dto = await usersDAL.GetUsers(name, type, sellerCode, email, username, password);
+
+        
+
+        return dto;
     }
 }

@@ -32,7 +32,6 @@ public class UsersController : Controller
         return RedirectToAction(nameof(Login));
     }
 
-
     [HttpPost]
     public async Task<IActionResult> Login(LoginRequest request)
     {

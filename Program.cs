@@ -7,10 +7,8 @@ using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.Dal.DalImplementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity.Data;
 using TripBookingBE.security;
 using Microsoft.IdentityModel.Tokens;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,5 +95,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapControllers();
 
 app.Run();
