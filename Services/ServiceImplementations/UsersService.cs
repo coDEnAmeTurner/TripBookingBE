@@ -8,6 +8,7 @@ using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
 using TripBookingBE.security;
 using TripBookingBE.Services.ServiceInterfaces;
+﻿using BCrypt.Net;
 
 namespace TripBookingBE.Services.ServiceImplementations;
 
@@ -19,16 +20,16 @@ public class UsersService : IUsersService
     private readonly Cloudinary cloudinary;
     private readonly TokenGenerator generator;
 
-    private readonly IPasswordHasher<User> passwordHasher;
+private readonly IPasswordHasher<User> passwordHasher;
 
-    public UsersService(IUsersDal dal, Cloudinary cloudinary, IBookingsDal bookingDAL, IReviewsDal reviewDAL, IPasswordHasher<User> passwordHasher, TokenGenerator generator)
+    public UsersService(IUsersDal dal, Cloudinary cloudinary, IBookingsDal bookingDAL, IReviewsDal reviewDAL, TokenGenerator generator, IPasswordHasher<User> passwordHasher)
     {
         this.usersDAL = dal;
         this.cloudinary = cloudinary;
         this.bookingDAL = bookingDAL;
         this.reviewDAL = reviewDAL;
-        this.passwordHasher = passwordHasher;
         this.generator = generator;
+        this.passwordHasher = passwordHasher;
     }
 
     public async Task<UserCreateOrUpdateDTO> CreateOrUpdate(User user)
@@ -123,7 +124,7 @@ public class UsersService : IUsersService
                     dto.RespCode = reviewDTO.RespCode;
                     dto.Message += $"\n{reviewDTO.Message}";
                 }
-                
+
                 scope.Complete();
             }
             catch (Exception ex)
@@ -161,7 +162,7 @@ public class UsersService : IUsersService
         return dto;
     }
 
-    public async Task<UserGetUsersDTO> GetUsers(string name=null, string type=null, string sellerCode=null, string email=null, string username = null)
+    public async Task<UserGetUsersDTO> GetUsers(string name = null, string type = null, string sellerCode = null, string email = null, string username = null)
     {
         var dto = await usersDAL.GetUsers(name, type, sellerCode, email, username);
 
@@ -172,8 +173,9 @@ public class UsersService : IUsersService
     {
         var dto = await GetUsers(username: username);
         var user = dto.Users.FirstOrDefault();
-        var hash = passwordHasher.HashPassword(user, password);
+        var hash = passwordHasher.HashPassword(user,password);
         user.Password = hash;
+
         await CreateOrUpdate(user);
 
         return new UserHashDTO()
@@ -201,6 +203,7 @@ public class UsersService : IUsersService
 
         var user = dto.Users.FirstOrDefault();
         var dbpass = user.Password;
+        user.Password = string.Empty;
 
         var result = passwordHasher.VerifyHashedPassword(user, dbpass, password);
         if (result != PasswordVerificationResult.Success)
@@ -234,8 +237,8 @@ public class UsersService : IUsersService
         var user = dto.Users.FirstOrDefault();
         var dbpass = user.Password;
 
-        var result = passwordHasher.VerifyHashedPassword(user, dbpass,password);
-        if (result != PasswordVerificationResult.Success)
+        var result = BCrypt.Net.BCrypt.Verify(password, dbpass);
+        if (!result)
         {
             servicedto.RespCode = (int)HttpStatusCode.Unauthorized;
             servicedto.Message = "Login Failed! Check your password.";
