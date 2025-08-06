@@ -29,24 +29,14 @@ public class UsersRestController : MyControllerBase
                 StatusCode = (int)HttpStatusCode.NotFound
             };
         }
-        return new ContentResult()
-        {
-            Content = JsonSerializer.Serialize(new Dictionary<string, object>()
-            {
-                {"AccessToken", dto.AccessToken}
-            }),
-            StatusCode = (int)HttpStatusCode.OK
-        };
+        return Ok(dto);
     }
 
     [HttpPost("hash")]
     public async Task<IActionResult> Hash([FromBody] LoginRequest req)
     {
         var dto = await usersService.Hash(req.UserName, req.Password);
-        return new ContentResult()
-        {
-            Content = JsonSerializer.Serialize(dto)
-        };
+        return Ok(dto);
     }
 
 }

@@ -103,16 +103,11 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateOrUpdate([Bind("Id, Password,NewPassword,ConfirmPassword,UserName,FirstName,LastName,Email,Active,Name,Phone,Type,SellerCode,File,DateCreated,DateModified,Avatar,RowVersion")] User user)
+    public async Task<IActionResult> CreateOrUpdate([Bind("Id,Password,PasswordHash,NewPassword,ConfirmPassword,UserName,FirstName,LastName,Email,Active,Name,Phone,Type,SellerCode,File,DateCreated,DateModified,Avatar,RowVersion")] User user)
     {
         if (ModelState.IsValid)
         {
             UserCreateOrUpdateDTO targetUser = new() { User = user };
-            if (String.IsNullOrEmpty(user.PasswordHash))
-            {
-                ViewData["passwordError"] = "Password is required!";
-                return View(user);
-            }
 
             if (user.Id == 0 && user.File == null)
             {

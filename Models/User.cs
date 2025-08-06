@@ -16,6 +16,8 @@ public partial class User : IdentityUser<long>
     public string? NewPassword { get; set; }
     [NotMapped]
     public string? ConfirmPassword { get; set; }
+    [NotMapped]
+    public string? Password { get; set; }
 
     [NotMapped]
     public IFormFile? File { get; set; }

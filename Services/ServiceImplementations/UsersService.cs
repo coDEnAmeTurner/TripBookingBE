@@ -8,7 +8,7 @@ using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
 using TripBookingBE.security;
 using TripBookingBE.Services.ServiceInterfaces;
-﻿using BCrypt.Net;
+using BCrypt.Net;
 
 namespace TripBookingBE.Services.ServiceImplementations;
 
@@ -32,7 +32,7 @@ public class UsersService : IUsersService
         this.passwordHasher = passwordHasher;
     }
 
-    public async Task<UserCreateOrUpdateDTO> CreateOrUpdate(User user)
+    public async Task<UserCreateOrUpdateDTO> CreateOrUpdate(User user, bool api = false)
     {
         UserCreateOrUpdateDTO dto = new();
 
@@ -75,17 +75,37 @@ public class UsersService : IUsersService
         }
 
         UserCreateOrUpdateDTO dtoDAL = new();
+        dtoDAL.User = user;
         if (user.Id == 0)
         {
             if (!user.Type.Equals("SELLER"))
                 user.SellerCode = null;
 
+            if (string.IsNullOrEmpty(user.Password))
+            {
+                dtoDAL.RespCode = HttpStatusCode.BadRequest;
+                dtoDAL.Message = "Password is missing.";
+                return dtoDAL;
+            }
+
+            user.PasswordHash = passwordHasher.Hash(user.Password);
             dtoDAL = await usersDAL.Create(user);
         }
         else
         {
-            //check for password, with jwt configured
+            if (api == true || (!string.IsNullOrEmpty(user.NewPassword) && user.NewPassword.Equals(user.ConfirmPassword)))
+            {
+                if (passwordHasher.Verify(user.PasswordHash, user.Password))
+                    user.PasswordHash = passwordHasher.Hash(user.NewPassword);
+                else
+                {
+                    dtoDAL.RespCode = HttpStatusCode.BadRequest;
+                    dtoDAL.Message = "Current Password is incorrect.";
+                    return dtoDAL;
+                }
+            }
 
+            //check for password, with jwt configured
             dtoDAL = await usersDAL.Update(user);
         }
         dto.User = dtoDAL.User;
@@ -173,14 +193,13 @@ public class UsersService : IUsersService
     {
         var dto = await GetUsers(username: username);
         var user = dto.Users.FirstOrDefault();
-        var hash = passwordHasher.Hash(password);
-        user.PasswordHash = hash;
+        user.NewPassword = password;
 
-        await CreateOrUpdate(user);
+        var rslt = await CreateOrUpdate(user, true);
 
         return new UserHashDTO()
         {
-            Hash = hash,
+            Hash = rslt.User.PasswordHash,
             User = user
         };
     }
@@ -204,7 +223,7 @@ public class UsersService : IUsersService
         var user = dto.Users.FirstOrDefault();
         var dbpass = user.PasswordHash;
 
-        var result = passwordHasher.Verify(dbpass,password);
+        var result = passwordHasher.Verify(dbpass, password);
         if (!result)
         {
             servicedto.RespCode = (int)HttpStatusCode.Unauthorized;
@@ -236,7 +255,7 @@ public class UsersService : IUsersService
         var user = dto.Users.FirstOrDefault();
         var dbpass = user.PasswordHash;
 
-        var result = BCrypt.Net.BCrypt.Verify(password, dbpass);
+        var result = passwordHasher.Verify(dbpass, password);
         if (!result)
         {
             servicedto.RespCode = (int)HttpStatusCode.Unauthorized;
