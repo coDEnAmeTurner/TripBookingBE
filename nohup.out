@@ -4060,3 +4060,34 @@ Caused by: com.microsoft.sqlserver.jdbc.SQLServerException: Cannot insert the va
 (DBeaver:4591): Gtk-WARNING **: 22:10:05.871: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
 
 (DBeaver:4591): Gtk-WARNING **: 22:10:05.871: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:4591): Gtk-WARNING **: 22:15:56.683: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:4591): Gtk-WARNING **: 22:15:56.684: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:4591): Gtk-WARNING **: 22:15:56.684: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:4591): Gtk-WARNING **: 22:15:56.684: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:4591): Gtk-WARNING **: 22:15:56.684: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:4591): Gtk-WARNING **: 22:15:57.884: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:4591): Gtk-WARNING **: 22:15:57.884: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:4591): Gtk-WARNING **: 22:15:57.885: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:4591): Gtk-WARNING **: 22:15:57.885: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+
+(DBeaver:4591): Gtk-WARNING **: 22:15:57.885: Negative content width -6 (allocation 6, extents 6x6) while allocating gadget (node separator, owner GtkSeparatorToolItem)
+2025-08-05 22:15:58.819 - Execution context closed (master, 2)
+2025-08-05 22:15:59.126 - Dispose navigator model
+2025-08-05 22:15:59.145 - DBeaver is stopping
+2025-08-05 22:15:59.145 - Stop instance server
+2025-08-05 22:16:00.146 - Instance server has been stopped
+2025-08-05 22:16:00.147 - DBeaver shutdown completed
+2025-08-05 22:16:00.187 - Shutdown desktop platform...
+2025-08-05 22:16:00.199 - Execution context closed (master, 0)
+2025-08-05 22:16:00.209 - Execution context closed (master, 1)
+2025-08-05 22:16:00.209 - Disconnected (microsoft-198504f9161-2708ab4509e92398)
+2025-08-05 22:16:00.290 - Platform shutdown completed (103ms)

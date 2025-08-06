@@ -137,7 +137,7 @@ public class UsersDal : IUsersDal
             var currentState = context.Entry(user).State;
             context.Entry(user).State = EntityState.Modified;
             // context.Entry(user).Property("RowVersion").OriginalValue = user.RowVersion;
-            user.Password = user.NewPassword == null ? user.Password : user.NewPassword;
+            user.PasswordHash = user.NewPassword == null ? user.PasswordHash : user.NewPassword;
             context.Update(user);
             await context.SaveChangesAsync();
 

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace TripBookingBE.Models;
 
 [Table("User")]
 [Index("UserName", Name = "UQ__User__66DCF95C55A682B1", IsUnique = true)]
-public partial class User
+public partial class User : IdentityUser<long>
 {
     [Timestamp]
     public byte[] RowVersion { get; set; }
@@ -23,12 +22,12 @@ public partial class User
 
     [Key]
     [Column("id")]
-    public long Id { get; set; }
+    public override long Id { get; set; }
 
     [Column("password")]
     [StringLength(500)]
     [Unicode(false)]
-    public string Password { get; set; } = null!;
+    public override string? PasswordHash { get; set; } = null!;
 
     [Column("lastLogin", TypeName = "datetime")]
     public DateTime? LastLogin { get; set; }
@@ -36,7 +35,7 @@ public partial class User
     [Column("userName")]
     [StringLength(150)]
     [Unicode(false)]
-    public string UserName { get; set; } = null!;
+    public override string UserName { get; set; } = null!;
 
     [Column("firstName")]
     [StringLength(150)]
@@ -49,7 +48,7 @@ public partial class User
     public string LastName { get; set; } = null!;
 
     [Column("email", TypeName = "text")]
-    public string? Email { get; set; }
+    public override string? Email { get; set; }
 
     [Column("active")]
     public bool Active { get; set; }

@@ -20,9 +20,9 @@ public class UsersService : IUsersService
     private readonly Cloudinary cloudinary;
     private readonly TokenGenerator generator;
 
-private readonly IPasswordHasher<User> passwordHasher;
+    private readonly IPasswordHasher passwordHasher;
 
-    public UsersService(IUsersDal dal, Cloudinary cloudinary, IBookingsDal bookingDAL, IReviewsDal reviewDAL, TokenGenerator generator, IPasswordHasher<User> passwordHasher)
+    public UsersService(IUsersDal dal, Cloudinary cloudinary, IBookingsDal bookingDAL, IReviewsDal reviewDAL, TokenGenerator generator, IPasswordHasher passwordHasher)
     {
         this.usersDAL = dal;
         this.cloudinary = cloudinary;
@@ -173,8 +173,8 @@ private readonly IPasswordHasher<User> passwordHasher;
     {
         var dto = await GetUsers(username: username);
         var user = dto.Users.FirstOrDefault();
-        var hash = passwordHasher.HashPassword(user,password);
-        user.Password = hash;
+        var hash = passwordHasher.Hash(password);
+        user.PasswordHash = hash;
 
         await CreateOrUpdate(user);
 
@@ -202,11 +202,10 @@ private readonly IPasswordHasher<User> passwordHasher;
         }
 
         var user = dto.Users.FirstOrDefault();
-        var dbpass = user.Password;
-        user.Password = string.Empty;
+        var dbpass = user.PasswordHash;
 
-        var result = passwordHasher.VerifyHashedPassword(user, dbpass, password);
-        if (result != PasswordVerificationResult.Success)
+        var result = passwordHasher.Verify(dbpass,password);
+        if (!result)
         {
             servicedto.RespCode = (int)HttpStatusCode.Unauthorized;
             servicedto.Message = "Login Failed! Check your password.";
@@ -235,7 +234,7 @@ private readonly IPasswordHasher<User> passwordHasher;
         }
 
         var user = dto.Users.FirstOrDefault();
-        var dbpass = user.Password;
+        var dbpass = user.PasswordHash;
 
         var result = BCrypt.Net.BCrypt.Verify(password, dbpass);
         if (!result)

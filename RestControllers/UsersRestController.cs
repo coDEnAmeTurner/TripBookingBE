@@ -24,10 +24,10 @@ public class UsersRestController : MyControllerBase
         if (dto.RespCode != (int)HttpStatusCode.OK)
         {
             return new ContentResult()
-        {
-            Content = JsonSerializer.Serialize(dto),
-            StatusCode = (int)HttpStatusCode.NotFound
-        };
+            {
+                Content = JsonSerializer.Serialize(dto),
+                StatusCode = (int)HttpStatusCode.NotFound
+            };
         }
         return new ContentResult()
         {
@@ -39,8 +39,8 @@ public class UsersRestController : MyControllerBase
         };
     }
 
-    [HttpGet("hash")]
-    public async Task<IActionResult> Hash([FromQuery] LoginRequest req)
+    [HttpPost("hash")]
+    public async Task<IActionResult> Hash([FromBody] LoginRequest req)
     {
         var dto = await usersService.Hash(req.UserName, req.Password);
         return new ContentResult()

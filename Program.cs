@@ -60,7 +60,8 @@ builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<ITicketDAL, TicketDAL>();
 builder.Services.AddScoped<IGeneralParamService, GeneralParamService>();
 builder.Services.AddScoped<IGeneralParamDal, GeneralParamDal>();
-builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+// builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddDistributedMemoryCache();
 

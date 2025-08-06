@@ -108,7 +108,7 @@ public class UsersController : Controller
         if (ModelState.IsValid)
         {
             UserCreateOrUpdateDTO targetUser = new() { User = user };
-            if (String.IsNullOrEmpty(user.Password))
+            if (String.IsNullOrEmpty(user.PasswordHash))
             {
                 ViewData["passwordError"] = "Password is required!";
                 return View(user);
