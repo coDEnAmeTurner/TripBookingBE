@@ -95,7 +95,7 @@ public class UsersService : IUsersService
         {
             if (api == true || (!string.IsNullOrEmpty(user.NewPassword) && user.NewPassword.Equals(user.ConfirmPassword)))
             {
-                if (passwordHasher.Verify(user.PasswordHash, user.Password))
+                if (api == true || passwordHasher.Verify(user.PasswordHash, user.Password))
                     user.PasswordHash = passwordHasher.Hash(user.NewPassword);
                 else
                 {
@@ -139,17 +139,17 @@ public class UsersService : IUsersService
                 }
 
                 var userDTO = await usersDAL.DeleteUser(id);
-                if (reviewDTO.RespCode != HttpStatusCode.NoContent)
+                if (userDTO.RespCode != HttpStatusCode.NoContent)
                 {
-                    dto.RespCode = reviewDTO.RespCode;
-                    dto.Message += $"\n{reviewDTO.Message}";
+                    dto.RespCode = userDTO.RespCode;
+                    dto.Message += $"\n{userDTO.Message}";
                 }
 
                 scope.Complete();
             }
             catch (Exception ex)
             {
-                if (dto.RespCode == HttpStatusCode.NoContent)
+                if (dto.RespCode != HttpStatusCode.NoContent)
                 {
                     dto.RespCode = HttpStatusCode.InternalServerError;
                     dto.Message = ex.Message;

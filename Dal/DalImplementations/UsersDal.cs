@@ -42,22 +42,30 @@ public class UsersDal : IUsersDal
 
         return dto;
     }
-
+        
     public async Task<UserDeleteDTO> DeleteUser(long id)
     {
         UserDeleteDTO dto = new();
-
-        var inst = await context.Users.FindAsync(id);
-        if (inst == null)
+        try
         {
-            dto.RespCode = System.Net.HttpStatusCode.NotFound;
-            dto.Message += $"\nUser with Id {id} not found!";
+            var inst = await context.Users.FindAsync(id);
+            if (inst == null)
+            {
+                dto.RespCode = System.Net.HttpStatusCode.NotFound;
+                dto.Message += $"\nUser with Id {id} not found!";
+            }
+
+            context.Users.Remove(inst);
+            await context.SaveChangesAsync();
+
+            dto.User = inst;
+        }
+        catch (Exception ex)
+        {
+            dto.RespCode = HttpStatusCode.InternalServerError;
+            dto.Message = $"{ex.Message}\n{ex.InnerException.Message}";
         }
 
-        context.Users.Remove(inst);
-        await context.SaveChangesAsync();
-
-        dto.User = inst;
         return dto;
     }
 
@@ -107,7 +115,7 @@ public class UsersDal : IUsersDal
                 users = users.Where(u => u.SellerCode != null && u.SellerCode.Contains(sellerCode));
             }
             if (!String.IsNullOrEmpty(email))
-            {
+            {       
                 users = users.Where(u => u.Email != null && u.Email.Contains(sellerCode));
             }
             if (!String.IsNullOrEmpty(username))
