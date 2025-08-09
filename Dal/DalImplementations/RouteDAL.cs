@@ -29,7 +29,7 @@ public class RouteDAL : IRouteDAL
         catch (Exception ex)
         {
             dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
-            dto.Message = ex.Message;
+            dto.Message = $"{ex.Message}\n{ex.InnerException.Message}";
         }
         finally
         {
@@ -84,21 +84,22 @@ public class RouteDAL : IRouteDAL
         RouteGetRoutesDTO dto = new();
         try
         {
-            var routes = from route in context.Routes select route;
 
-                routes = from route in routes where description == null || (route.RouteDescription != null && route.RouteDescription.Contains(description, StringComparison.OrdinalIgnoreCase)) select route;
-                routes = from route in routes where dateCreated == null ||
+            var routes = await
+                        (from route in context.Routes
+                        where
+                        (description == null || (route.RouteDescription != null && route.RouteDescription.ToUpper().Contains(description.ToUpper())))
+                        && (dateCreated == null ||
                         (
-                            route.DateCreated != null &&
-                            route.DateCreated.Value.Year == DateTime.Now.Year
-                            && route.DateCreated.Value.Month == DateTime.Now.Month
-                            && route.DateCreated.Value.Day == DateTime.Now.Day
-                            && route.DateCreated.Value.Hour == DateTime.Now.Hour
-                            && route.DateCreated.Value.Minute == DateTime.Now.Minute
-                        ) select route;
-            var resultroutes = routes.OrderByDescending(u => u.Id).ToList();
+                            (route.DateCreated != null &&
+                            route.DateCreated.Value.Year == dateCreated.Value.Year
+                            && route.DateCreated.Value.Month == dateCreated.Value.Month
+                            && route.DateCreated.Value.Day == dateCreated.Value.Day)
+                        ))
+                        orderby route.Id descending
+                        select route).ToListAsync();
 
-            dto.Routes = resultroutes;
+            dto.Routes = routes;
         }
         catch (Exception ex)
         {

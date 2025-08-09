@@ -20,10 +20,10 @@ public partial class Route
     public string? RouteDescription { get; set; }
 
     [Column("dateCreated", TypeName = "datetime")]
-    public DateTime? DateCreated { get; set; }=null;
+    public DateTime? DateCreated { get; set; }=DateTime.Now;
 
     [Column("dateModified", TypeName = "datetime")]
-    public DateTime? DateModified { get; set; }=null;
+    public DateTime? DateModified { get; set; }=DateTime.Now;
 
     [InverseProperty("Route")]
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
