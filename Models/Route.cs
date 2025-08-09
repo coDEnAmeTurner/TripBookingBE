@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace TripBookingBE.Models;
@@ -20,11 +21,12 @@ public partial class Route
     public string? RouteDescription { get; set; }
 
     [Column("dateCreated", TypeName = "datetime")]
-    public DateTime? DateCreated { get; set; }=DateTime.Now;
+    public DateTime? DateCreated { get; set; } = DateTime.Now;
 
     [Column("dateModified", TypeName = "datetime")]
-    public DateTime? DateModified { get; set; }=DateTime.Now;
+    public DateTime? DateModified { get; set; } = DateTime.Now;
 
+    [JsonIgnore]
     [InverseProperty("Route")]
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
 }

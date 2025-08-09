@@ -15,4 +15,6 @@ public interface ITripService
 
     Task<TripDeleteDTO> DeleteTrip(long id);
 
+    Task<TripAssignDTO> AssignDriver(int tripId, int driverId);
+    Task<TripAssignDTO> AssignRoute(int tripId, int routeId);
 }

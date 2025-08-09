@@ -8,11 +8,11 @@ using TripBookingBE.Services.ServiceInterfaces;
 namespace TripBookingBE.RestControllers;
 
 [Route("api/routes")]
-public class RoutesRestController : MyControllerBase
+public class RoutesController : MyControllerBase
 {
     private readonly IRouteService routeService;
 
-    public RoutesRestController(IRouteService routeService)
+    public RoutesController(IRouteService routeService)
     {
         this.routeService = routeService;
     }

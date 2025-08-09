@@ -1,8 +1,6 @@
 using System.Net;
 using System.Transactions;
-using Microsoft.Extensions.Logging.Abstractions;
 using TripBookingBE.Dal.DalInterfaces;
-using TripBookingBE.DTO.RouteDTO;
 using TripBookingBE.DTO.TripDTO;
 using TripBookingBE.Models;
 using TripBookingBE.Services.ServiceInterfaces;
@@ -13,9 +11,58 @@ public class TripService : ITripService
 {
     private readonly ITripDAL tripDAL;
 
-    public TripService(ITripDAL tripDAL)
+    private readonly IUsersDal usersDAL;
+    private readonly IRouteDAL routeDAL;
+
+    public TripService(ITripDAL tripDAL, IUsersDal usersDAL, IRouteDAL routeDAL)
     {
         this.tripDAL = tripDAL;
+        this.usersDAL = usersDAL;
+        this.routeDAL = routeDAL;
+    }
+
+    public async Task<TripAssignDTO> AssignDriver(int tripId, int driverId)
+    {
+        var dto = new TripAssignDTO();
+        var userdto = await usersDAL.GetUserById(driverId);
+
+        if (userdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = HttpStatusCode.NotFound;
+            dto.Message = $"Driver of id: {driverId} is not found!";
+            return dto;
+        }
+
+        var tripdto = await tripDAL.GetTripById(tripId);
+        var dbtrip = tripdto.Trip;
+        dbtrip.Driver = userdto.User;
+        var editdto = await tripDAL.Update(dbtrip);
+           
+        dto.RespCode = editdto.RespCode;
+        dto.Message = editdto.Message;
+        return dto;
+    }
+
+    public async Task<TripAssignDTO> AssignRoute(int tripId, int routeId)
+    {
+        var dto = new TripAssignDTO();
+        var routedto = await routeDAL.GetRouteById(routeId);
+
+        if (routedto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = HttpStatusCode.NotFound;
+            dto.Message = $"Route of id: {routeId} is not found!";
+            return dto;
+        }
+
+        var tripdto = await tripDAL.GetTripById(tripId);
+        var dbtrip = tripdto.Trip;
+        dbtrip.Route = routedto.Route;
+        var editdto = await tripDAL.Update(dbtrip);
+           
+        dto.RespCode = editdto.RespCode;
+        dto.Message = editdto.Message;
+        return dto;
     }
 
     public async Task<TripCreateOrUpdateDTO> CreateOrUpdate(Trip trip)

@@ -10,11 +10,11 @@ using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 namespace TripBookingBE.RestControllers;
 
 [Route("api/users")]
-public class UsersRestController : MyControllerBase
+public class UsersController : MyControllerBase
 {
     private readonly IUsersService usersService;
 
-    public UsersRestController(IUsersService usersService)
+    public UsersController(IUsersService usersService)
     {
         this.usersService = usersService;
     }

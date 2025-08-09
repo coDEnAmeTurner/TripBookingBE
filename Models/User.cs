@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -78,10 +79,10 @@ public partial class User : IdentityUser<long>
     public string? SellerCode { get; set; }
 
     [Column("dateCreated", TypeName = "datetime")]
-    public DateTime? DateCreated { get; set; }=null;
+    public DateTime? DateCreated { get; set; } = null;
 
     [Column("dateModified", TypeName = "datetime")]
-    public DateTime? DateModified { get; set; }=null;
+    public DateTime? DateModified { get; set; } = null;
 
     [InverseProperty("Customer")]
     public virtual ICollection<CustomerBookTrip> CustomerBookTrips { get; set; } = new List<CustomerBookTrip>();
@@ -89,6 +90,7 @@ public partial class User : IdentityUser<long>
     [InverseProperty("Customer")]
     public virtual ICollection<CustomerReviewTrip> CustomerReviewTrips { get; set; } = new List<CustomerReviewTrip>();
 
+    [JsonIgnore]
     [InverseProperty("Driver")]
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
 
