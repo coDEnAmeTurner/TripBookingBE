@@ -9,8 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using TripBookingBE.security;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Identity;
-using TripBookingBE.Models;
+using Microsoft.IdentityModel.Logging;
+
+IdentityModelEventSource.ShowPII = true;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,22 +20,6 @@ builder.Services.AddControllersWithViews();
 
 //db context
 builder.Services.AddDbContext<TripBookingContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext")));
-
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-        {
-            IssuerSigningKey = new SymmetricSecurityKey(TokenGenerator.key),
-            ValidIssuer = "https://id.dotnettrain.com",
-            ValidAudience = "https://donettrain.com",
-            ValidateIssuerSigningKey = true,
-            ValidateLifetime = true,
-            ValidateAudience = true,
-            ValidateIssuer = true
-        };
-    });
 
 //cloudinary
 DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
@@ -65,12 +50,31 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddSession(options=>
+builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(1);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+//auth
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(x =>
+        {
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                IssuerSigningKey = new SymmetricSecurityKey(TokenGenerator.key),
+                ValidIssuer = "https://localhost:7078",
+                ValidAudience = "https://localhost:7078",
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                ValidateIssuer = true,
+                ValidateAudience = true
+            };
+        }
+    );
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -81,6 +85,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseRouting();
 
 app.UseSession();
 
@@ -89,7 +94,6 @@ app.UseAuthorization();
 
 app.UseHttpsRedirection();
 
-app.UseRouting();
 
 app.MapStaticAssets();
 

@@ -27,7 +27,7 @@ public class BookingsDal : IBookingsDal
         }
         catch (Exception ex)
         {
-            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.BadRequest;
             dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
         finally

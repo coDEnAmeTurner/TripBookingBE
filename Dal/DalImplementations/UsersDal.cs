@@ -77,7 +77,7 @@ public class UsersDal : IUsersDal
             var user = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if (user == null)
             {
-                dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.RespCode = System.Net.HttpStatusCode.NotFound;
                 dto.Message = $"User with Id {id} not found!";
             }
             dto.User = user;

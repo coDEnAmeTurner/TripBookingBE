@@ -66,7 +66,7 @@ public class TripDAL : ITripDAL
             var trip = await context.Trips.Include(t=>t.Route).FirstOrDefaultAsync(x => x.Id == id);
             if (trip == null)
             {
-                dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.RespCode = System.Net.HttpStatusCode.NotFound;
                 dto.Message = $"User with Id {id} not found!";
             }
             dto.Trip = trip;

@@ -14,11 +14,14 @@ public class TripService : ITripService
     private readonly IUsersDal usersDAL;
     private readonly IRouteDAL routeDAL;
 
-    public TripService(ITripDAL tripDAL, IUsersDal usersDAL, IRouteDAL routeDAL)
+    private readonly IBookingsDal bookingDAL;
+
+    public TripService(ITripDAL tripDAL, IUsersDal usersDAL, IRouteDAL routeDAL, IBookingsDal bookingDAL)
     {
         this.tripDAL = tripDAL;
         this.usersDAL = usersDAL;
         this.routeDAL = routeDAL;
+        this.bookingDAL = bookingDAL;
     }
 
     public async Task<TripAssignDTO> AssignDriver(int tripId, int driverId)
@@ -62,6 +65,37 @@ public class TripService : ITripService
            
         dto.RespCode = editdto.RespCode;
         dto.Message = editdto.Message;
+        return dto;
+    }
+
+    public async Task<TripBookDTO> Book(long tripId, long userId, int placeNumber)
+    {
+        var dto = new TripBookDTO();
+        var tripdto = await tripDAL.GetTripById(tripId);
+        if (tripdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = tripdto.RespCode;
+            dto.Message = tripdto.Message;
+            return dto;
+        }
+
+        var userdto = await usersDAL.GetUserById(userId);
+        if (userdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = userdto.RespCode;
+            dto.Message = userdto.Message;
+            return dto;
+        }
+
+        var booking = new CustomerBookTrip()
+        {
+            Trip = tripdto.Trip,
+            Customer = userdto.User,
+            PlaceNumber = placeNumber
+        };
+        var bookingdto = await bookingDAL.Create(booking);
+        dto.RespCode = bookingdto.RespCode;
+        dto.Message = bookingdto.Message;
         return dto;
     }
 

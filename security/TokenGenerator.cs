@@ -7,7 +7,7 @@ namespace TripBookingBE.security;
 public class TokenGenerator
 {
     public static byte[] key = "893u498423-n2u8y07134pjoigvrew0y82453jpir-e90135 kjsdfg"u8.ToArray();
-    public string GenerateToken(string username, string phone,string email)
+    public string GenerateToken(long id, string username, string phone,string email)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -15,6 +15,7 @@ public class TokenGenerator
         {
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(JwtRegisteredClaimNames.Sub, username),
+            new(JwtRegisteredClaimNames.NameId, $"{id}"),
             new(JwtRegisteredClaimNames.PhoneNumber, phone),
             new(JwtRegisteredClaimNames.Email, email),
         };
@@ -23,8 +24,8 @@ public class TokenGenerator
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.Now.AddDays(2),
-            Issuer = "https://id.dotnettrain.com",
-            Audience = "https://donettrain.com",
+            Issuer = "https://localhost:7078",
+            Audience = "https://localhost:7078",
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 
