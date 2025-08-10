@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -133,11 +134,11 @@ public class TripsController : MyControllerBase
     }
 
     [Authorize]
-    [HttpPost("{id:int}/book")]                                 
+    [HttpPost("{id:int}/book")]                                                             
     public async Task<IActionResult> Book(int id, [FromBody] TripBookRequest request)
     {
         var identity = HttpContext.User.Identity as ClaimsIdentity;
-        var userId = int.Parse(identity.FindFirst("NameId").Value);
+        var userId = int.Parse(identity.Claims.ElementAt(2).Value);
         var dto = await tripService.Book(id, userId, request.PlaceNumber.Value);
         if (dto.RespCode != System.Net.HttpStatusCode.Created)
         {

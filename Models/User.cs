@@ -27,6 +27,7 @@ public partial class User : IdentityUser<long>
     [Column("id")]
     public override long Id { get; set; }
 
+    [JsonIgnore]
     [Column("password")]
     [StringLength(500)]
     [Unicode(false)]
@@ -84,9 +85,11 @@ public partial class User : IdentityUser<long>
     [Column("dateModified", TypeName = "datetime")]
     public DateTime? DateModified { get; set; } = null;
 
+    [JsonIgnore]
     [InverseProperty("Customer")]
     public virtual ICollection<CustomerBookTrip> CustomerBookTrips { get; set; } = new List<CustomerBookTrip>();
 
+    [JsonIgnore]
     [InverseProperty("Customer")]
     public virtual ICollection<CustomerReviewTrip> CustomerReviewTrips { get; set; } = new List<CustomerReviewTrip>();
 
@@ -94,6 +97,7 @@ public partial class User : IdentityUser<long>
     [InverseProperty("Driver")]
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
 
+    [JsonIgnore]
     [InverseProperty("Sellers")]
     public virtual ICollection<Trip> SellingTrips { get; set; } = new List<Trip>();
 }

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using TripBookingBE.security;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Logging;
+using System.IdentityModel.Tokens.Jwt;
 
 IdentityModelEventSource.ShowPII = true;
 
@@ -46,8 +47,8 @@ builder.Services.AddScoped<ITicketDAL, TicketDAL>();
 builder.Services.AddScoped<IGeneralParamService, GeneralParamService>();
 builder.Services.AddScoped<IGeneralParamDal, GeneralParamDal>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-// builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
+//session
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
@@ -58,12 +59,14 @@ builder.Services.AddSession(options =>
 });
 
 //auth
+builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(x =>
         {
             x.TokenValidationParameters = new TokenValidationParameters
             {
-                IssuerSigningKey = new SymmetricSecurityKey(TokenGenerator.key),
+                
+                IssuerSigningKey = new SymmetricSecurityKey("893u498423-n2u8y07134pjoigvrew0y82453jpir-e90135 kjsdfg"u8.ToArray()),
                 ValidIssuer = "https://localhost:7078",
                 ValidAudience = "https://localhost:7078",
                 ValidateIssuerSigningKey = true,
@@ -71,10 +74,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 ValidateIssuer = true,
                 ValidateAudience = true
             };
+
+            x.Events = new JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    Console.WriteLine("JWT authentication failed:");
+                    Console.WriteLine(context.Exception.ToString());
+                    return Task.CompletedTask;
+                }
+            };
         }
     );
 
-builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -87,16 +99,14 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseRouting();
 
-app.UseSession();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSession();
+
 app.UseHttpsRedirection();
 
-
 app.MapStaticAssets();
-
 
 //conventional routing
 app.MapControllerRoute(

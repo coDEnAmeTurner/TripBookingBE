@@ -94,6 +94,7 @@ public class TripService : ITripService
             PlaceNumber = placeNumber
         };
         var bookingdto = await bookingDAL.Create(booking);
+        dto.Booking = bookingdto.CustomerBookTrip;
         dto.RespCode = bookingdto.RespCode;
         dto.Message = bookingdto.Message;
         return dto;

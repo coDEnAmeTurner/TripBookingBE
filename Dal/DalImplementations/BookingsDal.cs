@@ -13,7 +13,7 @@ public class BookingsDal : IBookingsDal
     public BookingsDal(TripBookingContext context)
     {
         this.context = context;
-    }
+    }               
 
     public async Task<BookingCreateOrUpdateDTO> Create(CustomerBookTrip booking)
     {
@@ -30,7 +30,7 @@ public class BookingsDal : IBookingsDal
             dto.RespCode = System.Net.HttpStatusCode.BadRequest;
             dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
-        finally
+        finally     
         {
             dto.CustomerBookTrip = booking;
 

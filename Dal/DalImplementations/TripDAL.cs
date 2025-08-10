@@ -63,11 +63,11 @@ public class TripDAL : ITripDAL
         TripGetByIdDTO dto = new();
         try
         {
-            var trip = await context.Trips.Include(t=>t.Route).FirstOrDefaultAsync(x => x.Id == id);
+            var trip = await context.Trips.Include(t=>t.Driver).Include(t=>t.Route).FirstOrDefaultAsync(x => x.Id == id);
             if (trip == null)
             {
                 dto.RespCode = System.Net.HttpStatusCode.NotFound;
-                dto.Message = $"User with Id {id} not found!";
+                dto.Message = $"Trip with Id {id} not found!";
             }
             dto.Trip = trip;
         }

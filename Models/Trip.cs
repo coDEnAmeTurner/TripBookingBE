@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace TripBookingBE.Models;
@@ -43,9 +44,11 @@ public partial class Trip
     [Column("dateModified", TypeName = "datetime")]
     public DateTime? DateModified { get; set; } =null;
 
+    [JsonIgnore]
     [InverseProperty("Trip")]
     public virtual ICollection<CustomerBookTrip> CustomerBookTrips { get; set; } = new List<CustomerBookTrip>();
 
+    [JsonIgnore]
     [InverseProperty("Trip")]
     public virtual ICollection<CustomerReviewTrip> CustomerReviewTrips { get; set; } = new List<CustomerReviewTrip>();
 
@@ -57,6 +60,7 @@ public partial class Trip
     [InverseProperty("Trips")]
     public virtual Route? Route { get; set; }
 
+    [JsonIgnore]
     [InverseProperty("SellingTrips")]
     public virtual ICollection<User> Sellers { get; set; } = new List<User>();
 }
