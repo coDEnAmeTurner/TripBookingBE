@@ -231,7 +231,7 @@ public class UsersService : IUsersService
             return servicedto;
         }
 
-        servicedto.AccessToken = generator.GenerateToken(user.Id, user.UserName, user.Phone, user.Email);
+        servicedto.AccessToken = generator.GenerateToken(user.Id, user.UserName, user.Phone, user.Email, user.SellerCode);
 
         return servicedto;
     }

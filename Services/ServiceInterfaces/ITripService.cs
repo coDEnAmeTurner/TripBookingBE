@@ -13,6 +13,7 @@ public interface ITripService
 
     Task<TripGetByIdDTO> GetTripById(long id);
     Task<TripBookDTO> Book(long tripId, long userId, int placeNumber);
+    Task<TripReviewDTO> Review(long tripId, long userId, string? Content);
 
     Task<TripDeleteDTO> DeleteTrip(long id);
 

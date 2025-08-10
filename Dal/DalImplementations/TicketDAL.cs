@@ -102,7 +102,7 @@ public class TicketDAL : ITicketDAL
             .FirstOrDefaultAsync();
             if (ticket == null)
             {
-                dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.RespCode = System.Net.HttpStatusCode.NotFound;
                 dto.Message = $"Ticket with Id {id} not found!";
             }
             dto.Ticket = ticket;

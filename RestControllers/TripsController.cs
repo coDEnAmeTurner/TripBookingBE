@@ -134,7 +134,7 @@ public class TripsController : MyControllerBase
     }
 
     [Authorize]
-    [HttpPost("{id:int}/book")]                                                             
+    [HttpPost("{id:int}/book")]
     public async Task<IActionResult> Book(int id, [FromBody] TripBookRequest request)
     {
         var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -155,4 +155,29 @@ public class TripsController : MyControllerBase
 
         return Ok(dto);
     }
+
+    [Authorize]
+    [HttpPost("{id:int}/review")]
+    public async Task<IActionResult> Review(int id, [FromBody] TripReviewRequest request)
+    {
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        var userId = int.Parse(identity.Claims.ElementAt(2).Value);
+        var dto = await tripService.Review(id, userId, request.Content);
+        if (dto.RespCode != System.Net.HttpStatusCode.Created)
+        {
+            if (dto.RespCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return NotFound(dto.Message);
+            }
+            if (dto.RespCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                return BadRequest(dto.Message);
+            }
+            return Problem(dto.Message);
+        }
+
+        return Ok(dto);
+    }
+    
+
 }

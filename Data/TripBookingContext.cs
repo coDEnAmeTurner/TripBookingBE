@@ -65,10 +65,10 @@ public partial class TripBookingContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_UserReviewTrip");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.CustomerId).HasConstraintName("FK_UserReviewTrip_User").OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.CustomerId).HasConstraintName("FK_UserReviewTrip_User").OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(d => d.Trip).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.TripId)
-                .HasConstraintName("FK_UserReviewTrip_Trip").OnDelete(DeleteBehavior.SetNull);
+                .HasConstraintName("FK_UserReviewTrip_Trip").OnDelete(DeleteBehavior.Cascade);
 
             entity.Property(e => e.RowVersion).IsRowVersion();
         });

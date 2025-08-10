@@ -7,7 +7,7 @@ namespace TripBookingBE.security;
 public class TokenGenerator
 {
     public static byte[] key = "893u498423-n2u8y07134pjoigvrew0y82453jpir-e90135 kjsdfg"u8.ToArray();
-    public string GenerateToken(long id, string username, string phone,string email)
+    public string GenerateToken(long id, string username, string phone,string email, string sellerCode)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -17,6 +17,7 @@ public class TokenGenerator
             new(JwtRegisteredClaimNames.Sub, username),
             new(JwtRegisteredClaimNames.NameId, $"{id}"),
             new(JwtRegisteredClaimNames.PhoneNumber, phone),
+            new("SellerCode", sellerCode),
             new(JwtRegisteredClaimNames.Email, email),
         };
 

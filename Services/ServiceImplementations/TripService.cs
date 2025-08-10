@@ -15,13 +15,15 @@ public class TripService : ITripService
     private readonly IRouteDAL routeDAL;
 
     private readonly IBookingsDal bookingDAL;
+    private readonly IReviewsDal reviewsDAL;
 
-    public TripService(ITripDAL tripDAL, IUsersDal usersDAL, IRouteDAL routeDAL, IBookingsDal bookingDAL)
+    public TripService(ITripDAL tripDAL, IUsersDal usersDAL, IRouteDAL routeDAL, IBookingsDal bookingDAL, IReviewsDal reviewsDAL)
     {
         this.tripDAL = tripDAL;
         this.usersDAL = usersDAL;
         this.routeDAL = routeDAL;
         this.bookingDAL = bookingDAL;
+        this.reviewsDAL = reviewsDAL;
     }
 
     public async Task<TripAssignDTO> AssignDriver(int tripId, int driverId)
@@ -40,7 +42,7 @@ public class TripService : ITripService
         var dbtrip = tripdto.Trip;
         dbtrip.Driver = userdto.User;
         var editdto = await tripDAL.Update(dbtrip);
-           
+
         dto.RespCode = editdto.RespCode;
         dto.Message = editdto.Message;
         return dto;
@@ -62,7 +64,7 @@ public class TripService : ITripService
         var dbtrip = tripdto.Trip;
         dbtrip.Route = routedto.Route;
         var editdto = await tripDAL.Update(dbtrip);
-           
+
         dto.RespCode = editdto.RespCode;
         dto.Message = editdto.Message;
         return dto;
@@ -171,7 +173,39 @@ public class TripService : ITripService
 
     public async Task<TripGetTripsDTO> GetTrips(int? placeCount, int? routeId, int? driverId, string? registrationNumber, DateTime? departureTime)
     {
-        var dto = await tripDAL.GetTrips( placeCount,  routeId,  driverId,  registrationNumber, departureTime);
+        var dto = await tripDAL.GetTrips(placeCount, routeId, driverId, registrationNumber, departureTime);
+        return dto;
+    }
+
+    public async Task<TripReviewDTO> Review(long tripId, long userId, string? Content)
+    {
+        var dto = new TripReviewDTO();
+        var tripdto = await tripDAL.GetTripById(tripId);
+        if (tripdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = tripdto.RespCode;
+            dto.Message = tripdto.Message;
+            return dto;
+        }
+
+        var userdto = await usersDAL.GetUserById(userId);
+        if (userdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = userdto.RespCode;
+            dto.Message = userdto.Message;
+            return dto;
+        }
+
+        var review = new CustomerReviewTrip()
+        {
+            Trip = tripdto.Trip,
+            Customer = userdto.User,
+            Content = Content
+        };
+        var reviewdto = await reviewsDAL.Create(review);
+        dto.Review = reviewdto.Review;
+        dto.RespCode = reviewdto.RespCode;
+        dto.Message = reviewdto.Message;
         return dto;
     }
 }
