@@ -28,8 +28,8 @@ public class RouteDAL : IRouteDAL
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
-            dto.Message = ex.Message;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.Message = $"{ex.Message}\n{ex.InnerException.Message}";
         }
         finally
         {
@@ -47,7 +47,7 @@ public class RouteDAL : IRouteDAL
         var inst = await context.Routes.FindAsync(id);
         if (inst == null)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+            dto.RespCode = System.Net.HttpStatusCode.NotFound;
             dto.Message += $"\nRoute with Id {id} not found!";
         }
 
@@ -66,14 +66,14 @@ public class RouteDAL : IRouteDAL
             var route = await context.Routes.FirstOrDefaultAsync(x => x.Id == id);
             if (route == null)
             {
-                dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
                 dto.Message = $"User with Id {id} not found!";
             }
             dto.Route = route;
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         return dto;
@@ -84,25 +84,26 @@ public class RouteDAL : IRouteDAL
         RouteGetRoutesDTO dto = new();
         try
         {
-            var routes = from route in context.Routes select route;
 
-                routes = from route in routes where description == null || (route.RouteDescription != null && route.RouteDescription.Contains(description, StringComparison.OrdinalIgnoreCase)) select route;
-                routes = from route in routes where dateCreated == null ||
+            var routes = await
+                        (from route in context.Routes
+                        where
+                        (description == null || (route.RouteDescription != null && route.RouteDescription.ToUpper().Contains(description.ToUpper())))
+                        && (dateCreated == null ||
                         (
-                            route.DateCreated != null &&
-                            route.DateCreated.Value.Year == DateTime.Now.Year
-                            && route.DateCreated.Value.Month == DateTime.Now.Month
-                            && route.DateCreated.Value.Day == DateTime.Now.Day
-                            && route.DateCreated.Value.Hour == DateTime.Now.Hour
-                            && route.DateCreated.Value.Minute == DateTime.Now.Minute
-                        ) select route;
-            var resultroutes = routes.OrderByDescending(u => u.Id).ToList();
+                            (route.DateCreated != null &&
+                            route.DateCreated.Value.Year == dateCreated.Value.Year
+                            && route.DateCreated.Value.Month == dateCreated.Value.Month
+                            && route.DateCreated.Value.Day == dateCreated.Value.Day)
+                        ))
+                        orderby route.Id descending
+                        select route).ToListAsync();
 
-            dto.Routes = resultroutes;
+            dto.Routes = routes;
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
 
@@ -123,7 +124,7 @@ public class RouteDAL : IRouteDAL
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            dto.StatusCode = HttpStatusCode.Conflict;
+            dto.RespCode = HttpStatusCode.Conflict;
 
             var exceptionEntry = ex.Entries.Single();
             var clientValues = (Models.Route)exceptionEntry.Entity;
@@ -153,7 +154,7 @@ public class RouteDAL : IRouteDAL
         catch (Exception ex)
         {
             dto.Message = ex.Message;
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
         }
         finally
         {

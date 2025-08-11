@@ -27,9 +27,9 @@ public class ReviewsController : Controller
         ReviewGetReviewsDTO dto = new();
 
         dto = await reviewService.GetReviews(customerName, registrationNumber, departureTimeStr == null ? null : DateTime.ParseExact(departureTimeStr, "dd/MM/yyyy", CultureInfo.InvariantCulture), routeDescription, content);
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -43,9 +43,9 @@ public class ReviewsController : Controller
     {
         var dto = await reviewService.GetCreateOrUpdateModel(id);
         await PopulateDropDownList();
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -62,11 +62,11 @@ public class ReviewsController : Controller
             ReviewCreateOrUpdateDTO targetReview = new() { Review = review };
 
             targetReview = await reviewService.CreateOrUpdate(review);
-            if (targetReview.StatusCode != HttpStatusCode.Created)
+            if (targetReview.RespCode != HttpStatusCode.Created)
             {
-                ViewData["statusCode"] = targetReview.StatusCode;
+                ViewData["statusCode"] = targetReview.RespCode;
                 ViewData["errorMessage"] = targetReview.Message;
-                if (targetReview.StatusCode == HttpStatusCode.Conflict)
+                if (targetReview.RespCode == HttpStatusCode.Conflict)
                     ModelState.Remove("RowVersion");
                 await PopulateDropDownList();
                 return View(targetReview.Review);
@@ -81,9 +81,9 @@ public class ReviewsController : Controller
     {
         var dto = await reviewService.GetReviewById(id.GetValueOrDefault());
         await PopulateDropDownList();
-        if (dto.StatusCode != HttpStatusCode.OK || dto.Review == null)
+        if (dto.RespCode != HttpStatusCode.OK || dto.Review == null)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View("Index");
         }
@@ -94,9 +94,9 @@ public class ReviewsController : Controller
     public async Task<IActionResult> Delete(long id)
     {
         var dto = await reviewService.DeleteReview(id);
-        if (dto.StatusCode != HttpStatusCode.NoContent)
+        if (dto.RespCode != HttpStatusCode.NoContent)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
         }
 

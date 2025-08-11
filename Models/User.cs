@@ -1,34 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace TripBookingBE.Models;
 
 [Table("User")]
 [Index("UserName", Name = "UQ__User__66DCF95C55A682B1", IsUnique = true)]
-public partial class User
+public partial class User : IdentityUser<long>
 {
     [Timestamp]
     public byte[] RowVersion { get; set; }
 
     [NotMapped]
+    [JsonIgnore]
     public string? NewPassword { get; set; }
-    [NotMapped]
+    [NotMapped] 
+    [JsonIgnore]
     public string? ConfirmPassword { get; set; }
+    [NotMapped]
+    [JsonIgnore]
+    public string? Password { get; set; }
 
     [NotMapped]
     public IFormFile? File { get; set; }
 
     [Key]
     [Column("id")]
-    public long Id { get; set; }
+    public override long Id { get; set; }
 
+    [JsonIgnore]
     [Column("password")]
-    [StringLength(255)]
+    [StringLength(500)]
     [Unicode(false)]
-    public string Password { get; set; } = null!;
+    public override string? PasswordHash { get; set; } = null!;
 
     [Column("lastLogin", TypeName = "datetime")]
     public DateTime? LastLogin { get; set; }
@@ -36,20 +42,20 @@ public partial class User
     [Column("userName")]
     [StringLength(150)]
     [Unicode(false)]
-    public string UserName { get; set; } = null!;
+    public override string UserName { get; set; } = null!;
 
     [Column("firstName")]
     [StringLength(150)]
     [Unicode(false)]
     public string? FirstName { get; set; }
 
-    [Column("lastName")]
+    [Column("lastName")]        
     [StringLength(150)]
     [Unicode(false)]
     public string LastName { get; set; } = null!;
 
     [Column("email", TypeName = "text")]
-    public string? Email { get; set; }
+    public override string? Email { get; set; }
 
     [Column("active")]
     public bool Active { get; set; }
@@ -77,20 +83,24 @@ public partial class User
     public string? SellerCode { get; set; }
 
     [Column("dateCreated", TypeName = "datetime")]
-    public DateTime? DateCreated { get; set; }=null;
+    public DateTime? DateCreated { get; set; } = null;
 
     [Column("dateModified", TypeName = "datetime")]
-    public DateTime? DateModified { get; set; }=null;
+    public DateTime? DateModified { get; set; } = null;
 
+    [JsonIgnore]
     [InverseProperty("Customer")]
     public virtual ICollection<CustomerBookTrip> CustomerBookTrips { get; set; } = new List<CustomerBookTrip>();
 
+    [JsonIgnore]
     [InverseProperty("Customer")]
     public virtual ICollection<CustomerReviewTrip> CustomerReviewTrips { get; set; } = new List<CustomerReviewTrip>();
 
+    [JsonIgnore]
     [InverseProperty("Driver")]
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
 
+    [JsonIgnore]
     [InverseProperty("Sellers")]
     public virtual ICollection<Trip> SellingTrips { get; set; } = new List<Trip>();
 }

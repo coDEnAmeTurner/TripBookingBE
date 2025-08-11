@@ -31,9 +31,9 @@ public class TripsController : Controller
                                        System.Globalization.CultureInfo.InvariantCulture));
 
         await PopulateDropdownList();
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -52,9 +52,9 @@ public class TripsController : Controller
     public async Task<IActionResult> CreateOrUpdate(long? id)
     {
         var dto = await tripService.GetCreateOrUpdateModel(id);
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -77,11 +77,11 @@ public class TripsController : Controller
             TripCreateOrUpdateDTO targetTrip = new() { Trip = trip };
 
             targetTrip = await tripService.CreateOrUpdate(trip);
-            if (targetTrip.StatusCode != HttpStatusCode.Created)
+            if (targetTrip.RespCode != HttpStatusCode.Created)
             {
-                ViewData["statusCode"] = targetTrip.StatusCode;
+                ViewData["statusCode"] = targetTrip.RespCode;
                 ViewData["errorMessage"] = targetTrip.Message;
-                if (targetTrip.StatusCode == HttpStatusCode.Conflict)
+                if (targetTrip.RespCode == HttpStatusCode.Conflict)
                     ModelState.Remove("RowVersion");
                 await PopulateDropdownList();
                 return View(targetTrip.Trip);
@@ -96,9 +96,9 @@ public class TripsController : Controller
     {
         var dto = await tripService.GetTripById(id.GetValueOrDefault());
         await PopulateDropdownList();
-        if (dto.StatusCode != HttpStatusCode.OK || dto.Trip == null)
+        if (dto.RespCode != HttpStatusCode.OK || dto.Trip == null)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View("Index");
         }
@@ -109,9 +109,9 @@ public class TripsController : Controller
     public async Task<IActionResult> Delete(long id)
     {
         var dto = await tripService.DeleteTrip(id);
-        if (dto.StatusCode != HttpStatusCode.NoContent)
+        if (dto.RespCode != HttpStatusCode.NoContent)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
         }
 

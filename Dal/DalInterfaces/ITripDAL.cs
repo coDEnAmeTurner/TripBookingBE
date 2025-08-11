@@ -15,4 +15,6 @@ public interface ITripDAL
     public Task<TripCreateOrUpdateDTO> Update(Models.Trip trip);
 
     public Task<TripDeleteDTO> DeleteTrip(long id);
+
+    public Task<TripCheckSeatDTO> CheckSeat(long id, int placeNumber);
 }

@@ -1,15 +1,14 @@
-using System.IO.MemoryMappedFiles;
 using System.Net;
-using System.Threading.Tasks;
 using System.Transactions;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using Microsoft.VisualBasic;
+using Microsoft.AspNetCore.Identity;
 using TripBookingBE.Dal.DalInterfaces;
-using TripBookingBE.Data;
 using TripBookingBE.DTO.UserDTO;
 using TripBookingBE.Models;
+using TripBookingBE.security;
 using TripBookingBE.Services.ServiceInterfaces;
+using BCrypt.Net;
 
 namespace TripBookingBE.Services.ServiceImplementations;
 
@@ -19,16 +18,21 @@ public class UsersService : IUsersService
     private readonly IBookingsDal bookingDAL;
     private readonly IReviewsDal reviewDAL;
     private readonly Cloudinary cloudinary;
+    private readonly TokenGenerator generator;
 
-    public UsersService(IUsersDal dal, Cloudinary cloudinary, IBookingsDal bookingDAL, IReviewsDal reviewDAL)
+    private readonly IPasswordHasher passwordHasher;
+
+    public UsersService(IUsersDal dal, Cloudinary cloudinary, IBookingsDal bookingDAL, IReviewsDal reviewDAL, TokenGenerator generator, IPasswordHasher passwordHasher)
     {
         this.usersDAL = dal;
         this.cloudinary = cloudinary;
         this.bookingDAL = bookingDAL;
         this.reviewDAL = reviewDAL;
+        this.generator = generator;
+        this.passwordHasher = passwordHasher;
     }
 
-    public async Task<UserCreateOrUpdateDTO> CreateOrUpdate(User user)
+    public async Task<UserCreateOrUpdateDTO> CreateOrUpdate(User user, bool api = false)
     {
         UserCreateOrUpdateDTO dto = new();
 
@@ -54,7 +58,7 @@ public class UsersService : IUsersService
                     var uploadResult = cloudinary.Upload(uploadParams);
                     if (uploadResult.StatusCode != HttpStatusCode.OK)
                     {
-                        dto.StatusCode = uploadResult.StatusCode;
+                        dto.RespCode = uploadResult.StatusCode;
                         dto.Message = uploadResult.Error.Message;
                         return dto;
                     }
@@ -63,7 +67,7 @@ public class UsersService : IUsersService
                 }
                 catch (Exception ex)
                 {
-                    dto.StatusCode = HttpStatusCode.InternalServerError;
+                    dto.RespCode = HttpStatusCode.InternalServerError;
                     dto.Message = ex.Message;
                     return dto;
                 }
@@ -71,23 +75,43 @@ public class UsersService : IUsersService
         }
 
         UserCreateOrUpdateDTO dtoDAL = new();
+        dtoDAL.User = user;
         if (user.Id == 0)
         {
             if (!user.Type.Equals("SELLER"))
                 user.SellerCode = null;
 
+            if (string.IsNullOrEmpty(user.Password))
+            {
+                dtoDAL.RespCode = HttpStatusCode.BadRequest;
+                dtoDAL.Message = "Password is missing.";
+                return dtoDAL;
+            }
+
+            user.PasswordHash = passwordHasher.Hash(user.Password);
             dtoDAL = await usersDAL.Create(user);
         }
         else
         {
-            //check for password, with jwt configured
+            if (api == true || (!string.IsNullOrEmpty(user.NewPassword) && user.NewPassword.Equals(user.ConfirmPassword)))
+            {
+                if (api == true || passwordHasher.Verify(user.PasswordHash, user.Password))
+                    user.PasswordHash = passwordHasher.Hash(user.NewPassword);
+                else
+                {
+                    dtoDAL.RespCode = HttpStatusCode.BadRequest;
+                    dtoDAL.Message = "Current Password is incorrect.";
+                    return dtoDAL;
+                }
+            }
 
+            //check for password, with jwt configured
             dtoDAL = await usersDAL.Update(user);
         }
         dto.User = dtoDAL.User;
-        if (dtoDAL.StatusCode != HttpStatusCode.OK)
+        if (dtoDAL.RespCode != HttpStatusCode.OK)
         {
-            dto.StatusCode = dtoDAL.StatusCode;
+            dto.RespCode = dtoDAL.RespCode;
             dto.Message = dtoDAL.Message;
         }
         return dto;
@@ -101,33 +125,33 @@ public class UsersService : IUsersService
             try
             {
                 var bookingDTO = await bookingDAL.DeleteBookingsByUser(id);
-                if (bookingDTO.StatusCode != HttpStatusCode.NoContent)
+                if (bookingDTO.RespCode != HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = bookingDTO.StatusCode;
+                    dto.RespCode = bookingDTO.RespCode;
                     dto.Message = bookingDTO.Message;
                 }
 
                 var reviewDTO = await reviewDAL.DeleteReviewsByUser(id);
-                if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
+                if (reviewDTO.RespCode != HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = reviewDTO.StatusCode;
+                    dto.RespCode = reviewDTO.RespCode;
                     dto.Message += $"\n{reviewDTO.Message}";
                 }
 
                 var userDTO = await usersDAL.DeleteUser(id);
-                if (reviewDTO.StatusCode != HttpStatusCode.NoContent)
+                if (userDTO.RespCode != HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = reviewDTO.StatusCode;
-                    dto.Message += $"\n{reviewDTO.Message}";
+                    dto.RespCode = userDTO.RespCode;
+                    dto.Message += $"\n{userDTO.Message}";
                 }
-                
+
                 scope.Complete();
             }
             catch (Exception ex)
             {
-                if (dto.StatusCode == HttpStatusCode.NoContent)
+                if (dto.RespCode != HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = HttpStatusCode.InternalServerError;
+                    dto.RespCode = HttpStatusCode.InternalServerError;
                     dto.Message = ex.Message;
                 }
             }
@@ -145,7 +169,7 @@ public class UsersService : IUsersService
         {
             var dtoDAL = await GetUserById(id.GetValueOrDefault());
             dto.User = dtoDAL.User;
-            dto.StatusCode = dtoDAL.StatusCode;
+            dto.RespCode = dtoDAL.RespCode;
             dto.Message = dtoDAL.Message;
         }
 
@@ -158,8 +182,89 @@ public class UsersService : IUsersService
         return dto;
     }
 
-    public async Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email, string username = null, string password = null)
+    public async Task<UserGetUsersDTO> GetUsers(string name = null, string type = null, string sellerCode = null, string email = null, string username = null)
     {
-        return await usersDAL.GetUsers(name, type, sellerCode, email, username, password);
+        var dto = await usersDAL.GetUsers(name, type, sellerCode, email, username);
+
+        return dto;
+    }
+
+    public async Task<UserHashDTO> Hash(string username, string password)
+    {
+        var dto = await GetUsers(username: username);
+        var user = dto.Users.FirstOrDefault();
+        user.NewPassword = password;
+
+        var rslt = await CreateOrUpdate(user, true);
+
+        return new UserHashDTO()
+        {
+            Hash = rslt.User.PasswordHash,
+            User = user
+        };
+    }
+
+    public async Task<UserLoginDTO> LogUserIn(string username, string password)
+    {
+        UserGetUsersDTO dto = null;
+        if (!String.IsNullOrEmpty(username))
+        {
+            dto = await GetUsers(username: username);
+        }
+
+        UserLoginDTO servicedto = new();
+        if (dto == null || dto.Users == null || dto.Users.Count == 0)
+        {
+            servicedto.RespCode = (int)HttpStatusCode.NotFound;
+            servicedto.Message = "Login Failed! Check your username.";
+            return servicedto;
+        }
+
+        var user = dto.Users.FirstOrDefault();
+        var dbpass = user.PasswordHash;
+
+        var result = passwordHasher.Verify(dbpass, password);
+        if (!result)
+        {                   
+            servicedto.RespCode = (int)HttpStatusCode.Unauthorized;
+            servicedto.Message = "Login Failed! Check your password.";
+            return servicedto;
+        }
+
+        servicedto.AccessToken = generator.GenerateToken(user.Id, user.UserName, user.Phone, user.Email, string.IsNullOrEmpty(user.SellerCode)?"":user.SellerCode);
+
+        return servicedto;
+    }
+
+    public async Task<UserLoginMVCDTO> LogUserInMVC(string username, string password)
+    {
+        UserGetUsersDTO dto = null;
+        if (!String.IsNullOrEmpty(username))
+        {
+            dto = await GetUsers(username: username);
+        }
+
+        UserLoginMVCDTO servicedto = new();
+        if (dto == null || dto.Users == null || dto.Users.Count == 0)
+        {
+            servicedto.RespCode = (int)HttpStatusCode.NotFound;
+            servicedto.Message = "Login Failed! Check your username.";
+            return servicedto;
+        }
+
+        var user = dto.Users.FirstOrDefault();
+        var dbpass = user.PasswordHash;
+
+        var result = passwordHasher.Verify(dbpass, password);
+        if (!result)
+        {
+            servicedto.RespCode = (int)HttpStatusCode.Unauthorized;
+            servicedto.Message = "Login Failed! Check your password.";
+            return servicedto;
+        }
+
+        servicedto.User = user;
+
+        return servicedto;
     }
 }

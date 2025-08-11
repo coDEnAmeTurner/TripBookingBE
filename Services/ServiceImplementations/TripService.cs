@@ -1,8 +1,6 @@
 using System.Net;
 using System.Transactions;
-using Microsoft.Extensions.Logging.Abstractions;
 using TripBookingBE.Dal.DalInterfaces;
-using TripBookingBE.DTO.RouteDTO;
 using TripBookingBE.DTO.TripDTO;
 using TripBookingBE.Models;
 using TripBookingBE.Services.ServiceInterfaces;
@@ -13,9 +11,110 @@ public class TripService : ITripService
 {
     private readonly ITripDAL tripDAL;
 
-    public TripService(ITripDAL tripDAL)
+    private readonly IUsersDal usersDAL;
+    private readonly IRouteDAL routeDAL;
+
+    private readonly IBookingsDal bookingDAL;
+    private readonly IReviewsDal reviewsDAL;
+
+    public TripService(ITripDAL tripDAL, IUsersDal usersDAL, IRouteDAL routeDAL, IBookingsDal bookingDAL, IReviewsDal reviewsDAL)
     {
         this.tripDAL = tripDAL;
+        this.usersDAL = usersDAL;
+        this.routeDAL = routeDAL;
+        this.bookingDAL = bookingDAL;
+        this.reviewsDAL = reviewsDAL;
+    }
+
+    public async Task<TripAssignDTO> AssignDriver(int tripId, int driverId)
+    {
+        var dto = new TripAssignDTO();
+        var userdto = await usersDAL.GetUserById(driverId);
+
+        if (userdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = HttpStatusCode.NotFound;
+            dto.Message = $"Driver of id: {driverId} is not found!";
+            return dto;
+        }
+
+        var tripdto = await tripDAL.GetTripById(tripId);
+        var dbtrip = tripdto.Trip;
+        dbtrip.Driver = userdto.User;
+        var editdto = await tripDAL.Update(dbtrip);
+
+        dto.RespCode = editdto.RespCode;
+        dto.Message = editdto.Message;
+        return dto;
+    }
+
+    public async Task<TripAssignDTO> AssignRoute(int tripId, int routeId)
+    {
+        var dto = new TripAssignDTO();
+        var routedto = await routeDAL.GetRouteById(routeId);
+
+        if (routedto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = HttpStatusCode.NotFound;
+            dto.Message = $"Route of id: {routeId} is not found!";
+            return dto;
+        }
+
+        var tripdto = await tripDAL.GetTripById(tripId);
+        var dbtrip = tripdto.Trip;
+        dbtrip.Route = routedto.Route;
+        var editdto = await tripDAL.Update(dbtrip);
+
+        dto.RespCode = editdto.RespCode;
+        dto.Message = editdto.Message;
+        return dto;
+    }
+
+    public async Task<TripBookDTO> Book(long tripId, long userId, int placeNumber)
+    {
+        var dto = new TripBookDTO();
+        var tripdto = await tripDAL.GetTripById(tripId);
+        if (tripdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = tripdto.RespCode;
+            dto.Message = tripdto.Message;
+            return dto;
+        }
+
+        var userdto = await usersDAL.GetUserById(userId);
+        if (userdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = userdto.RespCode;
+            dto.Message = userdto.Message;
+            return dto;
+        }
+
+        var seatdto = await tripDAL.CheckSeat(tripId, placeNumber);
+        if (seatdto.RespCode != (int)HttpStatusCode.OK)
+        {
+            dto.RespCode = (HttpStatusCode)seatdto.RespCode;
+            dto.Message = seatdto.Message;
+            return dto;
+        }
+        if (seatdto.IsBooked)
+        {
+            dto.RespCode = HttpStatusCode.BadRequest;
+            dto.Message = $"{dto.Message}\nThe seat has been taken";
+            return dto;
+        }
+
+        var booking = new CustomerBookTrip()
+        {
+            Trip = tripdto.Trip,
+            Customer = userdto.User,
+            PlaceNumber = placeNumber
+        };
+
+        var bookingdto = await bookingDAL.Create(booking);
+        dto.Booking = bookingdto.CustomerBookTrip;
+        dto.RespCode = bookingdto.RespCode;
+        dto.Message = bookingdto.Message;
+        return dto;
     }
 
     public async Task<TripCreateOrUpdateDTO> CreateOrUpdate(Trip trip)
@@ -44,9 +143,9 @@ public class TripService : ITripService
             {
 
                 var tripDTO = await tripDAL.DeleteTrip(id);
-                if (tripDTO.StatusCode != HttpStatusCode.NoContent)
+                if (tripDTO.RespCode != HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = tripDTO.StatusCode;
+                    dto.RespCode = tripDTO.RespCode;
                     dto.Message += $"\n{tripDTO.Message}";
                 }
 
@@ -54,9 +153,9 @@ public class TripService : ITripService
             }
             catch (Exception ex)
             {
-                if (dto.StatusCode == HttpStatusCode.NoContent)
+                if (dto.RespCode == HttpStatusCode.NoContent)
                 {
-                    dto.StatusCode = HttpStatusCode.InternalServerError;
+                    dto.RespCode = HttpStatusCode.InternalServerError;
                     dto.Message = ex.Message;
                 }
             }
@@ -74,7 +173,7 @@ public class TripService : ITripService
         {
             var dtoDAL = await tripDAL.GetTripById(id.GetValueOrDefault());
             dto.Trip = dtoDAL.Trip;
-            dto.StatusCode = dtoDAL.StatusCode;
+            dto.RespCode = dtoDAL.RespCode;
             dto.Message = dtoDAL.Message;
         }
 
@@ -89,7 +188,39 @@ public class TripService : ITripService
 
     public async Task<TripGetTripsDTO> GetTrips(int? placeCount, int? routeId, int? driverId, string? registrationNumber, DateTime? departureTime)
     {
-        var dto = await tripDAL.GetTrips( placeCount,  routeId,  driverId,  registrationNumber, departureTime);
+        var dto = await tripDAL.GetTrips(placeCount, routeId, driverId, registrationNumber, departureTime);
+        return dto;
+    }
+    
+    public async Task<TripReviewDTO> Review(long tripId, long userId, string? Content)
+    {
+        var dto = new TripReviewDTO();
+        var tripdto = await tripDAL.GetTripById(tripId);
+        if (tripdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = tripdto.RespCode;
+            dto.Message = tripdto.Message;
+            return dto;
+        }
+
+        var userdto = await usersDAL.GetUserById(userId);
+        if (userdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = userdto.RespCode;
+            dto.Message = userdto.Message;
+            return dto;
+        }
+
+        var review = new CustomerReviewTrip()
+        {
+            Trip = tripdto.Trip,
+            Customer = userdto.User,
+            Content = Content
+        };
+        var reviewdto = await reviewsDAL.Create(review);
+        dto.Review = reviewdto.Review;
+        dto.RespCode = reviewdto.RespCode;
+        dto.Message = reviewdto.Message;
         return dto;
     }
 }

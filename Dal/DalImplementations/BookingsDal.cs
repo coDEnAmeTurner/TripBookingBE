@@ -13,7 +13,7 @@ public class BookingsDal : IBookingsDal
     public BookingsDal(TripBookingContext context)
     {
         this.context = context;
-    }
+    }               
 
     public async Task<BookingCreateOrUpdateDTO> Create(CustomerBookTrip booking)
     {
@@ -27,10 +27,10 @@ public class BookingsDal : IBookingsDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.BadRequest;
             dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
-        finally
+        finally     
         {
             dto.CustomerBookTrip = booking;
 
@@ -50,7 +50,7 @@ public class BookingsDal : IBookingsDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = HttpStatusCode.InternalServerError;
+            dto.RespCode = HttpStatusCode.InternalServerError;
             dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
 
@@ -72,7 +72,7 @@ public class BookingsDal : IBookingsDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         return dto;
@@ -90,14 +90,14 @@ public class BookingsDal : IBookingsDal
             .FirstOrDefaultAsync(x=>x.Id == id);
             if (cbt == null)
             {
-                dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
                 dto.Message = $"User with Id {id} not found!";
             }
             dto.CustomerBookTrip = cbt;
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         return dto;
@@ -122,7 +122,7 @@ public class BookingsDal : IBookingsDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = HttpStatusCode.InternalServerError;
+            dto.RespCode = HttpStatusCode.InternalServerError;
             dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
 
@@ -145,7 +145,7 @@ public class BookingsDal : IBookingsDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
         }
 
@@ -165,7 +165,7 @@ public class BookingsDal : IBookingsDal
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            dto.StatusCode = HttpStatusCode.Conflict;
+            dto.RespCode = HttpStatusCode.Conflict;
 
             var exceptionEntry = ex.Entries.Single();
             var clientValues = (CustomerBookTrip)exceptionEntry.Entity;
@@ -199,7 +199,7 @@ public class BookingsDal : IBookingsDal
         catch (Exception ex)
         {
             dto.Message = ex.Message;
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
         }
         finally
         {

@@ -34,7 +34,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("SellingTripsId");
 
-                    b.ToTable("SellerTrip");
+                    b.ToTable("SellerTrip", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.CustomerBookTrip", b =>
@@ -79,7 +79,7 @@ namespace TripBookingBE.Migrations
                     b.HasIndex(new[] { "CustomerId", "TripId" }, "IX_CustomerBookTrip")
                         .IsUnique();
 
-                    b.ToTable("CustomerBookTrip");
+                    b.ToTable("CustomerBookTrip", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.CustomerReviewTrip", b =>
@@ -96,7 +96,7 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("nvarchar(1000)")
                         .HasColumnName("content");
 
-                    b.Property<long>("CustomerId")
+                    b.Property<long?>("CustomerId")
                         .HasColumnType("bigint")
                         .HasColumnName("customerId");
 
@@ -124,7 +124,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.ToTable("CustomerReviewTrip");
+                    b.ToTable("CustomerReviewTrip", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.GeneralParam", b =>
@@ -160,7 +160,7 @@ namespace TripBookingBE.Migrations
                     b.HasKey("Id")
                         .HasName("PK_GeneralParam_1");
 
-                    b.ToTable("GeneralParams");
+                    b.ToTable("GeneralParams", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.Route", b =>
@@ -196,7 +196,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Route");
+                    b.ToTable("Route", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.Ticket", b =>
@@ -236,7 +236,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("GeneralParamId");
 
-                    b.ToTable("Ticket");
+                    b.ToTable("Ticket", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.Trip", b =>
@@ -295,7 +295,7 @@ namespace TripBookingBE.Migrations
 
                     b.HasIndex("RouteId");
 
-                    b.ToTable("Trip");
+                    b.ToTable("Trip", (string)null);
                 });
 
             modelBuilder.Entity("TripBookingBE.Models.User", b =>
@@ -306,6 +306,9 @@ namespace TripBookingBE.Migrations
                         .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
@@ -318,6 +321,9 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("text")
                         .HasColumnName("avatar")
                         .HasDefaultValueSql("(NULL)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DateCreated")
                         .ValueGeneratedOnAdd()
@@ -336,6 +342,9 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("text")
                         .HasColumnName("email")
                         .HasDefaultValueSql("(NULL)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(150)
@@ -356,17 +365,28 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("varchar(150)")
                         .HasColumnName("lastName");
 
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("name");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasMaxLength(500)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("varchar(500)")
                         .HasColumnName("password");
 
                     b.Property<string>("Phone")
@@ -377,17 +397,29 @@ namespace TripBookingBE.Migrations
                         .HasColumnName("phone")
                         .HasDefaultValueSql("(NULL)");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SellerCode")
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)")
                         .HasColumnName("sellerCode");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -411,7 +443,7 @@ namespace TripBookingBE.Migrations
                     b.HasIndex(new[] { "UserName" }, "UQ__User__66DCF95C55A682B1")
                         .IsUnique();
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("SellerTrip", b =>
@@ -455,14 +487,14 @@ namespace TripBookingBE.Migrations
                     b.HasOne("TripBookingBE.Models.User", "Customer")
                         .WithMany("CustomerReviewTrips")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired()
                         .HasConstraintName("FK_UserReviewTrip_User");
 
                     b.HasOne("TripBookingBE.Models.Trip", "Trip")
                         .WithMany("CustomerReviewTrips")
                         .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("FK_UserReviewTrip_Trip");
 
                     b.Navigation("Customer");
@@ -495,12 +527,13 @@ namespace TripBookingBE.Migrations
                     b.HasOne("TripBookingBE.Models.User", "Driver")
                         .WithMany("Trips")
                         .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("FK_Trip_Driver");
 
                     b.HasOne("TripBookingBE.Models.Route", "Route")
                         .WithMany("Trips")
                         .HasForeignKey("RouteId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("FK_Trip_Route");
 
                     b.Navigation("Driver");

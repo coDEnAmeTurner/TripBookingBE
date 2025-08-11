@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace TripBookingBE.Models;
@@ -38,6 +39,7 @@ public partial class CustomerBookTrip
     [InverseProperty("CustomerBookTrips")]
     public virtual User? Customer { get; set; }
 
+    [JsonIgnore]
     [InverseProperty("CustomerBookTrip")]
     public virtual Ticket? Ticket { get; set; }
 

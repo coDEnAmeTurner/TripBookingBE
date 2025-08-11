@@ -6,6 +6,6 @@ namespace TripBookingBE.DTO.TripDTO;
 public class TripGetByIdDTO
 {
     public Models.Trip? Trip { get; set; } = null;
-    public HttpStatusCode StatusCode = HttpStatusCode.OK;
+    public HttpStatusCode RespCode = HttpStatusCode.OK;
     public string Message = string.Empty;
 }

@@ -31,7 +31,7 @@ public class BookingsService : IBookingsService
                 var trip = await tripDAL.GetTripById(booking.TripId);
 
                 dto.CustomerBookTrip = booking;
-                dto.StatusCode = System.Net.HttpStatusCode.Conflict;
+                dto.RespCode = System.Net.HttpStatusCode.Conflict;
                 dto.Message = $"Customer {customer.User.Name} - Phone: {customer.User.Phone} already booked Trip {trip.Trip.Route.RouteDescription} - Departure Time: {trip.Trip.DepartureTime?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)} - Regis Number: {trip.Trip.RegistrationNumber}";
                 return dto;
             }
@@ -53,7 +53,7 @@ public class BookingsService : IBookingsService
         if (booking == null)
         {
             BookingDeleteByIdDTO dto = new();
-            dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+            dto.RespCode = System.Net.HttpStatusCode.NotFound;
             dto.Message = "The booking is not found!";
             return dto;
         }
@@ -89,7 +89,7 @@ public class BookingsService : IBookingsService
         else
         {
             var dtobyid = await bookingDAL.GetBookingById(id.GetValueOrDefault());
-            dto.StatusCode = dtobyid.StatusCode;
+            dto.RespCode = dtobyid.RespCode;
             dto.Message = dtobyid.Message;
             dto.CustomerBookTrip = dtobyid.CustomerBookTrip;
             

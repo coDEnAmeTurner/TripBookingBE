@@ -30,9 +30,9 @@ public class TicketsController : Controller
 
         dto = await ticketService.GetTickets(customerId, tripId, fromPrice, toPrice, sellerCode, departureTime == null ? null : DateTime.ParseExact(departureTime, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture), generalParamId);
         await PopulateDropDownList();
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -47,9 +47,9 @@ public class TicketsController : Controller
         var dto = await ticketService.GetCreateOrUpdateModel(id);
         await PopuplateSellerCode();
         await PopulateDropDownList();
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -71,11 +71,11 @@ public class TicketsController : Controller
             TicketCreateOrUpdateDTO targetTicket = new() { Ticket = ticket };
 
             targetTicket = await ticketService.CreateOrUpdate(ticket);
-            if (targetTicket.StatusCode != HttpStatusCode.Created)
+            if (targetTicket.RespCode != HttpStatusCode.Created)
             {
-                ViewData["statusCode"] = targetTicket.StatusCode;
+                ViewData["statusCode"] = targetTicket.RespCode;
                 ViewData["errorMessage"] = targetTicket.Message;
-                if (targetTicket.StatusCode == HttpStatusCode.Conflict)
+                if (targetTicket.RespCode == HttpStatusCode.Conflict)
                     ModelState.Remove("RowVersion");
                 await PopuplateSellerCode();
                 await PopulateDropDownList();
@@ -95,9 +95,9 @@ public class TicketsController : Controller
         dto.Ticket.TripId = dto.Ticket.CustomerBookTrip.Trip.Id;
         await PopuplateSellerCode();
         await PopulateDropDownList();
-        if (dto.StatusCode != HttpStatusCode.OK || dto.Ticket == null)
+        if (dto.RespCode != HttpStatusCode.OK || dto.Ticket == null)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View("Index");
         }
@@ -108,9 +108,9 @@ public class TicketsController : Controller
     public async Task<IActionResult> Delete(long id)
     {
         var dto = await ticketService.DeleteTicket(id);
-        if (dto.StatusCode != HttpStatusCode.NoContent)
+        if (dto.RespCode != HttpStatusCode.NoContent)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
         }
 

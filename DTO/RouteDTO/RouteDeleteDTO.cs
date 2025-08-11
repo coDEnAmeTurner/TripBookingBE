@@ -6,6 +6,6 @@ namespace TripBookingBE.DTO.RouteDTO;
 public class RouteDeleteDTO
 {
     public Models.Route Route { get; set; } = null;
-    public HttpStatusCode StatusCode = HttpStatusCode.NoContent;
+    public HttpStatusCode RespCode = HttpStatusCode.NoContent;
     public string Message = string.Empty;
 }

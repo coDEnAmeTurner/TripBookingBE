@@ -7,7 +7,7 @@ public class GeneralParamGetGeneralParamsDTO
 {
     public List<GeneralParam> GeneralParams = null;
 
-    public HttpStatusCode StatusCode = HttpStatusCode.NoContent;
+    public HttpStatusCode RespCode = HttpStatusCode.NoContent;
 
     public string Message = string.Empty;
 }

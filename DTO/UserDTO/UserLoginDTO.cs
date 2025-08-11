@@ -7,6 +7,6 @@ namespace TripBookingBE.DTO.UserDTO;
 public class UserLoginDTO
 {
     public string AccessToken { get; set;} = null;
-    public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
+    public int RespCode { get; set; } = 200;
     public string Message { get; set; } = string.Empty;
 }

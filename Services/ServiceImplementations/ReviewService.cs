@@ -37,7 +37,7 @@ public class ReviewsService : IReviewService
         if (review == null)
         {
             ReviewDeleteByIdDTO dto = new();
-            dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+            dto.RespCode = System.Net.HttpStatusCode.NotFound;
             dto.Message = "The review is not found!";
             return dto;
         }
@@ -61,7 +61,7 @@ public class ReviewsService : IReviewService
         else
         {
             var dtobyid = await reviewDAL.GetReviewById(id.GetValueOrDefault());
-            dto.StatusCode = dtobyid.StatusCode;
+            dto.RespCode = dtobyid.RespCode;
             dto.Message = dtobyid.Message;
             dto.Review = dtobyid.Review;
 

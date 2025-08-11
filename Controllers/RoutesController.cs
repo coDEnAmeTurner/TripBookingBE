@@ -24,9 +24,9 @@ public class RoutesController : Controller
         dto = await routeService.GetRoutes(description, String.IsNullOrEmpty(dateCreated) ? null : DateTime.ParseExact(dateCreated, "dd/MM/yyyy",
                                        System.Globalization.CultureInfo.InvariantCulture));
 
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -38,9 +38,9 @@ public class RoutesController : Controller
     public async Task<IActionResult> CreateOrUpdate(long? id)
     {
         var dto = await routeService.GetCreateOrUpdateModel(id);
-        if (dto.StatusCode != HttpStatusCode.OK)
+        if (dto.RespCode != HttpStatusCode.OK)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View();
         }
@@ -56,11 +56,11 @@ public class RoutesController : Controller
             RouteCreateOrUpdateDTO targetRoute = new() { Route = route };
 
             targetRoute = await routeService.CreateOrUpdate(route);
-            if (targetRoute.StatusCode != HttpStatusCode.Created)
+            if (targetRoute.RespCode != HttpStatusCode.Created)
             {
-                ViewData["statusCode"] = targetRoute.StatusCode;
+                ViewData["statusCode"] = targetRoute.RespCode;
                 ViewData["errorMessage"] = targetRoute.Message;
-                if (targetRoute.StatusCode == HttpStatusCode.Conflict)
+                if (targetRoute.RespCode == HttpStatusCode.Conflict)
                     ModelState.Remove("RowVersion");
                 return View(targetRoute.Route);
             }
@@ -72,9 +72,9 @@ public class RoutesController : Controller
     public async Task<IActionResult> Details(long? id)
     {
         var dto = await routeService.GetRouteById(id.GetValueOrDefault());
-        if (dto.StatusCode != HttpStatusCode.OK || dto.Route == null)
+        if (dto.RespCode != HttpStatusCode.OK || dto.Route == null)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
             return View("Index");
         }
@@ -85,9 +85,9 @@ public class RoutesController : Controller
     public async Task<IActionResult> Delete(long id)
     {
         var dto = await routeService.DeleteRoute(id);
-        if (dto.StatusCode != HttpStatusCode.NoContent)
+        if (dto.RespCode != HttpStatusCode.NoContent)
         {
-            ViewData["statusCode"] = dto.StatusCode;
+            ViewData["statusCode"] = dto.RespCode;
             ViewData["errorMessage"] = dto.Message;
         }
 

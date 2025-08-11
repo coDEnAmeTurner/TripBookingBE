@@ -16,6 +16,28 @@ public class TripDAL : ITripDAL
         this.context = context;
     }
 
+    public async Task<TripCheckSeatDTO> CheckSeat(long id, int placeNumber)
+    {
+        TripCheckSeatDTO dto = new();
+
+        try
+        {
+            var taken = await (
+                        from book in context.CustomerBookTrips
+                        where book.TripId == id && book.PlaceNumber == placeNumber
+                        select true).FirstOrDefaultAsync();
+
+            dto.IsBooked = taken;
+        }
+        catch (Exception ex)
+        {
+            dto.RespCode = (int)HttpStatusCode.InternalServerError;
+            dto.Message = $"{ex.Message}\n{ex.InnerException.Message}";
+        }
+
+        return dto;
+    }
+
     public async Task<TripCreateOrUpdateDTO> Create(Trip trip)
     {
         TripCreateOrUpdateDTO dto = new();
@@ -28,8 +50,8 @@ public class TripDAL : ITripDAL
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
-            dto.Message = ex.Message;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.Message = $"{ex.Message}\n{ex.InnerException.Message}";
         }
         finally
         {
@@ -47,7 +69,7 @@ public class TripDAL : ITripDAL
         var inst = await context.Trips.FindAsync(id);
         if (inst == null)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.NotFound;
+            dto.RespCode = System.Net.HttpStatusCode.NotFound;
             dto.Message += $"\nTrip with Id {id} not found!";
         }
 
@@ -63,17 +85,17 @@ public class TripDAL : ITripDAL
         TripGetByIdDTO dto = new();
         try
         {
-            var trip = await context.Trips.Include(t=>t.Route).FirstOrDefaultAsync(x => x.Id == id);
+            var trip = await context.Trips.Include(t=>t.Driver).Include(t=>t.Route).FirstOrDefaultAsync(x => x.Id == id);
             if (trip == null)
             {
-                dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
-                dto.Message = $"User with Id {id} not found!";
+                dto.RespCode = System.Net.HttpStatusCode.NotFound;
+                dto.Message = $"Trip with Id {id} not found!";
             }
             dto.Trip = trip;
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         return dto;
@@ -84,29 +106,32 @@ public class TripDAL : ITripDAL
         TripGetTripsDTO dto = new();
         try
         {
-            var trips = from trip in context.Trips select trip;
+            var trips = await (
+                        from trip in context.Trips
+                        where (placeCount == null || trip.PlaceCount == placeCount.Value) &&
+                                (routeId == null || trip.RouteId == routeId.Value) &&
+                                (driverId == null || trip.DriverId == driverId.Value)&&
+                                (departureTime == null ||
+                                            (
+                                        trip.DepartureTime != null &&
+                                        trip.DepartureTime.Value.Year == departureTime.Value.Year
+                                        && trip.DepartureTime.Value.Month == departureTime.Value.Month
+                                        && trip.DepartureTime.Value.Date == departureTime.Value.Date
+                                    )
+                                ) &&
+                                (registrationNumber == null ||
+                                    (trip.RegistrationNumber != null &&
+                                        trip.RegistrationNumber.ToUpper().Contains(registrationNumber.ToUpper())
+                                    )
+                                )
+                                orderby trip.Id descending
+                                select trip ).Include(e=>e.Driver).Include(e=>e.Route).ToListAsync();
 
-            trips = from trip in trips where placeCount == null || trip.PlaceCount == placeCount.Value select trip;
-            trips = from trip in trips where routeId == null || trip.RouteId == routeId.Value select trip;
-            trips = from trip in trips where driverId == null || trip.DriverId == driverId.Value select trip;
-            trips = from trip in trips
-                    where departureTime == null ||
-            (
-                trip.DepartureTime != null &&
-                trip.DepartureTime.Value.Year == departureTime.Value.Year
-                && trip.DepartureTime.Value.Month == departureTime.Value.Month
-                && trip.DepartureTime.Value.Date == departureTime.Value.Date
-            )
-                    select trip;
-
-            var resulttrips = trips.OrderByDescending(u => u.Id).Include(e=>e.Driver).Include(e=>e.Route).ToList();
-            resulttrips = (from trip in resulttrips where registrationNumber == null || (trip.RegistrationNumber != null && trip.RegistrationNumber.Contains(registrationNumber, StringComparison.OrdinalIgnoreCase)) select trip).ToList();
-
-            dto.Trips = resulttrips;
+            dto.Trips = trips;
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
 
@@ -127,7 +152,7 @@ public class TripDAL : ITripDAL
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            dto.StatusCode = HttpStatusCode.Conflict;
+            dto.RespCode = HttpStatusCode.Conflict;
 
             var exceptionEntry = ex.Entries.Single();
             var clientValues = (Models.Trip)exceptionEntry.Entity;
@@ -177,7 +202,7 @@ public class TripDAL : ITripDAL
         catch (Exception ex)
         {
             dto.Message = ex.Message;
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
         }
         finally
         {

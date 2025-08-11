@@ -7,10 +7,12 @@ using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.Dal.DalImplementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity.Data;
 using TripBookingBE.security;
 using Microsoft.IdentityModel.Tokens;
-using System;
+using Microsoft.IdentityModel.Logging;
+using System.IdentityModel.Tokens.Jwt;
+
+IdentityModelEventSource.ShowPII = true;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,22 +21,6 @@ builder.Services.AddControllersWithViews();
 
 //db context
 builder.Services.AddDbContext<TripBookingContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext")));
-
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-        {
-            IssuerSigningKey = new SymmetricSecurityKey(TokenGenerator.key),
-            ValidIssuer = "https://id.dotnettrain.com",
-            ValidAudience = "https://donettrain.com",
-            ValidateIssuerSigningKey = true,
-            ValidateLifetime = true,
-            ValidateAudience = true,
-            ValidateIssuer = true
-        };
-    });
 
 //cloudinary
 DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
@@ -60,15 +46,47 @@ builder.Services.AddScoped<ITicketService, TicketService>();
 builder.Services.AddScoped<ITicketDAL, TicketDAL>();
 builder.Services.AddScoped<IGeneralParamService, GeneralParamService>();
 builder.Services.AddScoped<IGeneralParamDal, GeneralParamDal>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
+//session
 builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddSession(options=>
+builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(1);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+//auth
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(x =>
+        {
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                
+                IssuerSigningKey = new SymmetricSecurityKey("893u498423-n2u8y07134pjoigvrew0y82453jpir-e90135 kjsdfg"u8.ToArray()),
+                ValidIssuer = "https://localhost:7078",
+                ValidAudience = "https://localhost:7078",
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                ValidateIssuer = true,
+                ValidateAudience = true
+            };
+
+            x.Events = new JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    Console.WriteLine("JWT authentication failed:");
+                    Console.WriteLine(context.Exception.ToString());
+                    return Task.CompletedTask;
+                }
+            };
+        }
+    );
+
 
 var app = builder.Build();
 
@@ -79,15 +97,14 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-app.UseSession();
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
+app.UseSession();
 
-app.UseRouting();
+app.UseHttpsRedirection();
 
 app.MapStaticAssets();
 
@@ -96,6 +113,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+app.MapControllers();
 
 
 app.Run();

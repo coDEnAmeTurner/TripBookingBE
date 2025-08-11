@@ -14,8 +14,6 @@ public class UsersDal : IUsersDal
 {
     private readonly TripBookingContext context;
 
-
-
     public UsersDal(TripBookingContext context)
     {
         this.context = context;
@@ -33,7 +31,7 @@ public class UsersDal : IUsersDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         finally
@@ -44,22 +42,30 @@ public class UsersDal : IUsersDal
 
         return dto;
     }
-
+        
     public async Task<UserDeleteDTO> DeleteUser(long id)
     {
         UserDeleteDTO dto = new();
-
-        var inst = await context.Users.FindAsync(id);
-        if (inst == null)
+        try
         {
-            dto.StatusCode = System.Net.HttpStatusCode.NotFound;
-            dto.Message += $"\nUser with Id {id} not found!";
+            var inst = await context.Users.FindAsync(id);
+            if (inst == null)
+            {
+                dto.RespCode = System.Net.HttpStatusCode.NotFound;
+                dto.Message += $"\nUser with Id {id} not found!";
+            }
+
+            context.Users.Remove(inst);
+            await context.SaveChangesAsync();
+
+            dto.User = inst;
+        }
+        catch (Exception ex)
+        {
+            dto.RespCode = HttpStatusCode.InternalServerError;
+            dto.Message = $"{ex.Message}\n{ex.InnerException.Message}";
         }
 
-        context.Users.Remove(inst);
-        await context.SaveChangesAsync();
-
-        dto.User = inst;
         return dto;
     }
 
@@ -71,20 +77,20 @@ public class UsersDal : IUsersDal
             var user = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
             if (user == null)
             {
-                dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                dto.RespCode = System.Net.HttpStatusCode.NotFound;
                 dto.Message = $"User with Id {id} not found!";
             }
             dto.User = user;
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
         return dto;
     }
 
-    public async Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email, string username, string password)
+    public async Task<UserGetUsersDTO> GetUsers(string name, string type, string sellerCode, string email, string username)
     {
 
         UserGetUsersDTO dto = new();
@@ -109,14 +115,13 @@ public class UsersDal : IUsersDal
                 users = users.Where(u => u.SellerCode != null && u.SellerCode.Contains(sellerCode));
             }
             if (!String.IsNullOrEmpty(email))
-            {
+            {       
                 users = users.Where(u => u.Email != null && u.Email.Contains(sellerCode));
             }
-            if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
+            if (!String.IsNullOrEmpty(username))
             {
                 users = users.Where(u => u.UserName != null
-                && u.UserName.Equals(username)
-                && u.Password.Equals(password));
+                && u.UserName.Equals(username));
             }
 
             var resultusers = await users.Include(u => u.Trips).ThenInclude(t => t.Route).OrderByDescending(u => u.Id).ToListAsync();
@@ -125,7 +130,7 @@ public class UsersDal : IUsersDal
         }
         catch (Exception ex)
         {
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
             dto.Message = ex.Message;
         }
 
@@ -139,15 +144,13 @@ public class UsersDal : IUsersDal
         {
             var currentState = context.Entry(user).State;
             context.Entry(user).State = EntityState.Modified;
-            // context.Entry(user).Property("RowVersion").OriginalValue = user.RowVersion;
-            user.Password = user.NewPassword == null ? user.Password : user.NewPassword;
             context.Update(user);
             await context.SaveChangesAsync();
 
         }
         catch (DbUpdateConcurrencyException ex)
         {
-            dto.StatusCode = HttpStatusCode.Conflict;
+            dto.RespCode = HttpStatusCode.Conflict;
 
             var exceptionEntry = ex.Entries.Single();
             var clientValues = (User)exceptionEntry.Entity;
@@ -209,7 +212,7 @@ public class UsersDal : IUsersDal
         catch (Exception ex)
         {
             dto.Message = ex.Message;
-            dto.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
         }
         finally
         {
