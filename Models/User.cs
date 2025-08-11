@@ -14,10 +14,13 @@ public partial class User : IdentityUser<long>
     public byte[] RowVersion { get; set; }
 
     [NotMapped]
+    [JsonIgnore]
     public string? NewPassword { get; set; }
-    [NotMapped]
+    [NotMapped] 
+    [JsonIgnore]
     public string? ConfirmPassword { get; set; }
     [NotMapped]
+    [JsonIgnore]
     public string? Password { get; set; }
 
     [NotMapped]
@@ -46,7 +49,7 @@ public partial class User : IdentityUser<long>
     [Unicode(false)]
     public string? FirstName { get; set; }
 
-    [Column("lastName")]
+    [Column("lastName")]        
     [StringLength(150)]
     [Unicode(false)]
     public string LastName { get; set; } = null!;

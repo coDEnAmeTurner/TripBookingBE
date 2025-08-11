@@ -153,7 +153,7 @@ public class TripsController : MyControllerBase
             return Problem(dto.Message);
         }
 
-        return Ok(dto);
+        return Created($"api/trips/{id}/book",dto);
     }
 
     [Authorize]

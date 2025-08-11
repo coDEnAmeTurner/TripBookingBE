@@ -28,7 +28,7 @@ public class TicketsController : MyControllerBase
             request.FromPrice,
             request.ToPrice,
             request.SellerCode,
-            DateTime.ParseExact(request.DepartureTime, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+            string.IsNullOrEmpty(request.DepartureTime)?null:DateTime.ParseExact(request.DepartureTime, "dd/MM/yyyy", CultureInfo.InvariantCulture),
             request.GeneralParamId
         );
         if (dto.RespCode != System.Net.HttpStatusCode.OK)
@@ -84,12 +84,11 @@ public class TicketsController : MyControllerBase
         var sellerCode = identity.Claims.FirstOrDefault(x => x.Type == "SellerCode").Value;
         var ticket = new Models.Ticket()
         {
-            CustomerBookTripId = request.CustomerBookTripId.Value,
-            CustomerId= request.CustomerId.Value,
-            TripId=request.TripId.Value,
-            Price=request.Price,
+            CustomerId = request.CustomerId.GetValueOrDefault(),
+            TripId = request.TripId.GetValueOrDefault(),
+            Price =request.Price,
             SellerCode=sellerCode,
-            GeneralParamId = request.GeneralParamId.Value
+            GeneralParamId = request.GeneralParamId.HasValue?request.GeneralParamId.Value:null
 
         };
         var dto = await ticketService.CreateOrUpdate(ticket);
@@ -101,6 +100,7 @@ public class TicketsController : MyControllerBase
         return Created($"api/trips/{ticket.CustomerBookTripId}", dto.Ticket);
     }
 
+    [Authorize]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] TicketCreateRequest request)
     {
@@ -113,9 +113,6 @@ public class TicketsController : MyControllerBase
         var sellerCode = identity.Claims.FirstOrDefault(x => x.Type == "SellerCode").Value;
         var dbticket = dbdto.Ticket;
         
-        dbticket.CustomerBookTripId = request.CustomerBookTripId.Value;
-        dbticket.CustomerId = request.CustomerId.Value;
-        dbticket.TripId = request.TripId.Value;
         dbticket.Price = request.Price;
         dbticket.SellerCode = sellerCode;
         dbticket.GeneralParamId = request.GeneralParamId;

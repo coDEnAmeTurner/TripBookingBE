@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TripBookingBE.Models
 {
@@ -23,6 +24,7 @@ namespace TripBookingBE.Models
         [Column("dateModified")]
         public DateTime? DateModified { get; set; }=null;
 
+        [JsonIgnore]
         [InverseProperty("GeneralParam")]
         public virtual IEnumerable<Ticket>? Tickets { get; set; }
     }

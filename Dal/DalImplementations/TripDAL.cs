@@ -16,6 +16,28 @@ public class TripDAL : ITripDAL
         this.context = context;
     }
 
+    public async Task<TripCheckSeatDTO> CheckSeat(long id, int placeNumber)
+    {
+        TripCheckSeatDTO dto = new();
+
+        try
+        {
+            var taken = await (
+                        from book in context.CustomerBookTrips
+                        where book.TripId == id && book.PlaceNumber == placeNumber
+                        select true).FirstOrDefaultAsync();
+
+            dto.IsBooked = taken;
+        }
+        catch (Exception ex)
+        {
+            dto.RespCode = (int)HttpStatusCode.InternalServerError;
+            dto.Message = $"{ex.Message}\n{ex.InnerException.Message}";
+        }
+
+        return dto;
+    }
+
     public async Task<TripCreateOrUpdateDTO> Create(Trip trip)
     {
         TripCreateOrUpdateDTO dto = new();

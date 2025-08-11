@@ -30,7 +30,7 @@ public class TicketService : ITicketService
             {
                 dto.Ticket = ticket;
                 dto.RespCode = System.Net.HttpStatusCode.NotFound;
-                dto.Message = $"Customer {ticket.CustomerId} doesn't book Tirp {ticket.TripId}";
+                dto.Message = $"Customer {ticket.CustomerId} doesn't book Trip {ticket.TripId}";
                 return dto;
             }
 

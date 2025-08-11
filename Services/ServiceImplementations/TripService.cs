@@ -89,12 +89,27 @@ public class TripService : ITripService
             return dto;
         }
 
+        var seatdto = await tripDAL.CheckSeat(tripId, placeNumber);
+        if (seatdto.RespCode != (int)HttpStatusCode.OK)
+        {
+            dto.RespCode = (HttpStatusCode)seatdto.RespCode;
+            dto.Message = seatdto.Message;
+            return dto;
+        }
+        if (seatdto.IsBooked)
+        {
+            dto.RespCode = HttpStatusCode.BadRequest;
+            dto.Message = $"{dto.Message}\nThe seat has been taken";
+            return dto;
+        }
+
         var booking = new CustomerBookTrip()
         {
             Trip = tripdto.Trip,
             Customer = userdto.User,
             PlaceNumber = placeNumber
         };
+
         var bookingdto = await bookingDAL.Create(booking);
         dto.Booking = bookingdto.CustomerBookTrip;
         dto.RespCode = bookingdto.RespCode;
@@ -176,7 +191,7 @@ public class TripService : ITripService
         var dto = await tripDAL.GetTrips(placeCount, routeId, driverId, registrationNumber, departureTime);
         return dto;
     }
-
+    
     public async Task<TripReviewDTO> Review(long tripId, long userId, string? Content)
     {
         var dto = new TripReviewDTO();

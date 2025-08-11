@@ -99,6 +99,7 @@ public class TicketDAL : ITicketDAL
             .Include(x => x.CustomerBookTrip)
                 .ThenInclude(x => x.Trip)
                     .ThenInclude(x => x.Route)
+            .Include(x=>x.GeneralParam)
             .FirstOrDefaultAsync();
             if (ticket == null)
             {
