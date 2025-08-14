@@ -1,0 +1,147 @@
+@model TripBookingBE.Models.User
+
+@if (ViewData["statusCode"] != null && ViewData["errorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <p><b>Status Code: @(ViewData["statusCode"].ToString())</b></p>
+        <p><b>Message: @(ViewData["errorMessage"].ToString())</b></p>
+    </div>
+}
+
+
+<h4>User</h4>
+<hr />
+<form asp-action="CreateOrUpdate" enctype="multipart/form-data" method="post" class="container">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Avatar" />
+    <input type="hidden" asp-for="PasswordHash" />
+    <input type="hidden" asp-for="DateCreated" />
+    <input type="hidden" asp-for="DateModified" />
+    <input type="hidden" asp-for="RowVersion" />
+    <div class="form-group col col-12">
+        <label asp-for="Avatar" class="control-label col col-12" style="font-weight: bold;"></label>
+        <img style="object-fit: contain;"
+                        src=@(String.IsNullOrEmpty(Model.Avatar) ? "aspnetcore-logo.png" : Model.Avatar) width="270"
+                        height="420">
+        @if (!ViewData["AllowedSave"].ToString().Equals("False"))
+        {
+            <input asp-for="File" type="file" class="form-control col col-12" />
+            <span asp-validation-for="Avatar" class="text-danger col col-12">@ViewData["avatarError"]</span>
+        }
+        
+    </div>
+    <div class="form-group col col-12">
+        <label asp-for="UserName" class="control-label col col-12" style="font-weight: bold;"></label>
+        <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) asp-for="UserName"
+            class="form-control col col-12" />
+        <span asp-validation-for="UserName" class="text-danger col col-12"></span>
+    </div>
+    <div class="form-group col col-12">
+        <label asp-for="Password" class="control-label col col-12" style="font-weight: bold;">@(Model.Id==0 || (ViewData["AllowedSave"]!=null &&
+                        !Boolean.Parse(ViewData["AllowedSave"].ToString())) ? "" : "Current") Password</label>
+        <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="password" asp-for="Password"
+            class="form-control col col-12" />
+        <span asp-validation-for="Password" class="text-danger col col-12">@ViewData["passwordError"]</span>
+    </div>
+    @if (Model.Id != 0 && (ViewData["AllowedSave"] != null && Boolean.Parse(ViewData["AllowedSave"].ToString())))
+    {
+        <div class="form-group col col-12">
+            <label asp-for="NewPassword" class="control-label col col-12" style="font-weight: bold;">New Password</label>
+            <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="password" asp-for="NewPassword"
+                class="form-control col col-12" />
+            <span asp-validation-for="NewPassword" class="text-danger col col-12">@ViewData["passwordError"]</span>
+        </div>
+        <div class="form-group col col-12">
+            <label asp-for="ConfirmPassword" class="control-label col col-12" style="font-weight: bold;">Confirm Password</label>
+            <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) type="password" asp-for="ConfirmPassword"
+                class="form-control col col-12" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger col col-12">@ViewData["passwordError"]</span>
+        </div>
+    }
+    <div class="form-group col col-12">
+        <label asp-for="FirstName" class="control-label col col-12" style="font-weight: bold;"></label>
+        <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) asp-for="FirstName"
+            class="form-control col col-12" />
+        <span asp-validation-for="FirstName" class="text-danger col col-12"></span>
+    </div>
+    <div class="form-group col col-12">
+        <label asp-for="LastName" class="control-label col col-12" style="font-weight: bold;"></label>
+        <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) asp-for="LastName"
+            class="form-control col col-12" />
+        <span asp-validation-for="LastName" class="text-danger col col-12"></span>
+    </div>
+    <div class="form-group col col-12">
+        <label asp-for="Name" class="control-label col col-12" style="font-weight: bold;"></label>
+        <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) asp-for="Name"
+            class="form-control col col-12" />
+        <span asp-validation-for="Name" class="text-danger col col-12"></span>
+    </div>
+    <div class="form-group col col-12">
+        <label asp-for="Email" class="control-label col col-12" style="font-weight: bold;"></label>
+        <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) asp-for="Email"
+            class="form-control col col-12" />
+        <span asp-validation-for="Email" class="text-danger col col-12"></span>
+    </div>
+    <div class="form-group col col-12">
+        <div class="col col-12 container px-0">
+            <label asp-for="Active" class="control-label col col-3" style="font-weight: bold;"></label>
+            <input disabled=@(ViewData["AllowedSave"].ToString().Equals("False")) asp-for="Active"
+                class="form-check-input col col-3" type="checkbox" id="flexSwitchCheckChecked" checked>
+        </div>
+        <span asp-validation-for="Active" class="text-danger col col-12"></span>
+    </div>
+    <div class="form-group col col-12">
+        <label asp-for="Phone" class="control-label col col-12" style="font-weight: bold;"></label>
+        <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) asp-for="Phone"
+            class="form-control col col-12" />
+        <span asp-validation-for="Phone" class="text-danger col col-12"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Type" class="control-label col col-12" style="font-weight: bold;"></label>
+        <select disabled=@(ViewData["AllowedSave"].ToString().Equals("False")) onchange="setSellerDisabled();"
+            id="select-type" asp-for="Type" class="form-select col col-12" aria-label="Default select example">
+            <option value="CUSTOMER">CUSTOMER</option>
+            <option value="DRIVER">DRIVER</option>
+            <option value="SELLER">SELLER</option>
+            <option value="ADMIN">ADMIN</option>
+        </select>
+        <span asp-validation-for="Type" class="text-danger col col-12"></span>
+    </div>
+    <div class="form-group col col-12">
+        <label asp-for="SellerCode" class="control-label col col-12" style="font-weight: bold;"></label>
+        <input readonly=@(ViewData["AllowedSave"].ToString().Equals("False")) disabled=@(Model.Type == null ||
+                                                                                          !Model.Type.Equals("SELLER")) id="seller-input" asp-for="SellerCode" class="form-control col col-12" />
+        <span asp-validation-for="SellerCode" class="text-danger col col-12"></span>
+    </div>
+    <div class="form-group col col-12 mt-2 justify-content-center">
+        <input disabled=@(ViewData["AllowedSave"].ToString().Equals("False")) type="submit" value="Save"
+            class="btn btn-primary" />
+        <a class="btn btn-dark" asp-action="Index">Back to List</a>
+    </div>
+</form>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+
+    }
+
+    <script>
+        function setSellerDisabled() {
+            var e = document.getElementById("select-type");
+            var se = document.getElementById("seller-input");
+            var value = e.value;
+
+            if (value !== "SELLER") {
+                se.disabled = true;
+            }
+            else
+                se.disabled = False;
+
+        }
+
+    </script>
+}

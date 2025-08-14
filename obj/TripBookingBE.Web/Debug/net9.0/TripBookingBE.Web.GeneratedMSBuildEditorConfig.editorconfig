@@ -1,0 +1,157 @@
+is_global = true
+build_property.TargetFramework = net9.0
+build_property.TargetFramework = net9.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = TripBookingBE.Web
+build_property.RootNamespace = TripBookingBE.Web
+build_property.ProjectDir = /home/tuantran/Public/TripBookingBE/TripBookingBE.Web/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 9.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /home/tuantran/Public/TripBookingBE/TripBookingBE.Web
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Bookings/CreateOrUpdate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQm9va2luZ3MvQ3JlYXRlT3JVcGRhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Bookings/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQm9va2luZ3MvRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Bookings/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQm9va2luZ3MvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Bookings/_BookingForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQm9va2luZ3MvX0Jvb2tpbmdGb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Reviews/CreateOrUpdate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmV2aWV3cy9DcmVhdGVPclVwZGF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Reviews/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmV2aWV3cy9EZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Reviews/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmV2aWV3cy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Reviews/_BookingForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmV2aWV3cy9fQm9va2luZ0Zvcm0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Routes/CreateOrUpdate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUm91dGVzL0NyZWF0ZU9yVXBkYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Routes/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUm91dGVzL0RldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Routes/_RouteForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUm91dGVzL19Sb3V0ZUZvcm0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Tickets/CreateOrUpdate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGlja2V0cy9DcmVhdGVPclVwZGF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Tickets/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGlja2V0cy9EZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Tickets/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGlja2V0cy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Tickets/_TicketForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGlja2V0cy9fVGlja2V0Rm9ybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Trips/CreateOrUpdate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVHJpcHMvQ3JlYXRlT3JVcGRhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Trips/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVHJpcHMvRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Trips/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVHJpcHMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Trips/_TripForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVHJpcHMvX1RyaXBGb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Users/CreateOrUpdate.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlcnMvQ3JlYXRlT3JVcGRhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Users/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlcnMvRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Users/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlcnMvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Users/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlcnMvTG9naW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Users/_UserForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlcnMvX1VzZXJGb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Routes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUm91dGVzL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = b-3enhf7uiu3
+
+[/home/tuantran/Public/TripBookingBE/TripBookingBE.Web/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-ruhc0d119o

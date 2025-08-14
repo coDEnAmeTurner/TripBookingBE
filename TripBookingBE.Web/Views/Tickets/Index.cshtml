@@ -1,0 +1,170 @@
+@using TripBookingBE.Pagination
+@model PaginatedList<TripBookingBE.Models.Ticket>;
+
+@{
+    ViewData["Title"] = "Ticket List";
+
+    string prevDisabled = "disabled";
+    string nextDisabled = "disabled";
+    string prevpage = "";
+    string nextpage = "";
+
+    if (Model != null)
+    {
+        prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        prevpage = $"{Model.PageIndex - 1}";
+        nextpage = $"{Model.PageIndex + 1}";
+
+    }
+}
+
+@if (ViewData["statusCode"] != null && ViewData["errorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <p><b>Status Code: @(ViewData["statusCode"].ToString())</b></p>
+        <p><b>Message: @(ViewData["errorMessage"].ToString())</b></p>
+    </div>
+}
+
+<div>
+    <h4>Ticket</h4>
+    <form asp-controller="Tickets" asp-action="Index">
+        <div class="container">
+            <div class="row gy-3">
+                <div class="col col-3">
+                    <label for="filter-customerId" class="form-label">Customer: </label>
+                    <select class="form-select" id="filter-customerId" name="customerId" asp-items="ViewBag.CustomerOptions">
+                        <option value=@(null)>Default</option>
+                    </select>
+
+                </div>
+                <div class="col col-3">
+                    <label for="filter-tripId" class="form-label">Trip: </label>
+                    <select class="form-select" id="filter-tripId" name="tripId" asp-items="ViewBag.TripOptions">
+                        <option value=@(null)>Default</option>
+                    </select>
+
+                </div>
+                <div class="col col-3">
+                    <label for="filter-generalParamId" class="form-label">General Param: </label>
+                    <select class="form-select" id="filter-generalParamId" name="generalParamId" asp-items="ViewBag.GeneralParamOptions">
+                        <option value=@(null)>Default</option>
+                    </select>
+
+                </div>
+                <div class="col col-3">
+                    <label for="filter-fromPrice" class="form-label">From Price: </label>
+                    <input type="number" id="fromPrice" name="fromPrice" class="form-control" autocomplete="off" />
+                </div>
+                <div class="col col-3">
+                    <label for="filter-toPrice" class="form-label">To Price: </label>
+                    <input type="number" id="toPrice" name="toPrice" class="form-control" autocomplete="off" />
+                </div>
+                <div class="col col-3">
+                    <label for="filter-departureTime" class="form-label">Time for Departure: </label>
+                    <input type="text" id="datepicker" name="departureTime" class="form-control" autocomplete="off" />
+                </div>
+                <div class="col col-5 mx-2 d-flex justify-content-space-between align-items-center">
+                    <input class="btn btn-primary" type="submit" value="Filter" />
+                    <input class="btn btn-light @prevDisabled" type="submit" value="Previous"
+                        asp-route-pageNumber=@prevpage />
+                    <input class="btn btn-dark @nextDisabled" type="submit" value="Next"
+                        asp-route-pageNumber=@nextpage />
+                    <a class="btn btn-success mx-2" asp-action="CreateOrUpdate">Create</a>
+                </div>
+            </div>
+        </div>
+    </form>
+    @if (Model != null)
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            Id
+                        </th>
+                        <th>
+                            Customer
+                        </th>
+                        <th>
+                            Trip
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                        <th>
+                            Seller Code
+                        </th>
+                        <th>
+                            General Param
+                        </th>
+                        <th>
+                            Date Of Creation
+                        </th>
+                        <th>
+                            Date Of Modification
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var model in Model)
+                    {
+                        <tr>
+                            <td>
+                                @(model.CustomerBookTripId)
+                            </td>
+                            <td>
+                                @(model.CustomerBookTrip.Customer.Name)
+
+                            </td>
+                            <td>
+                                @(model.CustomerBookTrip.Trip.Route.RouteDescription + " - " + model.CustomerBookTrip.Trip.RegistrationNumber)
+                            </td>
+                            <td>
+                                @(model.Price)
+                            </td>
+                            <td>
+                                @(model.SellerCode)
+
+                            </td>
+                            <td>
+                                @(model.GeneralParam?.ParamDescription)
+                            </td>
+                            <td>
+                                <div>
+                                    @(model.DateCreated.Value.ToString("dd/MM/yyyy"))
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    @(model.DateModified.Value.ToString("dd/MM/yyyy"))
+                                </div>
+                            </td>
+                            
+                            <td>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a class="btn btn-light" asp-action="CreateOrUpdate" asp-route-id="@(model.CustomerBookTripId)">Edit</a> |
+                                    <a class="btn btn-info" asp-action="Details" asp-route-id="@(model.CustomerBookTripId)">Details</a> |
+                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@(model.CustomerBookTripId)">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#datepicker").datepicker({
+            dateFormat: "dd/mm/yy"
+        });
+    });
+</script>
