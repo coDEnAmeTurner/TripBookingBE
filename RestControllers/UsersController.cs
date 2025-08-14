@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Net;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripBookingBE.Models;
 using TripBookingBE.RestRequests;
@@ -9,6 +10,7 @@ using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
 namespace TripBookingBE.RestControllers;
 
+[Authorize(Policy="AllowAdminOrCust")]
 [Route("api/users")]
 public class UsersController : MyControllerBase
 {
@@ -19,6 +21,7 @@ public class UsersController : MyControllerBase
         this.usersService = usersService;
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
@@ -30,6 +33,7 @@ public class UsersController : MyControllerBase
         return Ok(dto);
     }
 
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest request)
     {
@@ -55,6 +59,7 @@ public class UsersController : MyControllerBase
         return Created($"/api/users/{dto.User.Id}", dto);
     }
 
+    [Authorize(Policy="AllowUpdateUserDetails")]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, UserUpdateRequest request)
     {
@@ -90,6 +95,7 @@ public class UsersController : MyControllerBase
         return Created($"/api/users/{dto.User.Id}", dto);
     }
 
+    [Authorize(Policy="AllowUpdateUserDetails")]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Details(int id)
     {
@@ -102,6 +108,7 @@ public class UsersController : MyControllerBase
 
     }
 
+    [Authorize(Policy="AllowUpdateUserDetails")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -114,6 +121,7 @@ public class UsersController : MyControllerBase
     }
 
 
+    [Authorize(Policy="AllowAdminOnly")]
     [HttpPost("hash")]
     public async Task<IActionResult> Hash([FromBody] LoginRequest req)
     {

@@ -11,6 +11,11 @@ using TripBookingBE.security;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Logging;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using TripBookingBE.Requirements.TicketOfCustomer;
+using TripBookingBE.Requirements.UpdateUserDetails;
+using TripBookingBE.Requirements.TicketSeller;
 
 IdentityModelEventSource.ShowPII = true;
 
@@ -58,14 +63,31 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-//auth
-builder.Services.AddAuthorization();
+//auth handler
+builder.Services.AddScoped<IAuthorizationHandler, TicketOfCustomerHanlder>();
+builder.Services.AddScoped<IAuthorizationHandler, TicketSellerHanlder>();
+builder.Services.AddScoped<IAuthorizationHandler, UpdateUserDetailsHanlder>();
+
+//auth      
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AllowAll", policy => policy.RequireRole("ADMIN","SELLER","CUSTOMER","DRIVER"));
+    options.AddPolicy("AllowAdminOnly", policy => policy.RequireRole("ADMIN"));
+    options.AddPolicy("AllowAdminOrCust", policy => policy.RequireRole("ADMIN","CUSTOMER"));
+    options.AddPolicy("AllowDriverOnly", policy => policy.RequireRole("ADMIN","DRIVER"));
+    options.AddPolicy("AllowCustOnly", policy => policy.RequireRole("ADMIN","CUSTOMER"));
+    options.AddPolicy("AllowSellerOnly", policy => policy.RequireRole("ADMIN","SELLER"));
+    options.AddPolicy("AllowDriverOrTicketOwner", policy => policy.AddRequirements(new TicketOfCustomerRequirement()));
+    options.AddPolicy("AllowDriverOrSeller", policy => policy.RequireRole("ADMIN","DRIVER","SELLER"));
+    options.AddPolicy("AllowTicketSeller", policy => policy.AddRequirements(new TicketSellerRequirement()));
+    options.AddPolicy("AllowUpdateUserDetails", policy => policy.AddRequirements(new UpdateUserDetailsRequirement()));
+});
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(x =>
         {
             x.TokenValidationParameters = new TokenValidationParameters
             {
-                
+
                 IssuerSigningKey = new SymmetricSecurityKey("893u498423-n2u8y07134pjoigvrew0y82453jpir-e90135 kjsdfg"u8.ToArray()),
                 ValidIssuer = "https://localhost:7078",
                 ValidAudience = "https://localhost:7078",
@@ -97,6 +119,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 app.UseRouting();
 
 app.UseAuthentication();
@@ -108,11 +131,13 @@ app.UseHttpsRedirection();
 
 app.MapStaticAssets();
 
-//conventional routing
+//conventional routing + session
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+//attribute routing
 app.MapControllers();
 
 

@@ -11,12 +11,46 @@ namespace TripBookingBE.Services.ServiceImplementations;
 public class TicketService : ITicketService
 {
     private readonly ITicketDAL ticketDAL;
-    private readonly IBookingsDal bookingDAL ;
+    private readonly IBookingsDal bookingDAL;
 
     public TicketService(ITicketDAL ticketDAL, IBookingsDal bookingDAL)
     {
         this.ticketDAL = ticketDAL;
         this.bookingDAL = bookingDAL;
+    }
+
+    public async Task<TicketCheckOwnerDTO> CheckTicketOwner(long id, long userId)
+    {
+        var dto = new TicketCheckOwnerDTO();
+
+        var ticketdto = await GetTicketById(id);
+        if (ticketdto.Ticket == null || ticketdto.Ticket.CustomerBookTrip == null || ticketdto.Ticket.CustomerBookTrip.Customer == null || ticketdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = (int)ticketdto.RespCode;
+            dto.Message = ticketdto.Message;
+            return dto;
+        }
+
+        var ticket = ticketdto.Ticket;
+        dto.IsOwner = userId == ticket.CustomerBookTrip.Customer.Id;
+        return dto;
+    }
+
+    public async Task<TicketCheckSellerDTO> CheckTicketSeller(long id, string sellerCode)
+    {
+        var dto = new TicketCheckSellerDTO();
+
+        var ticketdto = await GetTicketById(id);
+        if (ticketdto.Ticket == null || ticketdto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = (int)ticketdto.RespCode;
+            dto.Message = ticketdto.Message;
+            return dto;
+        }
+
+        var ticket = ticketdto.Ticket;
+        dto.IsSeller = sellerCode == ticket.SellerCode;
+        return dto;
     }
 
     public async Task<TicketCreateOrUpdateDTO> CreateOrUpdate(Ticket ticket)
@@ -39,7 +73,7 @@ public class TicketService : ITicketService
             {
                 dto.Ticket = ticket;
                 dto.RespCode = System.Net.HttpStatusCode.Conflict;
-                dto.Message = $"{already_exist.Ticket.CustomerBookTrip?.Customer.Name} already has a Ticket for {already_exist.Ticket.CustomerBookTrip?.Trip.Route?.RouteDescription} - {already_exist.Ticket.CustomerBookTrip?.Trip.DepartureTime.GetValueOrDefault().ToString("dd/MM/yyyy",System.Globalization.CultureInfo.InvariantCulture)}";
+                dto.Message = $"{already_exist.Ticket.CustomerBookTrip?.Customer.Name} already has a Ticket for {already_exist.Ticket.CustomerBookTrip?.Trip.Route?.RouteDescription} - {already_exist.Ticket.CustomerBookTrip?.Trip.DepartureTime.GetValueOrDefault().ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)}";
                 return dto;
             }
 

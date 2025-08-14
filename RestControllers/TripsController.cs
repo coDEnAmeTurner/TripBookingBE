@@ -45,6 +45,7 @@ public class TripsController : MyControllerBase
         return Ok(dto.Trip);
     }
 
+    [Authorize(Policy = "AllowAdminOnly")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -57,6 +58,7 @@ public class TripsController : MyControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "AllowAdminOnly")]
     [HttpPost]
     public async Task<IActionResult> Create(TripCreateRequest request)
     {
@@ -78,6 +80,7 @@ public class TripsController : MyControllerBase
         return Created($"api/trips/{trip.Id}", dto.Trip);
     }
 
+    [Authorize(Policy = "AllowAdminOnly")]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] TripCreateRequest request)
     {
@@ -101,6 +104,7 @@ public class TripsController : MyControllerBase
         return Ok(dto.Trip);
     }
 
+    [Authorize(Policy = "AllowAdminOnly")]
     [HttpPatch("{id:int}/users")]
     public async Task<IActionResult> AssignDriver(int id, [FromBody] TripAssignDriverRequest request)
     {
@@ -117,6 +121,7 @@ public class TripsController : MyControllerBase
         return Ok(dto);
     }
 
+    [Authorize(Policy = "AllowAdminOnly")]
     [HttpPatch("{id:int}/routes")]
     public async Task<IActionResult> AssignRoute(int id, [FromBody] TripAssignRouteRequest request)
     {
@@ -133,7 +138,7 @@ public class TripsController : MyControllerBase
         return Ok(dto);
     }
 
-    [Authorize]
+    [Authorize(Policy = "AllowCustOnly")]
     [HttpPost("{id:int}/book")]
     public async Task<IActionResult> Book(int id, [FromBody] TripBookRequest request)
     {
@@ -153,10 +158,10 @@ public class TripsController : MyControllerBase
             return Problem(dto.Message);
         }
 
-        return Created($"api/trips/{id}/book",dto);
+        return Created($"api/trips/{id}/book", dto);
     }
 
-    [Authorize]
+    [Authorize(Policy = "AllowCustOnly")]
     [HttpPost("{id:int}/review")]
     public async Task<IActionResult> Review(int id, [FromBody] TripReviewRequest request)
     {
@@ -178,6 +183,6 @@ public class TripsController : MyControllerBase
 
         return Ok(dto);
     }
-    
+
 
 }

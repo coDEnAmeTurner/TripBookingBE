@@ -1,4 +1,5 @@
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripBookingBE.Models;
 using TripBookingBE.Pagination;
@@ -18,7 +19,7 @@ public class RoutesController : MyControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> List([FromQuery]RouteListRequest request)
+    public async Task<IActionResult> List([FromQuery] RouteListRequest request)
     {
         var dto = await routeService.GetRoutes(request.Description, DateTime.ParseExact(request.DateCreated, "dd/MM/yyyy", CultureInfo.InvariantCulture));
         if (dto.RespCode != System.Net.HttpStatusCode.OK)
@@ -42,6 +43,7 @@ public class RoutesController : MyControllerBase
         return Ok(dto.Route);
     }
 
+    [Authorize(Policy = "AllowAdmin")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -55,6 +57,7 @@ public class RoutesController : MyControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AllowAdmin")]
     public async Task<IActionResult> Create([FromBody] RouteCreateRequest request)
     {
         var route = new Models.Route()
@@ -69,9 +72,10 @@ public class RoutesController : MyControllerBase
 
         return Created($"api/routes/{route.Id}", dto.Route);
     }
-    
+
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id,[FromBody] RouteCreateRequest request)
+    [Authorize(Policy = "AllowAdmin")]
+    public async Task<IActionResult> Update(int id, [FromBody] RouteCreateRequest request)
     {
         var dbdto = await routeService.GetRouteById(id);
         if (dbdto.RespCode != System.Net.HttpStatusCode.OK)
