@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Net;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,8 @@ public class TicketsController : MyControllerBase
         this.ticketService = ticketService;
     }
 
-    [HttpGet]
+    [Authorize(Policy = "AllowDriverOrSeller")]
+    [HttpGet]           
     public async Task<IActionResult> List([FromQuery] TicketListRequest request)
     {
         var dto = await ticketService.GetTickets(
@@ -28,7 +30,7 @@ public class TicketsController : MyControllerBase
             request.FromPrice,
             request.ToPrice,
             request.SellerCode,
-            string.IsNullOrEmpty(request.DepartureTime)?null:DateTime.ParseExact(request.DepartureTime, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+            string.IsNullOrEmpty(request.DepartureTime) ? null : DateTime.ParseExact(request.DepartureTime, "dd/MM/yyyy", CultureInfo.InvariantCulture),
             request.GeneralParamId
         );
         if (dto.RespCode != System.Net.HttpStatusCode.OK)
@@ -44,6 +46,7 @@ public class TicketsController : MyControllerBase
         return Ok(await PaginatedList<Models.Ticket>.CreateAsync(dto.Tickets, request.PageNumber ?? 1, pageSize));
     }
 
+    [Authorize(Policy = "AllowDriverOrTicketOwner")]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Details(int id)
     {
@@ -60,6 +63,7 @@ public class TicketsController : MyControllerBase
         return Ok(dto.Ticket);
     }
 
+    [Authorize(Policy = "AllowTicketSellerOnly")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -76,8 +80,8 @@ public class TicketsController : MyControllerBase
         return NoContent();
     }
 
-    [Authorize]
-    [HttpPost]          
+    [Authorize(Policy = "AllowSellerOnly")]
+    [HttpPost]
     public async Task<IActionResult> Create(TicketCreateRequest request)
     {
         var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -86,9 +90,9 @@ public class TicketsController : MyControllerBase
         {
             CustomerId = request.CustomerId.GetValueOrDefault(),
             TripId = request.TripId.GetValueOrDefault(),
-            Price =request.Price,
-            SellerCode=sellerCode,
-            GeneralParamId = request.GeneralParamId.HasValue?request.GeneralParamId.Value:null
+            Price = request.Price,
+            SellerCode = sellerCode,
+            GeneralParamId = request.GeneralParamId.HasValue ? request.GeneralParamId.Value : null
 
         };
         var dto = await ticketService.CreateOrUpdate(ticket);
@@ -100,7 +104,7 @@ public class TicketsController : MyControllerBase
         return Created($"api/trips/{ticket.CustomerBookTripId}", dto.Ticket);
     }
 
-    [Authorize]
+    [Authorize(Policy = "AllowTicketSellerOnly")]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] TicketCreateRequest request)
     {
@@ -112,7 +116,7 @@ public class TicketsController : MyControllerBase
         var identity = HttpContext.User.Identity as ClaimsIdentity;
         var sellerCode = identity.Claims.FirstOrDefault(x => x.Type == "SellerCode").Value;
         var dbticket = dbdto.Ticket;
-        
+
         dbticket.Price = request.Price;
         dbticket.SellerCode = sellerCode;
         dbticket.GeneralParamId = request.GeneralParamId;

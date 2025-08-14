@@ -15,4 +15,7 @@ public interface ITicketService
 
     Task<TicketDeleteDTO> DeleteTicket(long id);
 
+    Task<TicketCheckOwnerDTO> CheckTicketOwner(long id, long userId);
+    Task<TicketCheckSellerDTO> CheckTicketSeller(long id, string sellerCode);
+
 }
