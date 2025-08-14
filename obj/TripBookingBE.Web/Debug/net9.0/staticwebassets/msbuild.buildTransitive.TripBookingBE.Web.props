@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../buildMultiTargeting/TripBookingBE.Web.props" />
-</Project>
