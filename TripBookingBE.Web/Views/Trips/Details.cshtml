@@ -1,0 +1,11 @@
+@model TripBookingBE.Models.Trip
+
+@{
+    ViewData["Title"] = "Trip Details";
+}
+
+<h1>Details</h1>
+
+@await Html.PartialAsync("_TripForm.cshtml", Model, new ViewDataDictionary(ViewData){
+    {"AllowedSave",false}
+})

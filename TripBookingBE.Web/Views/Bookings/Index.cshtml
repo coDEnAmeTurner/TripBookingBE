@@ -1,0 +1,173 @@
+@using TripBookingBE.Pagination
+@model PaginatedList<TripBookingBE.Models.CustomerBookTrip>;
+
+@{
+    ViewData["Title"] = "Booking List";
+
+    string prevDisabled = "disabled";
+    string nextDisabled = "disabled";
+    string prevpage = "";
+    string nextpage = "";
+
+    if (Model != null)
+    {
+        prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        prevpage = $"{Model.PageIndex - 1}";
+        nextpage = $"{Model.PageIndex + 1}";
+
+    }
+}
+
+@if (ViewData["statusCode"] != null && ViewData["errorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <p><b>Status Code: @(ViewData["statusCode"].ToString())</b></p>
+        <p><b>Message: @(ViewData["errorMessage"].ToString())</b></p>
+    </div>
+}
+
+<div>
+    <h4>Bookings</h4>
+    <form asp-controller="Bookings" asp-action="Index">
+        <div class="container">
+            <div class="row gy-3">
+                <div class="col col-3">
+                    <label for="filter-customerName" class="form-label">Customer Name: </label>
+                    <input type="text" id="customerName" name="customerName" class="form-control" autocomplete="off" />
+                </div>
+                <div class="col col-3">
+                    <label for="filter-registrationNumber" class="form-label">Registration Number: </label>
+                    <input type="text" id="registrationNumber" name="registrationNumber" class="form-control"
+                        autocomplete="off" />
+                </div>
+                <div class="col col-3">
+                    <label for="filter-departureTimeStr" class="form-label">Time for Departure: </label>
+                    <input type="text" id="datepicker" name="departureTimeStr" class="form-control"
+                        autocomplete="off" />
+                </div>
+                <div class="col col-3">
+                    <label for="filter-routeDescription" class="form-label">Route Description: </label>
+                    <input type="text" id="routeDescription" name="routeDescription" class="form-control"
+                        autocomplete="off" />
+                </div>
+                <div class="col col-5 mx-2 d-flex justify-content-space-between align-items-center">
+                    <input class="btn btn-primary" type="submit" value="Filter" />
+                    <input class="btn btn-light @prevDisabled" type="submit" value="Previous"
+                        asp-route-pageNumber=@prevpage />
+                    <input class="btn btn-dark @nextDisabled" type="submit" value="Next"
+                        asp-route-pageNumber=@nextpage />
+                    <a class="btn btn-success mx-2" asp-action="CreateOrUpdate">Create</a>
+                </div>
+            </div>
+        </div>
+    </form>
+    @if (Model != null)
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            Id
+                        </th>
+                        <th>
+                            Customer Name
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Phone
+                        </th>
+                        <th>
+                            Trip's Route
+                        </th>
+                        <th>
+                            Registration Number
+                        </th>
+                        <th>
+                            Departure Time
+                        </th>
+                        <th>
+                            Seat Number
+                        </th>
+                        <th>
+                            Date Of Creation
+                        </th>
+                        <th>
+                            Date Of Modification
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var model in Model)
+                    {
+                        <tr>
+                            <td>
+                                @(model.Id)
+                            </td>
+                            <td>
+                                @(model.Customer.Name)
+
+                            </td>
+                            <td>
+                                @(model.Customer.Email)
+                            </td>
+                            <td>
+                                @(model.Customer.Phone)
+                            </td>
+                            <td>
+                                @(model.Trip?.Route?.RouteDescription)
+
+                            </td>
+                            <td>
+                                @(model.Trip?.RegistrationNumber)
+                            </td>
+                            <td>
+                                <div>
+                                    @(model.Trip?.DepartureTime.Value.ToString("dd/MM/yyyy"))
+                                </div>
+                            </td>
+                            <td>
+                                @(model.PlaceNumber)
+                            </td>
+                            <td>
+                                <div>
+                                    @(model.DateCreated.Value.ToString("dd/MM/yyyy"))
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    @(model.DateModified.Value.ToString("dd/MM/yyyy"))
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a class="btn btn-light" asp-action="CreateOrUpdate"
+                                        asp-route-id="@(model.Id)">Edit</a> |
+                                    <a class="btn btn-info" asp-action="Details"
+                                        asp-route-id="@(model.Id)">Details</a> |
+                                    <a class="btn btn-danger" asp-action="Delete"
+                                        asp-route-id="@(model.Id)">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#datepicker").datepicker({
+            dateFormat: "dd/mm/yy"
+        });
+    });
+</script>

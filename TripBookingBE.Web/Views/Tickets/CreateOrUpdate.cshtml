@@ -1,0 +1,11 @@
+@model TripBookingBE.Models.Ticket
+
+@{
+    ViewData["Title"] = Model.CustomerBookTripId==0?"Create":"Edit";
+}
+
+<h1>@(Model.CustomerBookTripId==0?"Create":"Edit")</h1>
+
+@await Html.PartialAsync("_TicketForm.cshtml", Model, new ViewDataDictionary(ViewData){
+    {"AllowedSave",true}
+})

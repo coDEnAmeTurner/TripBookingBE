@@ -1,0 +1,10 @@
+.table[b-3enhf7uiu3] {
+  table-layout: fixed !important;
+}
+
+th[b-3enhf7uiu3],
+td[b-3enhf7uiu3] {
+  width: 14rem;
+  overflow-wrap: break-word;
+  height: 7rem;
+}
