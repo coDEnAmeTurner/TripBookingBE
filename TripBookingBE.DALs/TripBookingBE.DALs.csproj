@@ -1,21 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <OutputPath>$(SolutionDir)bin/$(Configuration)</OutputPath>
     <BaseIntermediateOutputPath>$(SolutionDir)obj/$(MSBuildProjectName)</BaseIntermediateOutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update=".env" CopyToOutputDirectory="PreserveNewest" />
     <ProjectReference Include="..\TripBookingBE.Commons\TripBookingBE.Commons.csproj" />
-    <ProjectReference Include="..\TripBookingBE.Services\TripBookingBE.Services.csproj" />
   </ItemGroup>
-
 </Project>

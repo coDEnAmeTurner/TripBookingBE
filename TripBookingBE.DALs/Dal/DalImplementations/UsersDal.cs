@@ -1,7 +1,4 @@
 using System.Net;
-using System.Transactions;
-using AspNetCoreGeneratedDocument;
-using Azure.Identity;
 using Microsoft.EntityFrameworkCore;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.Data;

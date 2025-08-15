@@ -31,7 +31,7 @@ var str = Environment.GetEnvironmentVariable("CLOUDINARY_URL");
 Cloudinary cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
 cloudinary.Api.Secure = true;
 builder.Services.AddSingleton(typeof(Cloudinary), cloudinary);
-
+ 
 //token gen
 builder.Services.AddSingleton<TokenGenerator>();
 
