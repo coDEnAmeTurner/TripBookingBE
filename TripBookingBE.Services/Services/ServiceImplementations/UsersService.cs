@@ -253,6 +253,12 @@ public class UsersService : IUsersService
         }
 
         var user = dto.Users.FirstOrDefault();
+        if (user.Type != "ADMIN")
+        {
+            servicedto.RespCode = (int)HttpStatusCode.Forbidden;
+            servicedto.Message = "User must be ADMIN!";
+            return servicedto;
+        }
         var dbpass = user.PasswordHash;
 
         var result = passwordHasher.Verify(dbpass, password);
