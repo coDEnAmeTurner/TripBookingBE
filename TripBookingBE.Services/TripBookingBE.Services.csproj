@@ -1,10 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <OutputPath>$(SolutionDir)bin/$(Configuration)</OutputPath>
-    <BaseIntermediateOutputPath>$(SolutionDir)obj/$(MSBuildProjectName)</BaseIntermediateOutputPath>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 

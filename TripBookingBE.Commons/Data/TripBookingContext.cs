@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using TripBookingBE.Commons.Configurations;
 using TripBookingBE.Models;
 
 namespace TripBookingBE.Data;
 
 public partial class TripBookingContext : DbContext
 {
+    public ConnectionStrings connectionStrings { get; set; }
+
     public TripBookingContext()
     {
     }
@@ -30,9 +33,11 @@ public partial class TripBookingContext : DbContext
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<GeneralParam> GeneralParams { get; set; }
 
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //     => optionsBuilder.UseSqlServer(connectionStrings.TripBookingContext);
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Encrypt=false;TrustServerCertificate=true;MultipleActiveResultSets=true;Persist Security Info=False;Server=localhost\\DOTNETTEST,1433;Initial Catalog=TripBooking;User ID=sa;Password=Admin@123;");
+    => optionsBuilder.UseSqlServer(connectionStrings.TripBookingContext_MySQL);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

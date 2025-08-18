@@ -14,16 +14,24 @@ using dotenv.net;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using TripBookingBE.Commons.Configurations;
 
 IdentityModelEventSource.ShowPII = true;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//configs
+ builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
+
 // add rest api controller
 builder.Services.AddControllersWithViews();
 
 //db context
-builder.Services.AddDbContext<TripBookingContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext")));
+builder.Services.AddDbContext<TripBookingContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext_MySQL")));
 
 //cloudinary
 DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));

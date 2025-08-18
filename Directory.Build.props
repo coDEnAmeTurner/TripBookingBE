@@ -1,8 +1,8 @@
 <Project>
   <PropertyGroup>
     <!-- Redirect normal and design-time intermediate output -->
-    <BaseIntermediateOutputPath>$(SolutionDir)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
-    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+    <!-- <BaseIntermediateOutputPath>$(SolutionDir)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath> -->
 
     <!-- Redirect normal and design-time build output -->
     <BaseOutputPath>$(SolutionDir)bin\</BaseOutputPath>
