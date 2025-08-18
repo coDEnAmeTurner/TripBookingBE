@@ -25,13 +25,17 @@ IdentityModelEventSource.ShowPII = true;
 var builder = WebApplication.CreateBuilder(args);
 
 //configs
- builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
+var config = new ConfigurationBuilder()
+            .SetBasePath($"{Directory.GetCurrentDirectory()}")
+            .AddJsonFile("appsettings.json")
+            .Build();
+builder.Services.Configure<ConnectionStrings>(config.GetSection("ConnectionStrings"));
 
 // add rest api controller
 builder.Services.AddControllersWithViews();
 
 //db context
-builder.Services.AddDbContext<TripBookingContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TripBookingContext_MySQL")));
+builder.Services.AddDbContext<TripBookingContext>(options => options.UseMySQL(config.GetConnectionString("TripBookingContext_MySQL")));
 
 //cloudinary
 DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
@@ -39,7 +43,7 @@ var str = Environment.GetEnvironmentVariable("CLOUDINARY_URL");
 Cloudinary cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
 cloudinary.Api.Secure = true;
 builder.Services.AddSingleton(typeof(Cloudinary), cloudinary);
- 
+
 //token gen
 builder.Services.AddSingleton<TokenGenerator>();
 
@@ -80,14 +84,14 @@ builder.Services.AddScoped<IAuthorizationHandler, UpdateUserDetailsHanlder>();
 //auth      
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AllowAll", policy => policy.RequireRole("ADMIN","SELLER","CUSTOMER","DRIVER"));
+    options.AddPolicy("AllowAll", policy => policy.RequireRole("ADMIN", "SELLER", "CUSTOMER", "DRIVER"));
     options.AddPolicy("AllowAdminOnly", policy => policy.RequireRole("ADMIN"));
-    options.AddPolicy("AllowAdminOrCust", policy => policy.RequireRole("ADMIN","CUSTOMER"));
-    options.AddPolicy("AllowDriverOnly", policy => policy.RequireRole("ADMIN","DRIVER"));
-    options.AddPolicy("AllowCustOnly", policy => policy.RequireRole("ADMIN","CUSTOMER"));
-    options.AddPolicy("AllowSellerOnly", policy => policy.RequireRole("ADMIN","SELLER"));
+    options.AddPolicy("AllowAdminOrCust", policy => policy.RequireRole("ADMIN", "CUSTOMER"));
+    options.AddPolicy("AllowDriverOnly", policy => policy.RequireRole("ADMIN", "DRIVER"));
+    options.AddPolicy("AllowCustOnly", policy => policy.RequireRole("ADMIN", "CUSTOMER"));
+    options.AddPolicy("AllowSellerOnly", policy => policy.RequireRole("ADMIN", "SELLER"));
     options.AddPolicy("AllowDriverOrTicketOwner", policy => policy.AddRequirements(new TicketOfCustomerRequirement()));
-    options.AddPolicy("AllowDriverOrSeller", policy => policy.RequireRole("ADMIN","DRIVER","SELLER"));
+    options.AddPolicy("AllowDriverOrSeller", policy => policy.RequireRole("ADMIN", "DRIVER", "SELLER"));
     options.AddPolicy("AllowTicketSeller", policy => policy.AddRequirements(new TicketSellerRequirement()));
     options.AddPolicy("AllowUpdateUserDetails", policy => policy.AddRequirements(new UpdateUserDetailsRequirement()));
 });

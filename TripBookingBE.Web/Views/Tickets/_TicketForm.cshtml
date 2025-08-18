@@ -16,7 +16,7 @@
     <input type="hidden" asp-for="CustomerBookTripId" />
     <input type="hidden" asp-for="DateCreated" />
     <input type="hidden" asp-for="DateModified" />
-    <input type="hidden" asp-for="RowVersion" />
+    @* <input type="hidden" asp-for="RowVersion" /> *@
     <div class="form-group col col-12">
         <label for="filter-customerId" class="form-label" style="font-weight: bold;">Customer: </label>
         <select disabled=@(ViewData["AllowedSave"].ToString().Equals("False"))

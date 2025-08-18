@@ -122,35 +122,35 @@ public class RouteDAL : IRouteDAL
             await context.SaveChangesAsync();
 
         }
-        catch (DbUpdateConcurrencyException ex)
-        {
-            dto.RespCode = HttpStatusCode.Conflict;
+        // catch (DbUpdateConcurrencyException ex)
+        // {
+        //     dto.RespCode = HttpStatusCode.Conflict;
 
-            var exceptionEntry = ex.Entries.Single();
-            var clientValues = (Models.Route)exceptionEntry.Entity;
-            var databaseEntry = exceptionEntry.GetDatabaseValues();
-            if (databaseEntry == null)
-            {
-                dto.Message =
-                    "Unable to save changes. The User was deleted by another user.";
-            }
-            else
-            {
-                var databaseValues = (Models.Route)databaseEntry.ToObject();
+        //     var exceptionEntry = ex.Entries.Single();
+        //     var clientValues = (Models.Route)exceptionEntry.Entity;
+        //     var databaseEntry = exceptionEntry.GetDatabaseValues();
+        //     if (databaseEntry == null)
+        //     {
+        //         dto.Message =
+        //             "Unable to save changes. The User was deleted by another user.";
+        //     }
+        //     else
+        //     {
+        //         var databaseValues = (Models.Route)databaseEntry.ToObject();
 
-                if (databaseValues.RouteDescription != clientValues.RouteDescription)
-                {
-                    dto.Message = $"RouteDescription - Current value: {databaseValues.RouteDescription}";
-                }
+        //         if (databaseValues.RouteDescription != clientValues.RouteDescription)
+        //         {
+        //             dto.Message = $"RouteDescription - Current value: {databaseValues.RouteDescription}";
+        //         }
 
-                dto.Message += "\nThe record you attempted to edit "
-                        + "was modified by another user after you got the original value. The "
-                        + "edit operation was canceled and the current values in the database "
-                        + "have been displayed. If you still want to edit this record, click "
-                        + "the Save button again. Otherwise click the Back to List hyperlink.";
-                route.RowVersion = (byte[])databaseValues.RowVersion;
-            }
-        }
+        //         dto.Message += "\nThe record you attempted to edit "
+        //                 + "was modified by another user after you got the original value. The "
+        //                 + "edit operation was canceled and the current values in the database "
+        //                 + "have been displayed. If you still want to edit this record, click "
+        //                 + "the Save button again. Otherwise click the Back to List hyperlink.";
+        //         route.RowVersion = (byte[])databaseValues.RowVersion;
+        //     }
+        // }
         catch (Exception ex)
         {
             dto.Message = ex.Message;

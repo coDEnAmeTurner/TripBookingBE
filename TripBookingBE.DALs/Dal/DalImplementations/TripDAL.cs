@@ -150,55 +150,55 @@ public class TripDAL : ITripDAL
             await context.SaveChangesAsync();
 
         }
-        catch (DbUpdateConcurrencyException ex)
-        {
-            dto.RespCode = HttpStatusCode.Conflict;
+        // catch (DbUpdateConcurrencyException ex)
+        // {
+        //     dto.RespCode = HttpStatusCode.Conflict;
 
-            var exceptionEntry = ex.Entries.Single();
-            var clientValues = (Models.Trip)exceptionEntry.Entity;
-            var databaseEntry = exceptionEntry.GetDatabaseValues();
-            if (databaseEntry == null)
-            {
-                dto.Message =
-                    "Unable to save changes. The User was deleted by another user.";
-            }
-            else
-            {
-                var databaseValues = (Models.Trip)databaseEntry.ToObject();
+        //     var exceptionEntry = ex.Entries.Single();
+        //     var clientValues = (Models.Trip)exceptionEntry.Entity;
+        //     var databaseEntry = exceptionEntry.GetDatabaseValues();
+        //     if (databaseEntry == null)
+        //     {
+        //         dto.Message =
+        //             "Unable to save changes. The User was deleted by another user.";
+        //     }
+        //     else
+        //     {
+        //         var databaseValues = (Models.Trip)databaseEntry.ToObject();
 
-                if (databaseValues.DepartureTime != clientValues.DepartureTime)
-                {
-                    dto.Message = $"Departure Time - Current value: {databaseValues.DepartureTime}";
-                }
+        //         if (databaseValues.DepartureTime != clientValues.DepartureTime)
+        //         {
+        //             dto.Message = $"Departure Time - Current value: {databaseValues.DepartureTime}";
+        //         }
 
-                if (databaseValues.PlaceCount != clientValues.PlaceCount)
-                {
-                    dto.Message = $"Place Count - Current value: {databaseValues.PlaceCount}";
-                }
+        //         if (databaseValues.PlaceCount != clientValues.PlaceCount)
+        //         {
+        //             dto.Message = $"Place Count - Current value: {databaseValues.PlaceCount}";
+        //         }
 
-                if (databaseValues.RegistrationNumber != clientValues.RegistrationNumber)
-                {
-                    dto.Message = $"Registration Number - Current value: {databaseValues.RegistrationNumber}";
-                }
+        //         if (databaseValues.RegistrationNumber != clientValues.RegistrationNumber)
+        //         {
+        //             dto.Message = $"Registration Number - Current value: {databaseValues.RegistrationNumber}";
+        //         }
 
-                if (databaseValues.DriverId != clientValues.DriverId)
-                {
-                    dto.Message = $"Driver Id - Current value: {databaseValues.DriverId}";
-                }
+        //         if (databaseValues.DriverId != clientValues.DriverId)
+        //         {
+        //             dto.Message = $"Driver Id - Current value: {databaseValues.DriverId}";
+        //         }
 
-                if (databaseValues.RouteId != clientValues.RouteId)
-                {
-                    dto.Message = $"Route Id - Current value: {databaseValues.RouteId}";
-                }
+        //         if (databaseValues.RouteId != clientValues.RouteId)
+        //         {
+        //             dto.Message = $"Route Id - Current value: {databaseValues.RouteId}";
+        //         }
 
-                dto.Message += "\nThe record you attempted to edit "
-                        + "was modified by another user after you got the original value. The "
-                        + "edit operation was canceled and the current values in the database "
-                        + "have been displayed. If you still want to edit this record, click "
-                        + "the Save button again. Otherwise click the Back to List hyperlink.";
-                trip.RowVersion = (byte[])databaseValues.RowVersion;
-            }
-        }
+        //         dto.Message += "\nThe record you attempted to edit "
+        //                 + "was modified by another user after you got the original value. The "
+        //                 + "edit operation was canceled and the current values in the database "
+        //                 + "have been displayed. If you still want to edit this record, click "
+        //                 + "the Save button again. Otherwise click the Back to List hyperlink.";
+        //         trip.RowVersion = (byte[])databaseValues.RowVersion;
+        //     }
+        // }
         catch (Exception ex)
         {
             dto.Message = ex.Message;

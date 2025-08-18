@@ -10,8 +10,8 @@ namespace TripBookingBE.Models;
 [Table("Ticket")]
 public partial class Ticket
 {
-    [Timestamp]
-    public byte[]? RowVersion { get; set; } = null;
+    // [Timestamp]
+    // public byte[]? RowVersion { get; set; } = null;
 
     [Key]
     [Column("customerBookTripId")]
@@ -26,7 +26,7 @@ public partial class Ticket
     [Column("generalParamId")]
     public long? GeneralParamId { get; set; }
 
-    [Column("price", TypeName = "money")]
+    [Column("price", TypeName = "decimal")]
     public decimal? Price { get; set; }
 
     [Column("sellerCode")]

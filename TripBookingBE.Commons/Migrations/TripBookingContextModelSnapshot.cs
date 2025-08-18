@@ -2,28 +2,22 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripBookingBE.Data;
 
 #nullable disable
 
-namespace TripBookingBE.Migrations
+namespace TripBookingBE.Commons.Migrations
 {
     [DbContext(typeof(TripBookingContext))]
-    [Migration("20250810125706_SetNullCustomerReview")]
-    partial class SetNullCustomerReview
+    partial class TripBookingContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("SellerTrip", b =>
                 {
@@ -47,9 +41,7 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("CustomerId")
+                    b.Property<long?>("CustomerId")
                         .HasColumnType("bigint")
                         .HasColumnName("customerId");
 
@@ -65,12 +57,7 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("int")
                         .HasColumnName("placeNumber");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long>("TripId")
+                    b.Property<long?>("TripId")
                         .HasColumnType("bigint")
                         .HasColumnName("tripId");
 
@@ -92,14 +79,12 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
                     b.Property<string>("Content")
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnType("varchar(1000)")
                         .HasColumnName("content");
 
-                    b.Property<long>("CustomerId")
+                    b.Property<long?>("CustomerId")
                         .HasColumnType("bigint")
                         .HasColumnName("customerId");
 
@@ -110,11 +95,6 @@ namespace TripBookingBE.Migrations
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime")
                         .HasColumnName("dateModified");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.Property<long?>("TripId")
                         .HasColumnType("bigint")
@@ -137,26 +117,27 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("dateCreated");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("dateModified");
 
                     b.Property<string>("ParamCode")
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("paramCode");
 
                     b.Property<string>("ParamDescription")
+                        .HasMaxLength(2000)
                         .HasColumnType("nvarchar(500)")
                         .HasColumnName("paramDescription");
 
                     b.Property<string>("ParamKey")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("paramKey");
 
@@ -173,8 +154,6 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
                     b.Property<DateTime?>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
@@ -188,14 +167,8 @@ namespace TripBookingBE.Migrations
                         .HasColumnName("dateModified");
 
                     b.Property<string>("RouteDescription")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("routeDescription");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
@@ -221,13 +194,8 @@ namespace TripBookingBE.Migrations
                         .HasColumnName("generalParamId");
 
                     b.Property<decimal?>("Price")
-                        .HasColumnType("money")
+                        .HasColumnType("decimal")
                         .HasColumnName("price");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.Property<string>("SellerCode")
                         .HasMaxLength(20)
@@ -249,19 +217,13 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
                     b.Property<DateTime?>("DateCreated")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("dateCreated")
-                        .HasDefaultValueSql("getdate()");
+                        .HasColumnName("dateCreated");
 
                     b.Property<DateTime?>("DateModified")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("dateModified")
-                        .HasDefaultValueSql("getdate()");
+                        .HasColumnName("dateModified");
 
                     b.Property<DateTime?>("DepartureTime")
                         .HasColumnType("datetime")
@@ -287,11 +249,6 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("routeId");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DriverId");
@@ -308,14 +265,12 @@ namespace TripBookingBE.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<bool>("Active")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("tinyint(1)")
                         .HasDefaultValue(true)
                         .HasColumnName("active");
 
@@ -326,19 +281,15 @@ namespace TripBookingBE.Migrations
                         .HasDefaultValueSql("(NULL)");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("DateCreated")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("dateCreated")
-                        .HasDefaultValueSql("(getdate())");
+                        .HasColumnName("dateCreated");
 
                     b.Property<DateTime?>("DateModified")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
-                        .HasColumnName("dateModified")
-                        .HasDefaultValueSql("(getdate())");
+                        .HasColumnName("dateModified");
 
                     b.Property<string>("Email")
                         .ValueGeneratedOnAdd()
@@ -347,7 +298,7 @@ namespace TripBookingBE.Migrations
                         .HasDefaultValueSql("(NULL)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(150)
@@ -369,22 +320,22 @@ namespace TripBookingBE.Migrations
                         .HasColumnName("lastName");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("name");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PasswordHash")
                         .HasMaxLength(500)
@@ -401,19 +352,13 @@ namespace TripBookingBE.Migrations
                         .HasDefaultValueSql("(NULL)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("SellerCode")
                         .HasMaxLength(20)
@@ -422,7 +367,7 @@ namespace TripBookingBE.Migrations
                         .HasColumnName("sellerCode");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -470,14 +415,12 @@ namespace TripBookingBE.Migrations
                         .WithMany("CustomerBookTrips")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK_CustomerBookTrip_Customer");
 
                     b.HasOne("TripBookingBE.Models.Trip", "Trip")
                         .WithMany("CustomerBookTrips")
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired()
                         .HasConstraintName("FK_CustomerBookTrip_Trip");
 
                     b.Navigation("Customer");
@@ -491,7 +434,6 @@ namespace TripBookingBE.Migrations
                         .WithMany("CustomerReviewTrips")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired()
                         .HasConstraintName("FK_UserReviewTrip_User");
 
                     b.HasOne("TripBookingBE.Models.Trip", "Trip")

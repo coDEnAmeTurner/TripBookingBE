@@ -10,13 +10,14 @@ namespace TripBookingBE.Models;
 [Table("Route")]
 public partial class Route
 {
-    [Timestamp]
-    public byte[] RowVersion { get; set; }
+    // [Timestamp]
+    // public byte[] RowVersion { get; set; }
 
     [Key]
     [Column("id")]
     public long Id { get; set; }
 
+    [DataType("nvarchar(2000)")]
     [Column("routeDescription")]
     public string? RouteDescription { get; set; }
 

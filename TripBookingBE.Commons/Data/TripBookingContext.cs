@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using TripBookingBE.Commons.Configurations;
@@ -9,12 +10,6 @@ namespace TripBookingBE.Data;
 
 public partial class TripBookingContext : DbContext
 {
-    public ConnectionStrings connectionStrings { get; set; }
-
-    public TripBookingContext()
-    {
-    }
-
     public TripBookingContext(DbContextOptions<TripBookingContext> options)
         : base(options)
     {
@@ -33,17 +28,11 @@ public partial class TripBookingContext : DbContext
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<GeneralParam> GeneralParams { get; set; }
 
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //     => optionsBuilder.UseSqlServer(connectionStrings.TripBookingContext);
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    => optionsBuilder.UseSqlServer(connectionStrings.TripBookingContext_MySQL);
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Models.Route>(entity =>
         {
-            entity.Property(e => e.RowVersion).IsRowVersion();
+            // entity.Property(e => e.RowVersion).IsRowVersion();
             entity.Property(e => e.DateCreated).HasDefaultValue(new DateTime());
             entity.Property(e => e.DateModified).HasDefaultValue(new DateTime());
         });
@@ -63,7 +52,7 @@ public partial class TripBookingContext : DbContext
 
             entity.HasOne(d => d.Trip).WithMany(p => p.CustomerBookTrips).HasForeignKey(b => b.TripId).HasConstraintName("FK_CustomerBookTrip_Trip").OnDelete(DeleteBehavior.SetNull);
 
-            entity.Property(e => e.RowVersion).IsRowVersion();
+            // entity.Property(e => e.RowVersion).IsRowVersion();
         });
 
         modelBuilder.Entity<CustomerReviewTrip>(entity =>
@@ -75,7 +64,7 @@ public partial class TripBookingContext : DbContext
             entity.HasOne(d => d.Trip).WithMany(p => p.CustomerReviewTrips).HasForeignKey(r => r.TripId)
                 .HasConstraintName("FK_UserReviewTrip_Trip").OnDelete(DeleteBehavior.Cascade);
 
-            entity.Property(e => e.RowVersion).IsRowVersion();
+            // entity.Property(e => e.RowVersion).IsRowVersion();
         });
 
         modelBuilder.Entity<Ticket>(entity =>
@@ -87,20 +76,20 @@ public partial class TripBookingContext : DbContext
 
             entity.HasOne(d => d.GeneralParam).WithMany(p => p.Tickets).HasForeignKey(t => t.GeneralParamId).HasConstraintName("FK_Ticket_GeneralParam").OnDelete(DeleteBehavior.Cascade);
 
-            entity.Property(e => e.RowVersion).IsRowVersion();
+            // entity.Property(e => e.RowVersion).IsRowVersion();
         });
 
         modelBuilder.Entity<Trip>(entity =>
         {
-            entity.Property(e => e.DateCreated).HasDefaultValueSql("getdate()");
-            entity.Property(e => e.DateModified).HasDefaultValueSql("getdate()");
+            entity.Property(e => e.DateCreated);
+            entity.Property(e => e.DateModified);
             entity.Property(e => e.PlaceCount).HasDefaultValue(1);
 
             entity.HasOne(d => d.Driver).WithMany(p => p.Trips).HasForeignKey(t => t.DriverId).HasConstraintName("FK_Trip_Driver").OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(d => d.Route).WithMany(p => p.Trips).HasForeignKey(t => t.RouteId).HasConstraintName("FK_Trip_Route").OnDelete(DeleteBehavior.Cascade);
 
-            entity.Property(e => e.RowVersion).IsRowVersion();
+            // entity.Property(e => e.RowVersion).IsRowVersion();
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -109,13 +98,13 @@ public partial class TripBookingContext : DbContext
 
             entity.Property(e => e.Active).HasDefaultValue(true);
             entity.Property(e => e.Avatar).HasDefaultValueSql("(NULL)");
-            entity.Property(e => e.DateCreated).HasDefaultValueSql("(getdate())");
-            entity.Property(e => e.DateModified).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.DateCreated);
+            entity.Property(e => e.DateModified);
             entity.Property(e => e.Email).HasDefaultValueSql("(NULL)");
             entity.Property(e => e.LastLogin).HasDefaultValueSql("(NULL)");
             entity.Property(e => e.Phone).HasDefaultValueSql("(NULL)");
             entity.Property(e => e.Type).HasDefaultValue("CUSTOMER");
-            entity.Property(e => e.RowVersion).IsRowVersion();
+            // entity.Property(e => e.RowVersion).IsRowVersion();
 
             entity.HasMany(e => e.SellingTrips).WithMany(e => e.Sellers).UsingEntity("SellerTrip");
         });
