@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace TripBookingBE.RestRequests;
 
 public class RegisterRequest
