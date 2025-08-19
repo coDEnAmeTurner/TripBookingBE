@@ -12,18 +12,18 @@ namespace TripBookingBE.Models;
 public partial class CustomerBookTrip
 {
 
-    [Timestamp]
-    public byte[]? RowVersion { get; set; }
+    // [Timestamp]
+    // public byte[]? RowVersion { get; set; }
 
     [Key]
     [Column("id")]
     public long Id { get; set; }
 
     [Column("customerId")]
-    public long CustomerId { get; set; }
+    public long? CustomerId { get; set; }
 
     [Column("tripId")]
-    public long TripId { get; set; }
+    public long? TripId { get; set; }
 
     [Display(Name ="Place Number")]
     [Column("placeNumber")]

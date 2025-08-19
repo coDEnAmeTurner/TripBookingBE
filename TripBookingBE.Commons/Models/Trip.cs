@@ -11,8 +11,8 @@ namespace TripBookingBE.Models;
 public partial class Trip
 {
 
-    [Timestamp]
-    public byte[]? RowVersion { get; set; }
+    // [Timestamp]
+    // public byte[]? RowVersion { get; set; }
     [Key]
     [Column("id")]
     public long Id { get; set; }

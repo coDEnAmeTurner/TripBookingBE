@@ -128,54 +128,54 @@ public class TicketDAL : ITicketDAL
             await context.SaveChangesAsync();
 
         }
-        catch (DbUpdateConcurrencyException ex)
-        {
-            dto.RespCode = HttpStatusCode.Conflict;
+        // catch (DbUpdateConcurrencyException ex)
+        // {
+        //     dto.RespCode = HttpStatusCode.Conflict;
 
-            var exceptionEntry = ex.Entries.Single();
-            var clientValues = (Models.Ticket)exceptionEntry.Entity;
-            var databaseEntry = exceptionEntry.GetDatabaseValues();
-            if (databaseEntry == null)
-            {
-                dto.Message =
-                    "Unable to save changes. The User was deleted by another user.";
-            }
-            else
-            {
-                var databaseValues = (Models.Ticket)databaseEntry.ToObject();
+        //     var exceptionEntry = ex.Entries.Single();
+        //     var clientValues = (Models.Ticket)exceptionEntry.Entity;
+        //     var databaseEntry = exceptionEntry.GetDatabaseValues();
+        //     if (databaseEntry == null)
+        //     {
+        //         dto.Message =
+        //             "Unable to save changes. The User was deleted by another user.";
+        //     }
+        //     else
+        //     {
+        //         var databaseValues = (Models.Ticket)databaseEntry.ToObject();
 
-                var cbt = await customerBookTripsDal.GetBookingById(databaseValues.CustomerBookTripId);
-                var customer = cbt.CustomerBookTrip.Customer;
-                var trip = cbt.CustomerBookTrip.Trip;
-                var generalParam = databaseValues.GeneralParamId.HasValue ? await generalParamDal.GetGeneralParamById(databaseValues.GeneralParamId.GetValueOrDefault()) : null;
-                if (databaseValues.CustomerBookTripId != clientValues.CustomerBookTripId)
-                {
-                    dto.Message = $"Customer and Trip - Current value: {customer.Name} currently books {trip.Route?.RouteDescription} - {trip.RegistrationNumber}";
-                }
+        //         var cbt = await customerBookTripsDal.GetBookingById(databaseValues.CustomerBookTripId);
+        //         var customer = cbt.CustomerBookTrip.Customer;
+        //         var trip = cbt.CustomerBookTrip.Trip;
+        //         var generalParam = databaseValues.GeneralParamId.HasValue ? await generalParamDal.GetGeneralParamById(databaseValues.GeneralParamId.GetValueOrDefault()) : null;
+        //         if (databaseValues.CustomerBookTripId != clientValues.CustomerBookTripId)
+        //         {
+        //             dto.Message = $"Customer and Trip - Current value: {customer.Name} currently books {trip.Route?.RouteDescription} - {trip.RegistrationNumber}";
+        //         }
 
-                if (databaseValues.Price != clientValues.Price)
-                {
-                    dto.Message = $"Price - Current value: {databaseValues.Price}";
-                }
+        //         if (databaseValues.Price != clientValues.Price)
+        //         {
+        //             dto.Message = $"Price - Current value: {databaseValues.Price}";
+        //         }
 
-                if (databaseValues.SellerCode != clientValues.SellerCode)
-                {
-                    dto.Message = $"Seller Code - Current value: {databaseValues.SellerCode}";
-                }
+        //         if (databaseValues.SellerCode != clientValues.SellerCode)
+        //         {
+        //             dto.Message = $"Seller Code - Current value: {databaseValues.SellerCode}";
+        //         }
 
-                if (databaseValues.GeneralParamId != clientValues.GeneralParamId)
-                {
-                    dto.Message = $"General Param Id - Current value: {generalParam?.GeneralParam?.ParamDescription}";
-                }
+        //         if (databaseValues.GeneralParamId != clientValues.GeneralParamId)
+        //         {
+        //             dto.Message = $"General Param Id - Current value: {generalParam?.GeneralParam?.ParamDescription}";
+        //         }
 
-                dto.Message += "\nThe record you attempted to edit "
-                        + "was modified by another user after you got the original value. The "
-                        + "edit operation was canceled and the current values in the database "
-                        + "have been displayed. If you still want to edit this record, click "
-                        + "the Save button again. Otherwise click the Back to List hyperlink.";
-                ticket.RowVersion = (byte[])databaseValues.RowVersion;
-            }
-        }
+        //         dto.Message += "\nThe record you attempted to edit "
+        //                 + "was modified by another user after you got the original value. The "
+        //                 + "edit operation was canceled and the current values in the database "
+        //                 + "have been displayed. If you still want to edit this record, click "
+        //                 + "the Save button again. Otherwise click the Back to List hyperlink.";
+        //         ticket.RowVersion = (byte[])databaseValues.RowVersion;
+        //     }
+        // }
         catch (Exception ex)
         {
             dto.Message = ex.Message;

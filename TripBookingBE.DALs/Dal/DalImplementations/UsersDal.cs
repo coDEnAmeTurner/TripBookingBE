@@ -145,67 +145,67 @@ public class UsersDal : IUsersDal
             await context.SaveChangesAsync();
 
         }
-        catch (DbUpdateConcurrencyException ex)
-        {
-            dto.RespCode = HttpStatusCode.Conflict;
+        // catch (DbUpdateConcurrencyException ex)
+        // {
+        //     dto.RespCode = HttpStatusCode.Conflict;
 
-            var exceptionEntry = ex.Entries.Single();
-            var clientValues = (User)exceptionEntry.Entity;
-            var databaseEntry = exceptionEntry.GetDatabaseValues();
-            if (databaseEntry == null)
-            {
-                dto.Message =
-                    "Unable to save changes. The User was deleted by another user.";
-            }
-            else
-            {
-                var databaseValues = (User)databaseEntry.ToObject();
+        //     var exceptionEntry = ex.Entries.Single();
+        //     var clientValues = (User)exceptionEntry.Entity;
+        //     var databaseEntry = exceptionEntry.GetDatabaseValues();
+        //     if (databaseEntry == null)
+        //     {
+        //         dto.Message =
+        //             "Unable to save changes. The User was deleted by another user.";
+        //     }
+        //     else
+        //     {
+        //         var databaseValues = (User)databaseEntry.ToObject();
 
-                if (databaseValues.Name != clientValues.Name)
-                {
-                    dto.Message = $"Name - Current value: {databaseValues.Name}";
-                }
-                if (databaseValues.UserName != clientValues.UserName)
-                {
-                    dto.Message = $"Username - Current value: {databaseValues.UserName}";
-                }
-                if (databaseValues.FirstName != clientValues.FirstName)
-                {
-                    dto.Message = $"FirstName - Current value: {databaseValues.FirstName}";
-                }
-                if (databaseValues.LastName != clientValues.LastName)
-                {
-                    dto.Message = $"LastName - Current value: {databaseValues.LastName}";
-                }
-                if (databaseValues.Email != clientValues.Email)
-                {
-                    dto.Message = $"Email - Current value: {databaseValues.Email}";
-                }
-                if (databaseValues.Avatar != clientValues.Avatar)
-                {
-                    dto.Message = $"Avatar - Current value: {databaseValues.Avatar}";
-                }
-                if (databaseValues.Phone != clientValues.Phone)
-                {
-                    dto.Message = $"Phone - Current value: {databaseValues.Phone}";
-                }
-                if (databaseValues.Type != clientValues.Type)
-                {
-                    dto.Message = $"Type - Current value: {databaseValues.Type}";
-                }
-                if (databaseValues.SellerCode != clientValues.SellerCode)
-                {
-                    dto.Message = $"SellerCode - Current value: {databaseValues.SellerCode}";
-                }
+        //         if (databaseValues.Name != clientValues.Name)
+        //         {
+        //             dto.Message = $"Name - Current value: {databaseValues.Name}";
+        //         }
+        //         if (databaseValues.UserName != clientValues.UserName)
+        //         {
+        //             dto.Message = $"Username - Current value: {databaseValues.UserName}";
+        //         }
+        //         if (databaseValues.FirstName != clientValues.FirstName)
+        //         {
+        //             dto.Message = $"FirstName - Current value: {databaseValues.FirstName}";
+        //         }
+        //         if (databaseValues.LastName != clientValues.LastName)
+        //         {
+        //             dto.Message = $"LastName - Current value: {databaseValues.LastName}";
+        //         }
+        //         if (databaseValues.Email != clientValues.Email)
+        //         {
+        //             dto.Message = $"Email - Current value: {databaseValues.Email}";
+        //         }
+        //         if (databaseValues.Avatar != clientValues.Avatar)
+        //         {
+        //             dto.Message = $"Avatar - Current value: {databaseValues.Avatar}";
+        //         }
+        //         if (databaseValues.Phone != clientValues.Phone)
+        //         {
+        //             dto.Message = $"Phone - Current value: {databaseValues.Phone}";
+        //         }
+        //         if (databaseValues.Type != clientValues.Type)
+        //         {
+        //             dto.Message = $"Type - Current value: {databaseValues.Type}";
+        //         }
+        //         if (databaseValues.SellerCode != clientValues.SellerCode)
+        //         {
+        //             dto.Message = $"SellerCode - Current value: {databaseValues.SellerCode}";
+        //         }
 
-                dto.Message += "\nThe record you attempted to edit "
-                        + "was modified by another user after you got the original value. The "
-                        + "edit operation was canceled and the current values in the database "
-                        + "have been displayed. If you still want to edit this record, click "
-                        + "the Save button again. Otherwise click the Back to List hyperlink.";
-                user.RowVersion = (byte[])databaseValues.RowVersion;
-            }
-        }
+        //         dto.Message += "\nThe record you attempted to edit "
+        //                 + "was modified by another user after you got the original value. The "
+        //                 + "edit operation was canceled and the current values in the database "
+        //                 + "have been displayed. If you still want to edit this record, click "
+        //                 + "the Save button again. Otherwise click the Back to List hyperlink.";
+        //         user.RowVersion = (byte[])databaseValues.RowVersion;
+        //     }
+        // }
         catch (Exception ex)
         {
             dto.Message = ex.Message;

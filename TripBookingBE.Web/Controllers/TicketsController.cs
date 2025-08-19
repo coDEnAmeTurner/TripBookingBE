@@ -56,8 +56,8 @@ public class TicketsController : Controller
 
         if (dto.Ticket.CustomerBookTripId != 0)
         {
-            dto.Ticket.CustomerId = dto.Ticket.CustomerBookTrip.CustomerId;
-            dto.Ticket.TripId = dto.Ticket.CustomerBookTrip.TripId;
+            dto.Ticket.CustomerId = dto.Ticket.CustomerBookTrip.CustomerId.GetValueOrDefault();
+            dto.Ticket.TripId = dto.Ticket.CustomerBookTrip.TripId.GetValueOrDefault();
         }
         return View(dto.Ticket);
     }

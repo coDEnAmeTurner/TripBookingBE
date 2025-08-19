@@ -11,8 +11,8 @@ namespace TripBookingBE.Models;
 [Index("UserName", Name = "UQ__User__66DCF95C55A682B1", IsUnique = true)]
 public partial class User : IdentityUser<long>
 {
-    [Timestamp]
-    public byte[] RowVersion { get; set; }
+    // [Timestamp]
+    // public byte[] RowVersion { get; set; }
 
     [NotMapped]
     [JsonIgnore]

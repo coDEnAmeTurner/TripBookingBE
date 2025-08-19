@@ -27,8 +27,8 @@ public class BookingsService : IBookingsService
             var already_exist = await bookingDAL.GetIdByCustIdAndTripId(booking.CustomerId, booking.TripId);
             if (already_exist != null && already_exist.Ids != null && already_exist.Ids.Count > 0)
             {
-                var customer = await usersDAL.GetUserById(booking.CustomerId);
-                var trip = await tripDAL.GetTripById(booking.TripId);
+                var customer = await usersDAL.GetUserById(booking.CustomerId.GetValueOrDefault());
+                var trip = await tripDAL.GetTripById(booking.TripId.GetValueOrDefault());
 
                 dto.CustomerBookTrip = booking;
                 dto.RespCode = System.Net.HttpStatusCode.Conflict;

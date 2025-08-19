@@ -11,11 +11,14 @@ namespace TripBookingBE.Models
         public long Id { get; set; }
 
         [Column("paramKey")]
+        [StringLength(100)]
         public string ParamKey { get; set; }
 
+        [StringLength(100)]
         [Column("paramCode")]
         public string? ParamCode { get; set; }
 
+        [StringLength(2000)]
         [Column("paramDescription")]
         public string? ParamDescription { get; set; }
 

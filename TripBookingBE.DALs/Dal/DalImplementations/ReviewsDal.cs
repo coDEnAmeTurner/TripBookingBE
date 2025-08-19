@@ -177,39 +177,39 @@ public class ReviewsDal : IReviewsDal
             await context.SaveChangesAsync();
 
         }
-        catch (DbUpdateConcurrencyException ex)
-        {
-            dto.RespCode = HttpStatusCode.Conflict;
+        // catch (DbUpdateConcurrencyException ex)
+        // {
+        //     dto.RespCode = HttpStatusCode.Conflict;
 
-            var exceptionEntry = ex.Entries.Single();
-            var clientValues = (CustomerReviewTrip)exceptionEntry.Entity;
-            var databaseEntry = exceptionEntry.GetDatabaseValues();
-            if (databaseEntry == null)
-            {
-                dto.Message =
-                    "Unable to save changes. The User was deleted by another user.";
-            }
-            else
-            {
-                var databaseValues = (CustomerReviewTrip)databaseEntry.ToObject();
+        //     var exceptionEntry = ex.Entries.Single();
+        //     var clientValues = (CustomerReviewTrip)exceptionEntry.Entity;
+        //     var databaseEntry = exceptionEntry.GetDatabaseValues();
+        //     if (databaseEntry == null)
+        //     {
+        //         dto.Message =
+        //             "Unable to save changes. The User was deleted by another user.";
+        //     }
+        //     else
+        //     {
+        //         var databaseValues = (CustomerReviewTrip)databaseEntry.ToObject();
 
-                if (databaseValues.CustomerId != clientValues.CustomerId)
-                {
-                    dto.Message = $"Customer - Current value: {databaseValues.Customer.Name} - Phone: {databaseValues.Customer.Phone} - Email: {databaseValues.Customer.Email}";
-                }
-                if (databaseValues.TripId != clientValues.TripId) 
-                {
-                    dto.Message = $"Trip - Current value: {databaseValues.Trip.Route?.RouteDescription} - Departure Time: {databaseValues.Trip.DepartureTime?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)} - Registration Number: {databaseValues.Trip.RegistrationNumber}";
-                }
+        //         if (databaseValues.CustomerId != clientValues.CustomerId)
+        //         {
+        //             dto.Message = $"Customer - Current value: {databaseValues.Customer.Name} - Phone: {databaseValues.Customer.Phone} - Email: {databaseValues.Customer.Email}";
+        //         }
+        //         if (databaseValues.TripId != clientValues.TripId) 
+        //         {
+        //             dto.Message = $"Trip - Current value: {databaseValues.Trip.Route?.RouteDescription} - Departure Time: {databaseValues.Trip.DepartureTime?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)} - Registration Number: {databaseValues.Trip.RegistrationNumber}";
+        //         }
 
-                dto.Message += "\nThe record you attempted to edit "
-                        + "was modified by another user after you got the original value. The "
-                        + "edit operation was canceled and the current values in the database "
-                        + "have been displayed. If you still want to edit this record, click "
-                        + "the Save button again. Otherwise click the Back to List hyperlink.";
-                review.RowVersion = (byte[])databaseValues.RowVersion;
-            }
-        }
+        //         dto.Message += "\nThe record you attempted to edit "
+        //                 + "was modified by another user after you got the original value. The "
+        //                 + "edit operation was canceled and the current values in the database "
+        //                 + "have been displayed. If you still want to edit this record, click "
+        //                 + "the Save button again. Otherwise click the Back to List hyperlink.";
+        //         review.RowVersion = (byte[])databaseValues.RowVersion;
+        //     }
+        // }
         catch (Exception ex)
         {
             dto.Message = ex.Message;
