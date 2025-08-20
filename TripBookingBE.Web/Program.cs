@@ -19,10 +19,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using TripBookingBE.Commons.Configurations;
+using TripBookingBE.Commons.VnPayLibrary;
 
 IdentityModelEventSource.ShowPII = true;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//httpcontext injection
+builder.Services.AddHttpContextAccessor();
 
 //configs
 var config = new ConfigurationBuilder()
@@ -30,6 +34,12 @@ var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .Build();
 builder.Services.Configure<ConnectionStrings>(config.GetSection("ConnectionStrings"));
+builder.Services.Configure<VnPayConfigs>(config.GetSection("VnPayConfigs"));
+
+//vnpay
+builder.Services.AddSingleton<Utils>();
+builder.Services.AddSingleton<VnPayCompare>();
+builder.Services.AddSingleton<VnPayLibrary>();
 
 // add rest api controller
 builder.Services.AddControllersWithViews();

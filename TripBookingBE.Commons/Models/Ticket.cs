@@ -34,6 +34,9 @@ public partial class Ticket
     [Unicode(false)]
     public string? SellerCode { get; set; }
 
+    [Column("paid")]
+    public bool Paid { get; set; } = false;
+
     [Column("dateCreated", TypeName = "datetime")]
     public DateTime? DateCreated { get; set; } = DateTime.Now;
 
