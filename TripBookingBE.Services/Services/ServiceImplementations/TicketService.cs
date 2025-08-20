@@ -1,5 +1,7 @@
 using System.Net;
 using System.Transactions;
+using TripBookingBE.Commons.Configurations;
+using TripBookingBE.Commons.TicketDTO;
 using TripBookingBE.Dal.DalImplementations;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.DTO.TicketDTO;
@@ -13,10 +15,13 @@ public class TicketService : ITicketService
     private readonly ITicketDAL ticketDAL;
     private readonly IBookingsDal bookingDAL;
 
-    public TicketService(ITicketDAL ticketDAL, IBookingsDal bookingDAL)
+    private readonly VnPayConfigs vnPayConfigs;
+
+    public TicketService(ITicketDAL ticketDAL, IBookingsDal bookingDAL, VnPayConfigs vnPayConfigs = null)
     {
         this.ticketDAL = ticketDAL;
         this.bookingDAL = bookingDAL;
+        this.vnPayConfigs = vnPayConfigs;
     }
 
     public async Task<TicketCheckOwnerDTO> CheckTicketOwner(long id, long userId)
@@ -148,4 +153,29 @@ public class TicketService : ITicketService
         return dto;
     }
 
+    public async Task<TicketPayDTO> Pay(long id)
+    {
+        var dto = new TicketPayDTO();
+
+        var modeldto = await ticketDAL.GetTicketById(id);
+
+        if (modeldto.RespCode != HttpStatusCode.OK)
+        {
+            dto.RespCode = (int)modeldto.RespCode;
+            dto.Message = dto.Message;
+            return dto;
+        }
+
+        var ticket = modeldto.Ticket;
+
+        //Get Config Info
+        string vnp_Returnurl = vnPayConfigs.vnp_Returnurl; //URL nhan ket qua tra ve 
+        string vnp_Url = vnPayConfigs.vnp_Url; //URL thanh toan cua VNPAY 
+        string vnp_TmnCode = vnPayConfigs.vnp_TmnCode; //Ma định danh merchant kết nối (Terminal Id)
+        string vnp_HashSecret = vnPayConfigs.vnp_HashSecret; //Secret Key
+
+        
+
+        return dto;
+    }
 }

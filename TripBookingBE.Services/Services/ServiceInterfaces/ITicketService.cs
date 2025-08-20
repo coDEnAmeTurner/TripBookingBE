@@ -1,3 +1,4 @@
+using TripBookingBE.Commons.TicketDTO;
 using TripBookingBE.DTO.TicketDTO;
 using TripBookingBE.Models;
 
@@ -17,5 +18,6 @@ public interface ITicketService
 
     Task<TicketCheckOwnerDTO> CheckTicketOwner(long id, long userId);
     Task<TicketCheckSellerDTO> CheckTicketSeller(long id, string sellerCode);
+    Task<TicketPayDTO> Pay(long id);
 
 }

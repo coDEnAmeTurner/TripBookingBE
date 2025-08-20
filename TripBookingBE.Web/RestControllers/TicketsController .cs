@@ -21,7 +21,7 @@ public class ApiTicketsController : MyControllerBase
     }
 
     [Authorize(Policy = "AllowDriverOrSeller")]
-    [HttpGet]           
+    [HttpGet]
     public async Task<IActionResult> List([FromQuery] TicketListRequest request)
     {
         var dto = await ticketService.GetTickets(
@@ -127,6 +127,26 @@ public class ApiTicketsController : MyControllerBase
         }
 
         return Ok(dto.Ticket);
+    }
+
+    [Authorize(Policy = "AllowDriverOrTicketOwner")]
+    [HttpGet("{id:int}/pay")]
+    public async Task<IActionResult> Pay(int id)
+    {
+        var dto = await ticketService.Pay(id);
+        if (dto.RespCode != 200)
+        {
+            if (dto.RespCode == 404)
+            {
+                return NotFound(dto);
+            }
+            else
+            {
+                return Problem(dto.Message);
+            }
+        }
+
+        return Ok(dto);
     }
 
 }
