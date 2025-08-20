@@ -35,7 +35,7 @@ public partial class Ticket
     public string? SellerCode { get; set; }
 
     [Column("paid")]
-    public bool Paid { get; set; } = false;
+    public int Paid { get; set; } = 0;
 
     [Column("dateCreated", TypeName = "datetime")]
     public DateTime? DateCreated { get; set; } = DateTime.Now;
