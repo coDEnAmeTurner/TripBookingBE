@@ -1,6 +1,7 @@
 using System.Net;
 using System.Transactions;
 using log4net.Core;
+using Microsoft.Extensions.Options;
 using TripBookingBE.Commons.Configurations;
 using TripBookingBE.Commons.DTO.TicketDTO;
 using TripBookingBE.Commons.TicketDTO;
@@ -23,12 +24,12 @@ public class TicketService : ITicketService
     private readonly Utils utils;
     private readonly ILogger log;
 
-    public TicketService(ITicketDAL ticketDAL, IBookingsDal bookingDAL, VnPayConfigs vnPayConfigs = null, VnPayLibrary vnPayLibrary = null, Utils utils = null, ILogger log = null)
+    public TicketService(ITicketDAL ticketDAL, IBookingsDal bookingDAL, IOptions<VnPayConfigs> vnPayConfigs, VnPayLibrary vnPayLibrary = null, Utils utils = null, ILogger log = null)
     {
         this.ticketDAL = ticketDAL;
         this.bookingDAL = bookingDAL;
-        this.vnPayConfigs = vnPayConfigs;
-        this.vnpay = vnPayLibrary;
+        this.vnPayConfigs = vnPayConfigs.Value;
+        vnpay = vnPayLibrary;
         this.utils = utils;
         this.log = log;
     }
@@ -204,6 +205,12 @@ public class TicketService : ITicketService
                                 vnpayTranId, vnp_ResponseCode);
                             ticket.Paid = 2;
                         }
+                        var updatedto = await ticketDAL.Update(ticket);
+                        if (updatedto.RespCode != HttpStatusCode.OK)
+                        {
+                            dto.RespCode = (int)updatedto.RespCode;
+                            dto.Message = updatedto.Message;
+                        }
 
                         //Thêm code Thực hiện cập nhật vào Database 
                         //Update Database
@@ -266,24 +273,24 @@ public class TicketService : ITicketService
         vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
         vnpay.AddRequestData("vnp_Command", "pay");
         vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
-        vnpay.AddRequestData("vnp_Amount", (ticket.Price * 100).ToString()); //Số tiền thanh toán. Số tiền không mang các ký tự phân tách thập phân, phần nghìn, ký tự tiền tệ. Để gửi số tiền thanh toán là 100,000 VND (một trăm nghìn VNĐ) thì merchant cần nhân thêm 100 lần (khử phần thập phân), sau đó gửi sang VNPAY là: 10000000
+        vnpay.AddRequestData("vnp_Amount", (Convert.ToInt64(ticket.Price) * 100).ToString()); //Số tiền thanh toán. Số tiền không mang các ký tự phân tách thập phân, phần nghìn, ký tự tiền tệ. Để gửi số tiền thanh toán là 100,000 VND (một trăm nghìn VNĐ) thì merchant cần nhân thêm 100 lần (khử phần thập phân), sau đó gửi sang VNPAY là: 10000000
 
         vnpay.AddRequestData("vnp_CreateDate", ticket.DateCreated.Value.ToString("yyyyMMddHHmmss"));
+        vnpay.AddRequestData("vnp_ExpireDate", DateTime.Now.AddDays(7).ToString("yyyyMMddHHmmss"));
         vnpay.AddRequestData("vnp_CurrCode", "VND");
         vnpay.AddRequestData("vnp_IpAddr", utils.GetIpAddress());
 
         vnpay.AddRequestData("vnp_Locale", "vn");
-        vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + ticket.CustomerBookTripId);
+        vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang: " + ticket.CustomerBookTripId);
         vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
 
         vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
-        vnpay.AddRequestData("vnp_TxnRef", ticket.CustomerBookTripId.ToString()); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
-
-        //Add Params of 2.1.0 Version
-        //Billing
+        vnpay.AddRequestData("vnp_TxnRef", Guid.NewGuid().ToString()); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
 
         string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
         Console.WriteLine($"VNPAY URL: {paymentUrl}");
+
+        dto.PaymentURL = paymentUrl;
 
         return dto;
     }
@@ -298,11 +305,16 @@ public class TicketService : ITicketService
         //vnp_ResponseCode:Response code from VNPAY: 00: Thanh cong, Khac 00: Xem tai lieu
         //vnp_SecureHash: HmacSHA512 cua du lieu tra ve
 
-        long orderId = Convert.ToInt64(vnpay.GetResponseData("vnp_TxnRef"));
-        long vnpayTranId = Convert.ToInt64(vnpay.GetResponseData("vnp_TransactionNo"));
+        long orderId = Convert.ToInt64(vnp_TxnRef);
+        long vnpayTranId = Convert.ToInt64(vnp_TransactionNo);
         long lvnp_Amount = Convert.ToInt64(vnp_Amount) / 100;
 
         bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
+
+        Console.WriteLine("[TicketService.ReturnUrl] vnp_SecureHash: {0}", vnp_SecureHash);
+        Console.WriteLine("[TicketService.ReturnUrl] vnp_HashSecret: {0}", vnp_HashSecret);
+        Console.WriteLine("[TicketService.ReturnUrl] checkSignature: {0}", checkSignature);
+
         if (checkSignature)
         {
             if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
@@ -321,7 +333,7 @@ public class TicketService : ITicketService
             dto.displayTmnCode = "Mã Website (Terminal ID):" + vnp_TmnCode;
             dto.displayTxnRef = "Mã giao dịch thanh toán:" + orderId.ToString();
             dto.displayVnpayTranNo = "Mã giao dịch tại VNPAY:" + vnpayTranId.ToString();
-            dto.displayAmount = "Số tiền thanh toán (VND):" + vnp_Amount.ToString();
+            dto.displayAmount = "Số tiền thanh toán (VND):" + lvnp_Amount.ToString();
             dto.displayBankCode = "Ngân hàng thanh toán:" + vnp_BankCode;
         }
         else

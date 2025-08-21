@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using TripBookingBE.Commons.Configurations;
 using TripBookingBE.Commons.VnPayLibrary;
+using Microsoft.AspNetCore.HttpOverrides;
 
 IdentityModelEventSource.ShowPII = true;
 
@@ -31,7 +32,6 @@ var config = new ConfigurationBuilder()
             .Build();
 builder.Services.Configure<ConnectionStrings>(config.GetSection("ConnectionStrings"));
 builder.Services.Configure<VnPayConfigs>(config.GetSection("VnPayConfigs"));
-// builder.Services.AddScoped(typeof(ILogger<>), typeof(Logger<>));
 
 //vnpay
 builder.Services.AddScoped<Utils>();
@@ -47,7 +47,7 @@ builder.Services.AddDbContext<TripBookingContext>(options => options.UseMySQL(co
 //cloudinary
 DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
 var str = Environment.GetEnvironmentVariable("CLOUDINARY_URL");
-Cloudinary cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
+Cloudinary cloudinary = new Cloudinary(str);
 cloudinary.Api.Secure = true;
 builder.Services.AddSingleton(typeof(Cloudinary), cloudinary);
 
@@ -148,6 +148,12 @@ app.UseAuthorization();
 app.UseSession();
 
 app.UseHttpsRedirection();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+    ForwardedHeaders.XForwardedProto
+});
 
 app.MapStaticAssets();
 
