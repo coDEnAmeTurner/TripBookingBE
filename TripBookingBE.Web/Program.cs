@@ -14,10 +14,6 @@ using dotenv.net;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
 using TripBookingBE.Commons.Configurations;
 using TripBookingBE.Commons.VnPayLibrary;
 
@@ -35,11 +31,12 @@ var config = new ConfigurationBuilder()
             .Build();
 builder.Services.Configure<ConnectionStrings>(config.GetSection("ConnectionStrings"));
 builder.Services.Configure<VnPayConfigs>(config.GetSection("VnPayConfigs"));
+// builder.Services.AddScoped(typeof(ILogger<>), typeof(Logger<>));
 
 //vnpay
-builder.Services.AddSingleton<Utils>();
-builder.Services.AddSingleton<VnPayCompare>();
-builder.Services.AddSingleton<VnPayLibrary>();
+builder.Services.AddScoped<Utils>();
+builder.Services.AddScoped<VnPayCompare>();
+builder.Services.AddScoped<VnPayLibrary>();
 
 // add rest api controller
 builder.Services.AddControllersWithViews();

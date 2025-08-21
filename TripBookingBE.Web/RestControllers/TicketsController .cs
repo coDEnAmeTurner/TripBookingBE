@@ -7,6 +7,7 @@ using TripBookingBE.Pagination;
 using TripBookingBE.RestRequests.Ticket;
 using TripBookingBE.RestRequests.Trip;
 using TripBookingBE.Services.ServiceInterfaces;
+using TripBookingBE.Web.RestRequests.Ticket;
 
 namespace TripBookingBE.RestControllers;
 
@@ -149,4 +150,56 @@ public class ApiTicketsController : MyControllerBase
         return Ok(dto);
     }
 
+    [AllowAnonymous]
+    [HttpGet("IPN")]
+    public async Task<IActionResult> IPN([FromQuery] TicketIPNRequest request)
+    {
+        var httpreq = HttpContext.Request;
+        var dto = await ticketService.IPN(
+            request.vnp_TmnCode,
+            request.vnp_Amount,
+            request.vnp_BankCode,
+            request.vnp_BankTranNo,
+            request.vnp_CardType,
+            request.vnp_PayDate,
+            request.vnp_OrderInfo,
+            request.vnp_TransactionNo,
+            request.vnp_ResponseCode,
+            request.vnp_TransactionStatus,
+            request.vnp_TxnRef,
+            request.vnp_SecureHash,
+            $"{httpreq.Host}{httpreq.Path}{httpreq.QueryString}"
+        );
+
+        if (dto.RespCode != 200)
+        {
+            return Problem(dto.Message);
+        }
+
+        return Ok(dto);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("ReturnUrl")]
+    public async Task<IActionResult> ReturnUrl([FromQuery] TicketIPNRequest request)
+    {
+        var httpreq = HttpContext.Request;
+        var dto = await ticketService.ReturnUrl(
+            request.vnp_TmnCode,
+            request.vnp_Amount,
+            request.vnp_BankCode,
+            request.vnp_BankTranNo,
+            request.vnp_CardType,
+            request.vnp_PayDate,
+            request.vnp_OrderInfo,
+            request.vnp_TransactionNo,
+            request.vnp_ResponseCode,
+            request.vnp_TransactionStatus,
+            request.vnp_TxnRef,
+            request.vnp_SecureHash,
+            $"{httpreq.Host}{httpreq.Path}{httpreq.QueryString}"
+        );
+
+        return Ok(dto);
+    }
 }
