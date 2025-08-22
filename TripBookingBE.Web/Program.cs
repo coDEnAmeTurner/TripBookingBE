@@ -14,12 +14,9 @@ using dotenv.net;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
 using TripBookingBE.Commons.Configurations;
 using TripBookingBE.Commons.VnPayLibrary;
+using Microsoft.AspNetCore.HttpOverrides;
 
 IdentityModelEventSource.ShowPII = true;
 
@@ -37,9 +34,9 @@ builder.Services.Configure<ConnectionStrings>(config.GetSection("ConnectionStrin
 builder.Services.Configure<VnPayConfigs>(config.GetSection("VnPayConfigs"));
 
 //vnpay
-builder.Services.AddSingleton<Utils>();
-builder.Services.AddSingleton<VnPayCompare>();
-builder.Services.AddSingleton<VnPayLibrary>();
+builder.Services.AddScoped<Utils>();
+builder.Services.AddScoped<VnPayCompare>();
+builder.Services.AddScoped<VnPayLibrary>();
 
 // add rest api controller
 builder.Services.AddControllersWithViews();
@@ -50,7 +47,7 @@ builder.Services.AddDbContext<TripBookingContext>(options => options.UseMySQL(co
 //cloudinary
 DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
 var str = Environment.GetEnvironmentVariable("CLOUDINARY_URL");
-Cloudinary cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
+Cloudinary cloudinary = new Cloudinary(str);
 cloudinary.Api.Secure = true;
 builder.Services.AddSingleton(typeof(Cloudinary), cloudinary);
 
@@ -151,6 +148,12 @@ app.UseAuthorization();
 app.UseSession();
 
 app.UseHttpsRedirection();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+    ForwardedHeaders.XForwardedProto
+});
 
 app.MapStaticAssets();
 

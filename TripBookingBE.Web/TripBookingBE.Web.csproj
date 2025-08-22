@@ -12,7 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update=".env" CopyToOutputDirectory="PreserveNewest" />
+    <None Update=".env">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <ProjectReference Include="..\TripBookingBE.Commons\TripBookingBE.Commons.csproj" />
     <ProjectReference Include="..\TripBookingBE.DALs\TripBookingBE.DALs.csproj" />
     <ProjectReference Include="..\TripBookingBE.Services\TripBookingBE.Services.csproj" />
