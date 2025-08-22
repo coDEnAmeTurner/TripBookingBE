@@ -100,6 +100,17 @@ public class TicketService : ITicketService
         {
             dto = await ticketDAL.Update(ticket);
         }
+
+        if (dto.RespCode == System.Net.HttpStatusCode.Created)
+        {
+            var maildto = await SendMailOwner(ticket);
+            if (maildto.RespCode != 200)
+            {
+                dto.Message = $"The ticket has been created, but the mail send is failed. {maildto.Message}";
+                return dto;
+            }
+        }
+
         return dto;
     }
 
@@ -341,6 +352,13 @@ public class TicketService : ITicketService
             Console.WriteLine("Invalid signature, InputData={0}", url);
             dto.displayMsg = "Có lỗi xảy ra trong quá trình xử lý";
         }
+
+        return dto;
+    }
+
+    public async Task<TicketSendMailOwnerDTO> SendMailOwner(Ticket ticket)
+    {
+        var dto = new TicketSendMailOwnerDTO();
 
         return dto;
     }

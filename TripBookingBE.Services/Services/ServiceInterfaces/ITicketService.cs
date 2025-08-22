@@ -51,4 +51,6 @@ public interface ITicketService
         string vnp_SecureHash,
         string url
     );
+
+    Task<TicketSendMailOwnerDTO> SendMailOwner(Ticket ticket);
 }
