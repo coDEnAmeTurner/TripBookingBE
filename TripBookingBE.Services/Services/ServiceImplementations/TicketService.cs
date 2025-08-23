@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using TripBookingBE.Commons.Configurations;
+using TripBookingBE.Commons.DTO.EmailDTO;
 using TripBookingBE.Commons.DTO.TicketDTO;
 using TripBookingBE.Commons.TicketDTO;
 using TripBookingBE.Commons.VnPayLibrary;
@@ -20,16 +21,14 @@ public class TicketService : ITicketService
 {
     private readonly ITicketDAL ticketDAL;
     private readonly IBookingsDal bookingDAL;
+    private readonly IEmailService emailService;
     private readonly VnPayConfigs vnPayConfigs;
-    private readonly SendGridConfigs sendGridConfigs;
-
-    private readonly ISendGridClient sendGridClient;
 
     private readonly VnPayLibrary vnpay;
     private readonly Utils utils;
     private readonly ILogger log;
 
-    public TicketService(ITicketDAL ticketDAL, IBookingsDal bookingDAL, IOptions<VnPayConfigs> vnPayConfigs, IOptions<SendGridConfigs> sendGridConfigs, VnPayLibrary vnPayLibrary = null, Utils utils = null, ILogger log = null, ISendGridClient sendGridClient = null)
+    public TicketService(ITicketDAL ticketDAL, IBookingsDal bookingDAL, IOptions<VnPayConfigs> vnPayConfigs, VnPayLibrary vnPayLibrary = null, Utils utils = null, ILogger log = null, ISendGridClient sendGridClient = null, IEmailService emailService = null)
     {
         this.ticketDAL = ticketDAL;
         this.bookingDAL = bookingDAL;
@@ -37,8 +36,7 @@ public class TicketService : ITicketService
         vnpay = vnPayLibrary;
         this.utils = utils;
         this.log = log;
-        this.sendGridConfigs = sendGridConfigs.Value;
-        this.sendGridClient = sendGridClient;
+        this.emailService = emailService;
     }
 
     public async Task<TicketCheckOwnerDTO> CheckTicketOwner(long id, long userId)
@@ -108,44 +106,24 @@ public class TicketService : ITicketService
             dto = await ticketDAL.Update(ticket);
         }
 
-        if (dto.RespCode == System.Net.HttpStatusCode.Created)
+        EmailSendDTO maildto = new();
+        if (dto.RespCode == System.Net.HttpStatusCode.Created && ticket.CustomerBookTripId == 0)
         {
-            string message = File.ReadAllText("../../EmailTemplates/SuccessfulTicketCreation.html");
-
-            message.Replace("[DateCreated]", ticket.DateCreated.Value.ToString("dd/MM/yyyy"));
-            message.Replace("[CustomerName]", ticket.CustomerBookTrip.Customer.Name);
-            message.Replace("[CustomerPhone]", ticket.CustomerBookTrip.Customer.Phone);
-            message.Replace("[Route]", ticket.CustomerBookTrip.Trip.Route.RouteDescription);
-            message.Replace("[PlateNumber]", ticket.CustomerBookTrip.Trip.RegistrationNumber);
-            message.Replace("[SellerCode]", ticket.SellerCode);
-
-            var maildto = await SendMailToOwner(ticket, "[TripBooking] Ticket Creation Completed!", message);
-            if (maildto.RespCode != 200)
-            {
-                dto.Message += $"The ticket has been created, but the mail send fails. {maildto.Message}";
-                return dto;
-            }
+            maildto = await SendMailTicketCreationSuccessful(ticket);
+            var newticketdto = await ticketDAL.GetTicketById(ticket.CustomerBookTripId);
+            var newticket = newticketdto.Ticket;
+            newticket.EmailStatus = 1;
+            await ticketDAL.Update(newticket);
         }
         else
         {
-            var bookingdto = await bookingDAL.GetBookingById(ticket.CustomerBookTripId);
-            var sellers = bookingdto.CustomerBookTrip.Trip.Sellers;
-            var sellerNames = string.Join(";",sellers.Select(x => x.Name).ToList());
-            var sellerPhones = string.Join(";",sellers.Select(x => x.Phone).ToList());
-
-            string message = File.ReadAllText("../../EmailTemplates/UnsuccessfulTicketCreation.html");
-
-            message.Replace("[BookingId]", ticket.CustomerBookTripId.ToString());
-            message.Replace("[SellerName]", sellerNames);
-            message.Replace("[SellerPhone]", sellerPhones);
-
-            var maildto = await SendMailToOwner(ticket, "[TripBooking] Ticket Creation Failed!", message);
-            if (maildto.RespCode != 200)
-            {
-                dto.Message += $"The ticket was not created and mail response fails. {maildto.Message}";
-                return dto;
-            }
+            maildto = await SendMailTicketCreationFail(ticket);
+            var newticketdto = await ticketDAL.GetTicketById(ticket.CustomerBookTripId);
+            var newticket = newticketdto.Ticket;
+            newticket.EmailStatus = 2;
+            await ticketDAL.Update(newticket);
         }
+        dto.Message += maildto.Message;
 
         return dto;
     }
@@ -392,37 +370,90 @@ public class TicketService : ITicketService
         return dto;
     }
 
-    public Task<TicketSendMailOwnerFromAPIDTO> SendMailOwnerFromAPI(long ticketId)
+    public async Task<EmailSendDTO> SendTicketCreationMailToTicketOwner(long ticketId)
     {
-        return null;
-    }
-
-    public async Task<TicketSendMailOwnerDTO> SendMailToOwner(Ticket ticket, string subject, string htmlbody)
-    {
-        var dto = new TicketSendMailOwnerDTO();
+        var dto = new EmailSendDTO();
 
         try
         {
-            var msg = new SendGridMessage()
+            var ticketdto = await ticketDAL.GetTicketById(ticketId);
+            var ticket = ticketdto.Ticket;
+
+            if (ticket.EmailStatus == 1)
             {
-                From = new EmailAddress(sendGridConfigs.FromEmail, sendGridConfigs.FromName),
-                Subject = subject,
-                HtmlContent = htmlbody
-            };
-            msg.AddTo(new EmailAddress(ticket.CustomerBookTrip.Customer.Email));
-            var response = await sendGridClient.SendEmailAsync(msg);
-            if (!response.IsSuccessStatusCode)
-            {
-                dto.RespCode = (int)response.StatusCode;
-                dto.Message = response.Body.ToString();
+                dto = await SendMailTicketCreationSuccessful(ticket);
             }
+            else if (ticket.EmailStatus == 2)
+            {
+                dto = await SendMailTicketCreationFail(ticket);
+            }
+
         }
         catch (Exception ex)
         {
             dto.RespCode = 500;
-            dto.Message = $"{ex.Message}\t{ex.InnerException.Message}";
+            dto.Message += $"{ex.Message};{ex.InnerException.Message}";
         }
 
         return dto;
+    }
+
+    public async Task<EmailSendDTO> SendMailTicketCreationSuccessful(Ticket ticket)
+    {
+        string message = File.ReadAllText("../../EmailTemplates/SuccessfulTicketCreation.html");
+
+        message.Replace("[DateCreated]", ticket.DateCreated.Value.ToString("dd/MM/yyyy"));
+        message.Replace("[CustomerName]", ticket.CustomerBookTrip.Customer.Name);
+        message.Replace("[CustomerPhone]", ticket.CustomerBookTrip.Customer.Phone);
+        message.Replace("[Route]", ticket.CustomerBookTrip.Trip.Route.RouteDescription);
+        message.Replace("[PlateNumber]", ticket.CustomerBookTrip.Trip.RegistrationNumber);
+        message.Replace("[SellerCode]", ticket.SellerCode);
+
+        string plain = $@"
+                - Created Date: {ticket.DateCreated.Value.ToString("dd/MM/yyyy")}
+                - Customer Name: {ticket.CustomerBookTrip.Customer.Name}
+                - Customer Phone: {ticket.CustomerBookTrip.Customer.Phone}
+                - Route: {ticket.CustomerBookTrip.Trip.Route.RouteDescription}
+                - Vehicle Plate Number: {ticket.CustomerBookTrip.Trip.RegistrationNumber}
+                - Seller Code: {ticket.SellerCode}
+        ";
+
+        var maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Creation Completed!", message, plain);
+        if (maildto.RespCode != 200)
+        {
+            maildto.Message += $"The ticket has been created, but the mail send fails. {maildto.Message}";
+            return maildto;
+        }
+
+        return maildto;
+    }
+
+    public async Task<EmailSendDTO> SendMailTicketCreationFail(Ticket ticket)
+    {
+        var bookingdto = await bookingDAL.GetBookingById(ticket.CustomerBookTripId);
+        var sellers = bookingdto.CustomerBookTrip.Trip.Sellers;
+        var sellerNames = string.Join(";", sellers.Select(x => x.Name).ToList());
+        var sellerPhones = string.Join(";", sellers.Select(x => x.Phone).ToList());
+
+        string message = File.ReadAllText("../../EmailTemplates/UnsuccessfulTicketCreation.html");
+
+        message.Replace("[BookingId]", ticket.CustomerBookTripId.ToString());
+        message.Replace("[SellerName]", sellerNames);
+        message.Replace("[SellerPhone]", sellerPhones);
+
+        string plain = $@"
+                - Booking Id: {ticket.CustomerBookTripId.ToString()}
+                - Seller Name: {sellerNames}
+                - Seller Phone: {sellerPhones}
+        ";
+
+        var maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Creation Failed!", message, plain);
+        if (maildto.RespCode != 200)
+        {
+            maildto.Message += $"The ticket creation failed and the mail send fails too. {maildto.Message}";
+            return maildto;
+        }
+
+        return maildto;
     }
 }

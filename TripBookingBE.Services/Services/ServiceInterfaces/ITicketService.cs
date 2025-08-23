@@ -1,3 +1,4 @@
+using TripBookingBE.Commons.DTO.EmailDTO;
 using TripBookingBE.Commons.DTO.TicketDTO;
 using TripBookingBE.Commons.TicketDTO;
 using TripBookingBE.DTO.TicketDTO;
@@ -52,6 +53,8 @@ public interface ITicketService
         string url
     );
 
-    Task<TicketSendMailOwnerDTO> SendMailToOwner(Ticket ticket, string subject, string body);
-    Task<TicketSendMailOwnerFromAPIDTO> SendMailOwnerFromAPI(long ticketId);
+    Task<EmailSendDTO> SendMailTicketCreationSuccessful(Ticket ticket);
+    Task<EmailSendDTO> SendMailTicketCreationFail(Ticket ticket);
+
+    Task<EmailSendDTO> SendTicketCreationMailToTicketOwner(long ticketId);
 }
