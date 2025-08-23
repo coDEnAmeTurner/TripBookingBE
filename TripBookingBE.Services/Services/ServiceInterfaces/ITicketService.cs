@@ -52,5 +52,6 @@ public interface ITicketService
         string url
     );
 
-    Task<TicketSendMailOwnerDTO> SendMailOwner(Ticket ticket);
+    Task<TicketSendMailOwnerDTO> SendMailToOwner(Ticket ticket, string subject, string body);
+    Task<TicketSendMailOwnerFromAPIDTO> SendMailOwnerFromAPI(long ticketId);
 }

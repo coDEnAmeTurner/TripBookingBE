@@ -11,4 +11,9 @@
     <ProjectReference Include="..\TripBookingBE.Commons\TripBookingBE.Commons.csproj" />
     <ProjectReference Include="..\TripBookingBE.DALs\TripBookingBE.DALs.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SendGrid" Version="9.29.3" />
+    <PackageReference Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1" />
+  </ItemGroup>
 </Project>
