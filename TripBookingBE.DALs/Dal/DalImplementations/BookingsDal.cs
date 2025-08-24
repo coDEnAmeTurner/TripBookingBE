@@ -87,6 +87,8 @@ public class BookingsDal : IBookingsDal
             .Include(e => e.Customer)
             .Include(e => e.Trip)
                 .ThenInclude(e => e.Route)
+            .Include(e => e.Trip)
+                .ThenInclude(e => e.Sellers)
             .FirstOrDefaultAsync(x=>x.Id == id);
             if (cbt == null)
             {
@@ -137,6 +139,7 @@ public class BookingsDal : IBookingsDal
             var ids = from cbt in context.CustomerBookTrips
                       where (tripId == null || tripId == cbt.TripId)
                       && (custId == null || custId == cbt.CustomerId)
+                      orderby cbt.Id descending
                       select cbt.Id;
             var result = await ids.ToListAsync();
 

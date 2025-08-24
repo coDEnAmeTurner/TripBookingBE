@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 namespace TripBookingBE.Models;
 
 [Table("CustomerBookTrip")]
-[Index("CustomerId", "TripId", Name = "IX_CustomerBookTrip", IsUnique = true)]
 public partial class CustomerBookTrip
 {
 

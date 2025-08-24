@@ -88,14 +88,14 @@ public class TicketService : ITicketService
                 return dto;
             }
 
-            var already_exist = await ticketDAL.GetTicketById(idDTO.Ids.FirstOrDefault());
-            if (already_exist.Ticket != null)
-            {
-                dto.Ticket = ticket;
-                dto.RespCode = System.Net.HttpStatusCode.Conflict;
-                dto.Message = $"{already_exist.Ticket.CustomerBookTrip?.Customer.Name} already has a Ticket for {already_exist.Ticket.CustomerBookTrip?.Trip.Route?.RouteDescription} - {already_exist.Ticket.CustomerBookTrip?.Trip.DepartureTime.GetValueOrDefault().ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)}";
-                return dto;
-            }
+            // var already_exist = await ticketDAL.GetTicketById(idDTO.Ids.FirstOrDefault());
+            // if (already_exist.Ticket != null)
+            // {
+            //     dto.Ticket = ticket;
+            //     dto.RespCode = System.Net.HttpStatusCode.Conflict;
+            //     dto.Message = $"{already_exist.Ticket.CustomerBookTrip?.Customer.Name} already has a Ticket for {already_exist.Ticket.CustomerBookTrip?.Trip.Route?.RouteDescription} - {already_exist.Ticket.CustomerBookTrip?.Trip.DepartureTime.GetValueOrDefault().ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)}";
+            //     return dto;
+            // }
 
             ticket.CustomerBookTripId = idDTO.Ids.FirstOrDefault();
 
@@ -107,21 +107,21 @@ public class TicketService : ITicketService
         }
 
         EmailSendDTO maildto = new();
-        if (dto.RespCode == System.Net.HttpStatusCode.Created && ticket.CustomerBookTripId == 0)
+        if (dto.RespCode == System.Net.HttpStatusCode.Created)
         {
             maildto = await SendMailTicketCreationSuccessful(ticket);
-            var newticketdto = await ticketDAL.GetTicketById(ticket.CustomerBookTripId);
-            var newticket = newticketdto.Ticket;
-            newticket.EmailStatus = 1;
-            await ticketDAL.Update(newticket);
+            if (maildto.RespCode != 200)
+            {
+                dto.Message += maildto.Message;
+            }
         }
         else
         {
             maildto = await SendMailTicketCreationFail(ticket);
-            var newticketdto = await ticketDAL.GetTicketById(ticket.CustomerBookTripId);
-            var newticket = newticketdto.Ticket;
-            newticket.EmailStatus = 2;
-            await ticketDAL.Update(newticket);
+            if (maildto.RespCode != 200)
+            {
+                dto.Message += maildto.Message;
+            }
         }
         dto.Message += maildto.Message;
 
@@ -193,7 +193,8 @@ public class TicketService : ITicketService
         var dto = new TicketIPNDTO();
 
         string vnp_HashSecret = vnPayConfigs.vnp_HashSecret;
-        long ticketId = Convert.ToInt64(vnp_TxnRef);
+        var parts = vnp_TxnRef.Split('|');
+        long ticketId = Convert.ToInt64(parts[0]);
         long lvnp_Amount = Convert.ToInt64(vnp_Amount) / 100;
         long vnpayTranId = Convert.ToInt64(vnp_TransactionNo);
         bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
@@ -214,12 +215,19 @@ public class TicketService : ITicketService
                 {
                     if (ticket.Paid == 0)
                     {
+                        EmailSendDTO emaildto = new();
                         if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
                         {
                             //Thanh toan thanh cong
                             Console.WriteLine("Thanh toan thanh cong, TicketId={0}, VNPAY TranId={1}", ticketId,
                                 vnpayTranId);
                             ticket.Paid = 1;
+
+                            emaildto = await SendMailTicketPaySuccessful(ticket);
+                            if (emaildto.RespCode != (int)HttpStatusCode.OK)
+                            {
+                                dto.Message += emaildto.Message;
+                            }
                         }
                         else
                         {
@@ -229,16 +237,18 @@ public class TicketService : ITicketService
                                 ticketId,
                                 vnpayTranId, vnp_ResponseCode);
                             ticket.Paid = 2;
+                            emaildto = await SendMailTicketPayFail(ticket);
+                            if (emaildto.RespCode != (int)HttpStatusCode.OK)
+                            {
+                                dto.Message += emaildto.Message;
+                            }
                         }
+
                         var updatedto = await ticketDAL.Update(ticket);
                         if (updatedto.RespCode != HttpStatusCode.OK)
                         {
-                            dto.RespCode = (int)updatedto.RespCode;
-                            dto.Message = updatedto.Message;
+                            dto.Message += updatedto.Message;
                         }
-
-                        //Thêm code Thực hiện cập nhật vào Database 
-                        //Update Database
 
                         dto.RspCode = "00";
                         dto.Message = "Confirm Success";
@@ -310,7 +320,7 @@ public class TicketService : ITicketService
         vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
 
         vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
-        vnpay.AddRequestData("vnp_TxnRef", Guid.NewGuid().ToString()); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
+        vnpay.AddRequestData("vnp_TxnRef", $"{ticket.CustomerBookTripId}|{Guid.NewGuid().ToString()}"); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
 
         string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
         Console.WriteLine($"VNPAY URL: {paymentUrl}");
@@ -330,7 +340,8 @@ public class TicketService : ITicketService
         //vnp_ResponseCode:Response code from VNPAY: 00: Thanh cong, Khac 00: Xem tai lieu
         //vnp_SecureHash: HmacSHA512 cua du lieu tra ve
 
-        long orderId = Convert.ToInt64(vnp_TxnRef);
+        var parts = vnp_TxnRef.Split('|');
+        long ticketId = Convert.ToInt64(parts[0]);
         long vnpayTranId = Convert.ToInt64(vnp_TransactionNo);
         long lvnp_Amount = Convert.ToInt64(vnp_Amount) / 100;
 
@@ -346,17 +357,17 @@ public class TicketService : ITicketService
             {
                 //Thanh toan thanh cong
                 dto.displayMsg = "Giao dịch được thực hiện thành công. Cảm ơn quý khách đã sử dụng dịch vụ";
-                Console.WriteLine("Thanh toan thanh cong, OrderId={0}, VNPAY TranId={1}", orderId, vnpayTranId);
+                Console.WriteLine("Thanh toan thanh cong, OrderId={0}, VNPAY TranId={1}", ticketId, vnpayTranId);
             }
             else
             {
                 //Thanh toan khong thanh cong. Ma loi: vnp_ResponseCode
                 dto.displayMsg = "Có lỗi xảy ra trong quá trình xử lý.Mã lỗi: " + vnp_ResponseCode;
-                Console.WriteLine("Thanh toan loi, OrderId={0}, VNPAY TranId={1},ResponseCode={2}", orderId,
+                Console.WriteLine("Thanh toan loi, OrderId={0}, VNPAY TranId={1},ResponseCode={2}", ticketId,
                 vnpayTranId, vnp_ResponseCode);
             }
             dto.displayTmnCode = "Mã Website (Terminal ID):" + vnp_TmnCode;
-            dto.displayTxnRef = "Mã giao dịch thanh toán:" + orderId.ToString();
+            dto.displayTxnRef = "Mã giao dịch thanh toán:" + ticketId.ToString();
             dto.displayVnpayTranNo = "Mã giao dịch tại VNPAY:" + vnpayTranId.ToString();
             dto.displayAmount = "Số tiền thanh toán (VND):" + lvnp_Amount.ToString();
             dto.displayBankCode = "Ngân hàng thanh toán:" + vnp_BankCode;
@@ -379,11 +390,11 @@ public class TicketService : ITicketService
             var ticketdto = await ticketDAL.GetTicketById(ticketId);
             var ticket = ticketdto.Ticket;
 
-            if (ticket.EmailStatus == 1)
+            if (ticket != null)
             {
                 dto = await SendMailTicketCreationSuccessful(ticket);
             }
-            else if (ticket.EmailStatus == 2)
+            else
             {
                 dto = await SendMailTicketCreationFail(ticket);
             }
@@ -400,14 +411,13 @@ public class TicketService : ITicketService
 
     public async Task<EmailSendDTO> SendMailTicketCreationSuccessful(Ticket ticket)
     {
-        string message = File.ReadAllText("../../EmailTemplates/SuccessfulTicketCreation.html");
-
-        message.Replace("[DateCreated]", ticket.DateCreated.Value.ToString("dd/MM/yyyy"));
-        message.Replace("[CustomerName]", ticket.CustomerBookTrip.Customer.Name);
-        message.Replace("[CustomerPhone]", ticket.CustomerBookTrip.Customer.Phone);
-        message.Replace("[Route]", ticket.CustomerBookTrip.Trip.Route.RouteDescription);
-        message.Replace("[PlateNumber]", ticket.CustomerBookTrip.Trip.RegistrationNumber);
-        message.Replace("[SellerCode]", ticket.SellerCode);
+        string message = File.ReadAllText("EmailTemplates/SuccessfulTicketCreation.html")
+        .Replace("[DateCreated]", ticket.DateCreated.Value.ToString("dd/MM/yyyy"))
+        .Replace("[CustomerName]", ticket.CustomerBookTrip.Customer.Name)
+        .Replace("[CustomerPhone]", ticket.CustomerBookTrip.Customer.Phone)
+        .Replace("[Route]", ticket.CustomerBookTrip.Trip.Route.RouteDescription)
+        .Replace("[PlateNumber]", ticket.CustomerBookTrip.Trip.RegistrationNumber)
+        .Replace("[SellerCode]", ticket.SellerCode);
 
         string plain = $@"
                 - Created Date: {ticket.DateCreated.Value.ToString("dd/MM/yyyy")}
@@ -418,10 +428,11 @@ public class TicketService : ITicketService
                 - Seller Code: {ticket.SellerCode}
         ";
 
-        var maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Creation Completed!", message, plain);
+        var maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Input Completed!", message, plain);
         if (maildto.RespCode != 200)
         {
-            maildto.Message += $"The ticket has been created, but the mail send fails. {maildto.Message}";
+            maildto.Message += $"The ticket has been created/updated, but the mail send fails. {maildto.Message}";
+            Console.WriteLine(maildto.Message);
             return maildto;
         }
 
@@ -435,11 +446,11 @@ public class TicketService : ITicketService
         var sellerNames = string.Join(";", sellers.Select(x => x.Name).ToList());
         var sellerPhones = string.Join(";", sellers.Select(x => x.Phone).ToList());
 
-        string message = File.ReadAllText("../../EmailTemplates/UnsuccessfulTicketCreation.html");
+        string message = File.ReadAllText("EmailTemplates/UnsuccessfulTicketCreation.html");
 
-        message.Replace("[BookingId]", ticket.CustomerBookTripId.ToString());
-        message.Replace("[SellerName]", sellerNames);
-        message.Replace("[SellerPhone]", sellerPhones);
+        message=message.Replace("[BookingId]", ticket.CustomerBookTripId.ToString())
+        .Replace("[SellerName]", sellerNames)
+        .Replace("[SellerPhone]", sellerPhones);
 
         string plain = $@"
                 - Booking Id: {ticket.CustomerBookTripId.ToString()}
@@ -451,9 +462,101 @@ public class TicketService : ITicketService
         if (maildto.RespCode != 200)
         {
             maildto.Message += $"The ticket creation failed and the mail send fails too. {maildto.Message}";
+            Console.WriteLine(maildto.Message);
             return maildto;
         }
 
         return maildto;
+    }
+
+    public async Task<EmailSendDTO> SendMailTicketPaySuccessful(Ticket ticket)
+    {
+        string message = File.ReadAllText("EmailTemplates/SuccessfulTicketPay.html")
+
+        .Replace("[CustomerName]", ticket.CustomerBookTrip.Customer.Name)
+        .Replace("[CustomerPhone]", ticket.CustomerBookTrip.Customer.Phone)
+        .Replace("[Route]", ticket.CustomerBookTrip.Trip.Route.RouteDescription)
+        .Replace("[PlateNumber]", ticket.CustomerBookTrip.Trip.RegistrationNumber)
+        .Replace("[Price]", ticket.Price.ToString())
+        .Replace("[PaymentDate]", DateTime.Now.ToString("dd/MM/yyyy"));
+
+        string plain = $@"
+                - Customer Name: {ticket.CustomerBookTrip.Customer.Name}
+                - Customer Phone: {ticket.CustomerBookTrip.Customer.Phone}
+                - Route: {ticket.CustomerBookTrip.Trip.Route.RouteDescription}
+                - Vehicle Plate Number: {ticket.CustomerBookTrip.Trip.RegistrationNumber}
+                - Price: {ticket.Price}
+                - Payment Date: {DateTime.Now.ToString("dd/MM/yyyy")}
+        ";
+
+        var maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Payment Completed!", message, plain);
+        if (maildto.RespCode != 200)
+        {
+            maildto.Message += $"The ticket has been paid, but the mail send fails. {maildto.Message}";
+            Console.WriteLine(maildto.Message);
+            return maildto;
+        }
+
+        return maildto;
+    }
+
+    public async Task<EmailSendDTO> SendMailTicketPayFail(Ticket ticket)
+    {
+        var bookingdto = await bookingDAL.GetBookingById(ticket.CustomerBookTripId);
+        var sellers = bookingdto.CustomerBookTrip.Trip.Sellers;
+        var sellerNames = string.Join(";", sellers.Select(x => x.Name).ToList());
+        var sellerPhones = string.Join(";", sellers.Select(x => x.Phone).ToList());
+
+        string message = File.ReadAllText("EmailTemplates/UnsuccessfulTicketPay.html")
+        .Replace("[TicketId]", ticket.CustomerBookTripId.ToString())
+        .Replace("[Price]", ticket.Price.ToString());
+
+        string plain = $@"
+                - Ticket Id: {ticket.CustomerBookTripId}
+                - Price: {ticket.Price}
+        ";
+
+        var maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Payment Failed!", message, plain);
+        if (maildto.RespCode != 200)
+        {
+            maildto.Message += $"The ticket payment failed and the mail send fails too. {maildto.Message}";
+            Console.WriteLine(maildto.Message);
+            return maildto;
+        }
+
+        return maildto;
+    }
+
+    public async Task<EmailSendDTO> SendTicketPayMailToTicketOwner(long ticketId)
+    {
+        var dto = new EmailSendDTO();
+
+        try
+        {
+            var ticketdto = await ticketDAL.GetTicketById(ticketId);
+            var ticket = ticketdto.Ticket;
+
+            if (ticket.Paid == 1)
+            {
+                dto = await SendMailTicketPaySuccessful(ticket);
+            }
+            else if (ticket.Paid == 2)
+            {
+                dto = await SendMailTicketCreationFail(ticket);
+            }
+            else
+            {
+                dto.RespCode = (int)HttpStatusCode.BadRequest;
+                dto.Message = "The ticket is not paid yet!";
+            }
+
+        }
+        catch (Exception ex)
+        {
+            dto.RespCode = 500;
+            dto.Message += $"{ex.Message};{ex.InnerException.Message}";
+        }
+
+        return dto;
     }
 }

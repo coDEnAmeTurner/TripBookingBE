@@ -55,6 +55,9 @@ public interface ITicketService
 
     Task<EmailSendDTO> SendMailTicketCreationSuccessful(Ticket ticket);
     Task<EmailSendDTO> SendMailTicketCreationFail(Ticket ticket);
-
     Task<EmailSendDTO> SendTicketCreationMailToTicketOwner(long ticketId);
+
+    Task<EmailSendDTO> SendMailTicketPaySuccessful(Ticket ticket);
+    Task<EmailSendDTO> SendMailTicketPayFail(Ticket ticket);
+    Task<EmailSendDTO> SendTicketPayMailToTicketOwner(long ticketId);
 }

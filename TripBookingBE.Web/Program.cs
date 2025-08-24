@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using TripBookingBE.Commons.Configurations;
 using TripBookingBE.Commons.VnPayLibrary;
 using Microsoft.AspNetCore.HttpOverrides;
+using SendGrid.Extensions.DependencyInjection;
 
 IdentityModelEventSource.ShowPII = true;
 
@@ -32,11 +33,17 @@ var config = new ConfigurationBuilder()
             .Build();
 builder.Services.Configure<ConnectionStrings>(config.GetSection("ConnectionStrings"));
 builder.Services.Configure<VnPayConfigs>(config.GetSection("VnPayConfigs"));
+builder.Services.Configure<SendGridConfigs>(config.GetSection("SendGridConfigs"));
 
 //vnpay
 builder.Services.AddScoped<Utils>();
 builder.Services.AddScoped<VnPayCompare>();
 builder.Services.AddScoped<VnPayLibrary>();
+
+//sendgrid client
+builder.Services.AddSendGrid(options =>
+        options.ApiKey = config.GetValue<string>("SendGridConfigs:ApiKey")
+    );
 
 // add rest api controller
 builder.Services.AddControllersWithViews();
@@ -72,6 +79,7 @@ builder.Services.AddScoped<ITicketDAL, TicketDAL>();
 builder.Services.AddScoped<IGeneralParamService, GeneralParamService>();
 builder.Services.AddScoped<IGeneralParamDal, GeneralParamDal>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 //session
 builder.Services.AddDistributedMemoryCache();

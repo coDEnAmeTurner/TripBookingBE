@@ -202,4 +202,26 @@ public class ApiTicketsController : MyControllerBase
 
         return Ok(dto);
     }
+    [Authorize(Policy = "AllowSellerOnly")]
+    [HttpGet("{id:int}/SendTicketCreationMail")]
+    public async Task<IActionResult> SendTicketMail(int id)
+    {
+        var dto = await ticketService.SendTicketCreationMailToTicketOwner(id);
+        if (dto.RespCode != 200)
+        {
+            return Problem(dto.Message);
+        }
+        return Ok(dto);
+    }
+    [Authorize(Policy = "AllowSellerOnly")]
+    [HttpGet("{id:int}/SendTicketPayMail")]
+    public async Task<IActionResult> SendTicketPayMail(int id)
+    {
+        var dto = await ticketService.SendTicketPayMailToTicketOwner(id);
+        if (dto.RespCode != 200)
+        {
+            return Problem(dto.Message);
+        }
+        return Ok(dto);
+    }
 }

@@ -66,9 +66,6 @@ namespace TripBookingBE.Commons.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.HasIndex(new[] { "CustomerId", "TripId" }, "IX_CustomerBookTrip")
-                        .IsUnique();
-
                     b.ToTable("CustomerBookTrip");
                 });
 
