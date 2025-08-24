@@ -79,8 +79,8 @@ public class TicketService : ITicketService
 
         if (ticket.CustomerBookTripId == 0)
         {
-            var idDTO = await bookingDAL.GetIdByCustIdAndTripId(ticket.CustomerId, ticket.TripId);
-            if (idDTO == null || idDTO.Ids == null || idDTO.Ids.Count == 0)
+            var idDTO = await bookingDAL.GetBookingByCustIdAndTripId(ticket.CustomerId, ticket.TripId);
+            if (idDTO == null || idDTO.Bookings == null || idDTO.Bookings.Count == 0)
             {
                 dto.Ticket = ticket;
                 dto.RespCode = System.Net.HttpStatusCode.NotFound;
@@ -97,7 +97,7 @@ public class TicketService : ITicketService
             //     return dto;
             // }
 
-            ticket.CustomerBookTripId = idDTO.Ids.FirstOrDefault();
+            ticket.CustomerBookTrip = idDTO.Bookings.FirstOrDefault();
 
             dto = await ticketDAL.Create(ticket);
         }
@@ -193,10 +193,11 @@ public class TicketService : ITicketService
         var dto = new TicketIPNDTO();
 
         string vnp_HashSecret = vnPayConfigs.vnp_HashSecret;
-        var parts = vnp_TxnRef.Split('|');
-        long ticketId = Convert.ToInt64(parts[0]);
+        var parts = vnp_OrderInfo.Split(':');
+        long ticketId = Convert.ToInt64(parts[parts.Length - 1]);
         long lvnp_Amount = Convert.ToInt64(vnp_Amount) / 100;
         long vnpayTranId = Convert.ToInt64(vnp_TransactionNo);
+        Console.WriteLine($"[IPN] Before checksignature: vnp_SecureHash: {vnp_SecureHash} vnp_HashSecret: {vnp_HashSecret}");
         bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
         if (checkSignature)
         {
@@ -299,6 +300,13 @@ public class TicketService : ITicketService
 
         var ticket = modeldto.Ticket;
 
+        if (ticket.Paid == 1)
+        {
+            dto.RespCode = (int)HttpStatusCode.BadRequest;
+            dto.Message = "The ticket has already been paid!";
+            return dto;
+        }
+
         //Get Config Info
         string vnp_Returnurl = vnPayConfigs.vnp_Returnurl; //URL nhan ket qua tra ve 
         string vnp_Url = vnPayConfigs.vnp_Url; //URL thanh toan cua VNPAY 
@@ -320,7 +328,7 @@ public class TicketService : ITicketService
         vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
 
         vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
-        vnpay.AddRequestData("vnp_TxnRef", $"{ticket.CustomerBookTripId}|{Guid.NewGuid().ToString()}"); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
+        vnpay.AddRequestData("vnp_TxnRef", $"{Guid.NewGuid().ToString()}"); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
 
         string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
         Console.WriteLine($"VNPAY URL: {paymentUrl}");
@@ -340,11 +348,12 @@ public class TicketService : ITicketService
         //vnp_ResponseCode:Response code from VNPAY: 00: Thanh cong, Khac 00: Xem tai lieu
         //vnp_SecureHash: HmacSHA512 cua du lieu tra ve
 
-        var parts = vnp_TxnRef.Split('|');
-        long ticketId = Convert.ToInt64(parts[0]);
+        var parts = vnp_OrderInfo.Split(':');
+        long ticketId = Convert.ToInt64(parts[parts.Length - 1]);
         long vnpayTranId = Convert.ToInt64(vnp_TransactionNo);
         long lvnp_Amount = Convert.ToInt64(vnp_Amount) / 100;
 
+        Console.WriteLine($"[ReturnUrl] Before checksignature: vnp_SecureHash: {vnp_SecureHash} vnp_HashSecret: {vnp_HashSecret}");
         bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
 
         Console.WriteLine("[TicketService.ReturnUrl] vnp_SecureHash: {0}", vnp_SecureHash);
@@ -403,7 +412,8 @@ public class TicketService : ITicketService
         catch (Exception ex)
         {
             dto.RespCode = 500;
-            dto.Message += $"{ex.Message};{ex.InnerException.Message}";
+            dto.Message += $"{ex.Message};{ex.InnerException?.Message}";
+            Console.WriteLine($"[SendTicketCreationMailToTicketOwner] [Exception] {dto.Message}");
         }
 
         return dto;
@@ -411,29 +421,38 @@ public class TicketService : ITicketService
 
     public async Task<EmailSendDTO> SendMailTicketCreationSuccessful(Ticket ticket)
     {
-        string message = File.ReadAllText("EmailTemplates/SuccessfulTicketCreation.html")
-        .Replace("[DateCreated]", ticket.DateCreated.Value.ToString("dd/MM/yyyy"))
-        .Replace("[CustomerName]", ticket.CustomerBookTrip.Customer.Name)
-        .Replace("[CustomerPhone]", ticket.CustomerBookTrip.Customer.Phone)
-        .Replace("[Route]", ticket.CustomerBookTrip.Trip.Route.RouteDescription)
-        .Replace("[PlateNumber]", ticket.CustomerBookTrip.Trip.RegistrationNumber)
-        .Replace("[SellerCode]", ticket.SellerCode);
+        var maildto = new EmailSendDTO();
+        try
+        {
+            string message = File.ReadAllText($"{AppDomain.CurrentDomain.BaseDirectory}/EmailTemplates/SuccessfulTicketCreation.html");
+            Console.WriteLine($"[SendMailTicketCreationSuccessful] After file read: {message}");
+            message = message.Replace("[DateCreated]", DateTime.Now.ToString("dd/MM/yyyy"));
+            message = message.Replace("[CustomerName]", ticket.CustomerBookTrip?.Customer?.Name);
+            message = message.Replace("[CustomerPhone]", ticket.CustomerBookTrip?.Customer?.Phone);
+            message = message.Replace("[Route]", ticket.CustomerBookTrip?.Trip?.Route?.RouteDescription);
+            message = message.Replace("[PlateNumber]", ticket.CustomerBookTrip?.Trip?.RegistrationNumber);
+            message = message.Replace("[SellerCode]", ticket.SellerCode);
 
-        string plain = $@"
-                - Created Date: {ticket.DateCreated.Value.ToString("dd/MM/yyyy")}
-                - Customer Name: {ticket.CustomerBookTrip.Customer.Name}
-                - Customer Phone: {ticket.CustomerBookTrip.Customer.Phone}
-                - Route: {ticket.CustomerBookTrip.Trip.Route.RouteDescription}
-                - Vehicle Plate Number: {ticket.CustomerBookTrip.Trip.RegistrationNumber}
+            string plain = $@"
+                - Created Date: {DateTime.Now.ToString("dd/MM/yyyy")}
+                - Customer Name: {ticket.CustomerBookTrip?.Customer?.Name}
+                - Customer Phone: {ticket.CustomerBookTrip?.Customer?.Phone}
+                - Route: {ticket.CustomerBookTrip?.Trip?.Route?.RouteDescription}
+                - Vehicle Plate Number: {ticket.CustomerBookTrip?.Trip?.RegistrationNumber}
                 - Seller Code: {ticket.SellerCode}
         ";
 
-        var maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Input Completed!", message, plain);
-        if (maildto.RespCode != 200)
+            maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Input Completed!", message, plain);
+            if (maildto.RespCode != 200)
+            {
+                maildto.Message += $"The ticket has been created/updated, but the mail send fails. {maildto.Message}";
+                Console.WriteLine(maildto.Message);
+            }
+        }catch (Exception ex)
         {
-            maildto.Message += $"The ticket has been created/updated, but the mail send fails. {maildto.Message}";
-            Console.WriteLine(maildto.Message);
-            return maildto;
+            maildto.RespCode = 500;
+            maildto.Message += $"{ex.Message};{ex.InnerException?.Message}";
+            Console.WriteLine($"[SendMailTicketCreationSuccessful] [Exception] {maildto.Message}");
         }
 
         return maildto;
@@ -441,29 +460,38 @@ public class TicketService : ITicketService
 
     public async Task<EmailSendDTO> SendMailTicketCreationFail(Ticket ticket)
     {
-        var bookingdto = await bookingDAL.GetBookingById(ticket.CustomerBookTripId);
-        var sellers = bookingdto.CustomerBookTrip.Trip.Sellers;
-        var sellerNames = string.Join(";", sellers.Select(x => x.Name).ToList());
-        var sellerPhones = string.Join(";", sellers.Select(x => x.Phone).ToList());
+        var maildto = new EmailSendDTO();
+        try
+        {
+            var bookingdto = await bookingDAL.GetBookingById(ticket.CustomerBookTripId);
+            var sellers = bookingdto.CustomerBookTrip.Trip?.Sellers;
+            var sellerNames = string.Join(";", sellers.Select(x => x.Name).ToList());
+            var sellerPhones = string.Join(";", sellers.Select(x => x.Phone).ToList());
 
-        string message = File.ReadAllText("EmailTemplates/UnsuccessfulTicketCreation.html");
+            string message = File.ReadAllText($"{AppDomain.CurrentDomain.BaseDirectory}/EmailTemplates/UnsuccessfulTicketCreation.html");
+            Console.WriteLine($"[SendMailTicketCreationSuccessful] After file read: {message}");
 
-        message=message.Replace("[BookingId]", ticket.CustomerBookTripId.ToString())
-        .Replace("[SellerName]", sellerNames)
-        .Replace("[SellerPhone]", sellerPhones);
+            message = message.Replace("[BookingId]", ticket.CustomerBookTripId.ToString());
+            message = message.Replace("[SellerName]", sellerNames);
+            message = message.Replace("[SellerPhone]", sellerPhones);
 
-        string plain = $@"
+            string plain = $@"
                 - Booking Id: {ticket.CustomerBookTripId.ToString()}
                 - Seller Name: {sellerNames}
                 - Seller Phone: {sellerPhones}
         ";
 
-        var maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Creation Failed!", message, plain);
-        if (maildto.RespCode != 200)
+            maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Creation Failed!", message, plain);
+            if (maildto.RespCode != 200)
+            {
+                maildto.Message += $"The ticket creation failed and the mail send fails too. {maildto.Message}";
+                Console.WriteLine(maildto.Message);
+            }
+        }catch (Exception ex)
         {
-            maildto.Message += $"The ticket creation failed and the mail send fails too. {maildto.Message}";
-            Console.WriteLine(maildto.Message);
-            return maildto;
+            maildto.RespCode = 500;
+            maildto.Message += $"{ex.Message};{ex.InnerException?.Message}";
+            Console.WriteLine($"[SendMailTicketCreationFail] [Exception] {maildto.Message}");
         }
 
         return maildto;
@@ -471,30 +499,38 @@ public class TicketService : ITicketService
 
     public async Task<EmailSendDTO> SendMailTicketPaySuccessful(Ticket ticket)
     {
-        string message = File.ReadAllText("EmailTemplates/SuccessfulTicketPay.html")
-
-        .Replace("[CustomerName]", ticket.CustomerBookTrip.Customer.Name)
-        .Replace("[CustomerPhone]", ticket.CustomerBookTrip.Customer.Phone)
-        .Replace("[Route]", ticket.CustomerBookTrip.Trip.Route.RouteDescription)
-        .Replace("[PlateNumber]", ticket.CustomerBookTrip.Trip.RegistrationNumber)
-        .Replace("[Price]", ticket.Price.ToString())
-        .Replace("[PaymentDate]", DateTime.Now.ToString("dd/MM/yyyy"));
-
-        string plain = $@"
-                - Customer Name: {ticket.CustomerBookTrip.Customer.Name}
-                - Customer Phone: {ticket.CustomerBookTrip.Customer.Phone}
-                - Route: {ticket.CustomerBookTrip.Trip.Route.RouteDescription}
-                - Vehicle Plate Number: {ticket.CustomerBookTrip.Trip.RegistrationNumber}
-                - Price: {ticket.Price}
-                - Payment Date: {DateTime.Now.ToString("dd/MM/yyyy")}
-        ";
-
-        var maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Payment Completed!", message, plain);
-        if (maildto.RespCode != 200)
+        var maildto = new EmailSendDTO();
+        try
         {
-            maildto.Message += $"The ticket has been paid, but the mail send fails. {maildto.Message}";
-            Console.WriteLine(maildto.Message);
-            return maildto;
+            string message = File.ReadAllText($"{AppDomain.CurrentDomain.BaseDirectory}/EmailTemplates/SuccessfulTicketPay.html");
+            Console.WriteLine($"[SendMailTicketCreationSuccessful] After file read: {message}");
+            message = message.Replace("[CustomerName]", ticket.CustomerBookTrip?.Customer?.Name);
+            message = message.Replace("[CustomerPhone]", ticket.CustomerBookTrip?.Customer?.Phone);
+            message = message.Replace("[Route]", ticket.CustomerBookTrip?.Trip?.Route?.RouteDescription);
+            message = message.Replace("[PlateNumber]", ticket.CustomerBookTrip?.Trip?.RegistrationNumber);
+            message = message.Replace("[Price]", ticket.Price.ToString());
+            message = message.Replace("[PaymentDate]", DateTime.Now.ToString("dd/MM/yyyy"));
+
+            string plain = $@"
+                - Customer Name: {ticket.CustomerBookTrip?.Customer?.Name}
+                - Customer Phone: {ticket.CustomerBookTrip?.Customer?.Phone}
+                - Route: {ticket.CustomerBookTrip?.Trip?.Route?.RouteDescription}
+                - Vehicle Plate Number: {ticket.CustomerBookTrip?.Trip?.RegistrationNumber}
+                - Price: {ticket.Price}
+                - Payment Date: {DateTime.Now.ToString("dd/MM/yyyy")}";
+
+            maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Payment Completed!", message, plain);
+            if (maildto.RespCode != 200)
+            {
+                maildto.Message += $"The ticket has been paid, but the mail send fails. {maildto.Message}";
+                Console.WriteLine(maildto.Message);
+            }
+        }
+        catch (Exception ex)
+        {
+            maildto.RespCode = 500;
+            maildto.Message += $"{ex.Message};{ex.InnerException?.Message}";
+            Console.WriteLine($"[SendMailTicketPaySuccessful] [Exception] {maildto.Message}");
         }
 
         return maildto;
@@ -502,26 +538,35 @@ public class TicketService : ITicketService
 
     public async Task<EmailSendDTO> SendMailTicketPayFail(Ticket ticket)
     {
-        var bookingdto = await bookingDAL.GetBookingById(ticket.CustomerBookTripId);
-        var sellers = bookingdto.CustomerBookTrip.Trip.Sellers;
-        var sellerNames = string.Join(";", sellers.Select(x => x.Name).ToList());
-        var sellerPhones = string.Join(";", sellers.Select(x => x.Phone).ToList());
+        var maildto = new EmailSendDTO();
+        try
+        {
+            var bookingdto = await bookingDAL.GetBookingById(ticket.CustomerBookTripId);
+            var sellers = bookingdto.CustomerBookTrip.Trip?.Sellers;
+            var sellerNames = string.Join(";", sellers.Select(x => x.Name).ToList());
+            var sellerPhones = string.Join(";", sellers.Select(x => x.Phone).ToList());
 
-        string message = File.ReadAllText("EmailTemplates/UnsuccessfulTicketPay.html")
-        .Replace("[TicketId]", ticket.CustomerBookTripId.ToString())
-        .Replace("[Price]", ticket.Price.ToString());
+            string message = File.ReadAllText($"{AppDomain.CurrentDomain.BaseDirectory}/EmailTemplates/UnsuccessfulTicketPay.html");
+            Console.WriteLine($"[SendMailTicketCreationSuccessful] After file read: {message}");
+            message = message.Replace("[TicketId]", ticket.CustomerBookTripId.ToString());
+            message = message.Replace("[Price]", ticket.Price.ToString());
 
-        string plain = $@"
+            string plain = $@"
                 - Ticket Id: {ticket.CustomerBookTripId}
                 - Price: {ticket.Price}
         ";
 
-        var maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Payment Failed!", message, plain);
-        if (maildto.RespCode != 200)
+            maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Payment Failed!", message, plain);
+            if (maildto.RespCode != 200)
+            {
+                maildto.Message += $"The ticket payment failed and the mail send fails too. {maildto.Message}";
+                Console.WriteLine(maildto.Message);
+            }
+        }catch (Exception ex)
         {
-            maildto.Message += $"The ticket payment failed and the mail send fails too. {maildto.Message}";
-            Console.WriteLine(maildto.Message);
-            return maildto;
+            maildto.RespCode = 500;
+            maildto.Message += $"{ex.Message};{ex.InnerException?.Message}";
+            Console.WriteLine($"[SendMailTicketPayFail] [Exception] {maildto.Message}");
         }
 
         return maildto;
@@ -554,7 +599,8 @@ public class TicketService : ITicketService
         catch (Exception ex)
         {
             dto.RespCode = 500;
-            dto.Message += $"{ex.Message};{ex.InnerException.Message}";
+            dto.Message += $"{ex.Message};{ex.InnerException?.Message}";
+            Console.WriteLine($"[SendTicketPayMailToTicketOwner] [Exception] {dto.Message}");
         }
 
         return dto;
