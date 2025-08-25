@@ -189,8 +189,8 @@ public class BookingsDal : IBookingsDal
         BookingCreateOrUpdateDTO dto = new();
         try
         {
-            var currentState = context.Entry(booking).State;
-            context.Entry(booking).State = EntityState.Modified;
+            // var currentState = context.Entry(booking).State;
+            // context.Entry(booking).State = EntityState.Modified;
             context.Update(booking);
             await context.SaveChangesAsync();
 

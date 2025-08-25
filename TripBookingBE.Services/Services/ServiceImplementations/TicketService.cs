@@ -188,9 +188,24 @@ public class TicketService : ITicketService
         return dto;
     }
 
-    public async Task<TicketIPNDTO> IPN(string vnp_TmnCode, string vnp_Amount, string vnp_BankCode, string vnp_BankTranNo, string vnp_CardType, string vnp_PayDate, string vnp_OrderInfo, string vnp_TransactionNo, string vnp_ResponseCode, string vnp_TransactionStatus, string vnp_TxnRef, string vnp_SecureHash, string url)
+    public async Task<TicketIPNDTO> IPN(string vnp_TmnCode, string vnp_Amount, string vnp_BankCode, string vnp_BankTranNo,
+    string vnp_CardType, string vnp_PayDate, string vnp_OrderInfo, string vnp_TransactionNo, string vnp_ResponseCode,
+     string vnp_TransactionStatus, string vnp_TxnRef, string vnp_SecureHash, string url)
     {
         var dto = new TicketIPNDTO();
+
+        vnpay.AddResponseData("vnp_TmnCode", vnp_TmnCode);
+        vnpay.AddResponseData("vnp_Amount", vnp_Amount);
+        vnpay.AddResponseData("vnp_BankCode", vnp_BankCode);
+        vnpay.AddResponseData("vnp_BankTranNo", vnp_BankTranNo);
+        vnpay.AddResponseData("vnp_CardType", vnp_CardType);
+        vnpay.AddResponseData("vnp_PayDate", vnp_PayDate);
+        vnpay.AddResponseData("vnp_OrderInfo", vnp_OrderInfo);
+        vnpay.AddResponseData("vnp_TransactionNo", vnp_TransactionNo);
+        vnpay.AddResponseData("vnp_ResponseCode", vnp_ResponseCode);
+        vnpay.AddResponseData("vnp_TransactionStatus", vnp_TransactionStatus);
+        vnpay.AddResponseData("vnp_TxnRef", vnp_TxnRef);
+        vnpay.AddResponseData("vnp_SecureHash", vnp_SecureHash);
 
         string vnp_HashSecret = vnPayConfigs.vnp_HashSecret;
         var parts = vnp_OrderInfo.Split(':');
@@ -212,7 +227,7 @@ public class TicketService : ITicketService
             var ticket = modeldto.Ticket;
             if (ticket != null)
             {
-                if (ticket.Price == Convert.ToDecimal(vnp_Amount))
+                if (ticket.Price == Convert.ToDecimal(lvnp_Amount))
                 {
                     if (ticket.Paid == 0)
                     {
@@ -246,9 +261,11 @@ public class TicketService : ITicketService
                         }
 
                         var updatedto = await ticketDAL.Update(ticket);
-                        if (updatedto.RespCode != HttpStatusCode.OK)
+                        if (updatedto.RespCode != HttpStatusCode.Created)
                         {
                             dto.Message += updatedto.Message;
+                            Console.WriteLine($"[IPN] Update Ticket Paid: {dto.Message}");
+
                         }
 
                         dto.RspCode = "00";
@@ -347,6 +364,19 @@ public class TicketService : ITicketService
         //vnp_TransactionNo: Ma GD tai he thong VNPAY
         //vnp_ResponseCode:Response code from VNPAY: 00: Thanh cong, Khac 00: Xem tai lieu
         //vnp_SecureHash: HmacSHA512 cua du lieu tra ve
+
+        vnpay.AddResponseData("vnp_TmnCode", vnp_TmnCode);
+        vnpay.AddResponseData("vnp_Amount", vnp_Amount);
+        vnpay.AddResponseData("vnp_BankCode", vnp_BankCode);
+        vnpay.AddResponseData("vnp_BankTranNo", vnp_BankTranNo);
+        vnpay.AddResponseData("vnp_CardType", vnp_CardType);
+        vnpay.AddResponseData("vnp_PayDate", vnp_PayDate);
+        vnpay.AddResponseData("vnp_OrderInfo", vnp_OrderInfo);
+        vnpay.AddResponseData("vnp_TransactionNo", vnp_TransactionNo);
+        vnpay.AddResponseData("vnp_ResponseCode", vnp_ResponseCode);
+        vnpay.AddResponseData("vnp_TransactionStatus", vnp_TransactionStatus);
+        vnpay.AddResponseData("vnp_TxnRef", vnp_TxnRef);
+        vnpay.AddResponseData("vnp_SecureHash", vnp_SecureHash);
 
         var parts = vnp_OrderInfo.Split(':');
         long ticketId = Convert.ToInt64(parts[parts.Length - 1]);

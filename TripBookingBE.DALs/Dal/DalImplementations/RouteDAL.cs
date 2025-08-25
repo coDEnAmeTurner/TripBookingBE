@@ -115,8 +115,8 @@ public class RouteDAL : IRouteDAL
         RouteCreateOrUpdateDTO dto = new();
         try
         {
-            var currentState = context.Entry(route).State;
-            context.Entry(route).State = EntityState.Modified;
+            // var currentState = context.Entry(route).State;
+            // context.Entry(route).State = EntityState.Modified;
             // context.Entry(user).Property("RowVersion").OriginalValue = user.RowVersion;
             context.Update(route);
             await context.SaveChangesAsync();

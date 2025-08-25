@@ -82,6 +82,7 @@ public class VnPayLibrary
     {
         string rspRaw = GetResponseData();
         string myChecksum = utils.HmacSHA512(secretKey, rspRaw);
+        Console.WriteLine("[TicketService.ReturnUrl] vnp_SecureHash local: {0}", myChecksum);
         return myChecksum.Equals(inputHash, StringComparison.InvariantCultureIgnoreCase);
     }
     private string GetResponseData()
