@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Net;
 using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripBookingBE.Pagination;
@@ -154,6 +155,7 @@ public class ApiTicketsController : MyControllerBase
     [HttpGet("IPN")]
     public async Task<IActionResult> IPN([FromQuery] TicketIPNRequest request)
     {
+        Console.WriteLine($"[TicketsController.IPN] Enter api: {JsonSerializer.Serialize(request)}");
         var httpreq = HttpContext.Request;
         var dto = await ticketService.IPN(
             request.vnp_TmnCode,
@@ -170,12 +172,6 @@ public class ApiTicketsController : MyControllerBase
             request.vnp_SecureHash,
             $"{httpreq.Host}{httpreq.Path}{httpreq.QueryString}"
         );
-
-        if (dto.RespCode != 200)
-        {
-            return Problem(dto.Message);
-        }
-
         return Ok(dto);
     }
 
@@ -200,6 +196,28 @@ public class ApiTicketsController : MyControllerBase
             $"{httpreq.Host}{httpreq.Path}{httpreq.QueryString}"
         );
 
+        return Ok(dto);
+    }
+    [Authorize(Policy = "AllowSellerOnly")]
+    [HttpGet("{id:int}/SendTicketCreationMail")]
+    public async Task<IActionResult> SendTicketMail(int id)
+    {
+        var dto = await ticketService.SendTicketCreationMailToTicketOwner(id);
+        if (dto.RespCode != 200)
+        {
+            return Problem(dto.Message);
+        }
+        return Ok(dto);
+    }
+    [Authorize(Policy = "AllowSellerOnly")]
+    [HttpGet("{id:int}/SendTicketPayMail")]
+    public async Task<IActionResult> SendTicketPayMail(int id)
+    {
+        var dto = await ticketService.SendTicketPayMailToTicketOwner(id);
+        if (dto.RespCode != 200)
+        {
+            return Problem(dto.Message);
+        }
         return Ok(dto);
     }
 }

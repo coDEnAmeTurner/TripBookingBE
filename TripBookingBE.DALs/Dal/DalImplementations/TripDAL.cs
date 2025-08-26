@@ -143,8 +143,8 @@ public class TripDAL : ITripDAL
         TripCreateOrUpdateDTO dto = new();
         try
         {
-            var currentState = context.Entry(trip).State;
-            context.Entry(trip).State = EntityState.Modified;
+            // var currentState = context.Entry(trip).State;
+            // context.Entry(trip).State = EntityState.Modified;
             // context.Entry(user).Property("RowVersion").OriginalValue = user.RowVersion;
             context.Update(trip);
             await context.SaveChangesAsync();

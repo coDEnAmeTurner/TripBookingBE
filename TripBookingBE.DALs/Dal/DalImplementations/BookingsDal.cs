@@ -2,6 +2,7 @@ using System.Data.Common;
 using System.Globalization;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
+using TripBookingBE.Commons.DTO.TicketDTO;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.Data;
 using TripBookingBE.DTO.BookingDTO;
@@ -78,6 +79,34 @@ public class BookingsDal : IBookingsDal
         return dto;
     }
 
+    public async Task<BookingGetBookingByCustomerIdAndTripIdDTO> GetBookingByCustIdAndTripId(long? custId, long? tripId)
+    {
+        BookingGetBookingByCustomerIdAndTripIdDTO dto = new();
+        try
+        {
+            var ids = from cbt in context.CustomerBookTrips
+                      where (tripId == null || tripId == cbt.TripId)
+                      && (custId == null || custId == cbt.CustomerId)
+                      orderby cbt descending
+                      select cbt;
+            var result = await ids
+            .Include(cbt => cbt.Customer)
+            .Include(cbt => cbt.Trip)
+                .ThenInclude(t => t.Route)
+            .ToListAsync();
+
+            dto.Bookings = result;
+
+        }
+        catch (Exception ex)
+        {
+            dto.RespCode = (int)System.Net.HttpStatusCode.InternalServerError;
+            dto.Message = $"{ex.Message}\n{ex.InnerException?.Message}";
+        }
+
+        return dto;
+    }
+
     public async Task<BookingGetByIdDTO> GetBookingById(long id)
     {
         BookingGetByIdDTO dto = new();
@@ -87,6 +116,8 @@ public class BookingsDal : IBookingsDal
             .Include(e => e.Customer)
             .Include(e => e.Trip)
                 .ThenInclude(e => e.Route)
+            .Include(e => e.Trip)
+                .ThenInclude(e => e.Sellers)
             .FirstOrDefaultAsync(x=>x.Id == id);
             if (cbt == null)
             {
@@ -137,6 +168,7 @@ public class BookingsDal : IBookingsDal
             var ids = from cbt in context.CustomerBookTrips
                       where (tripId == null || tripId == cbt.TripId)
                       && (custId == null || custId == cbt.CustomerId)
+                      orderby cbt.Id descending
                       select cbt.Id;
             var result = await ids.ToListAsync();
 
@@ -157,8 +189,8 @@ public class BookingsDal : IBookingsDal
         BookingCreateOrUpdateDTO dto = new();
         try
         {
-            var currentState = context.Entry(booking).State;
-            context.Entry(booking).State = EntityState.Modified;
+            // var currentState = context.Entry(booking).State;
+            // context.Entry(booking).State = EntityState.Modified;
             context.Update(booking);
             await context.SaveChangesAsync();
 

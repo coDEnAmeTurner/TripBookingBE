@@ -171,8 +171,8 @@ public class ReviewsDal : IReviewsDal
         ReviewCreateOrUpdateDTO dto = new();
         try
         {
-            var currentState = context.Entry(review).State;
-            context.Entry(review).State = EntityState.Modified;
+            // var currentState = context.Entry(review).State;
+            // context.Entry(review).State = EntityState.Modified;
             context.Update(review);
             await context.SaveChangesAsync();
 

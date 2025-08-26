@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using TripBookingBE.Dal.DalInterfaces;
 using TripBookingBE.Data;
@@ -121,9 +122,10 @@ public class TicketDAL : ITicketDAL
         TicketCreateOrUpdateDTO dto = new();
         try
         {
-            var currentState = context.Entry(ticket).State;
-            context.Entry(ticket).State = EntityState.Modified;
+            // var currentState = context.Entry(ticket).State;
+            // context.Entry(ticket).State = EntityState.Modified;
             // context.Entry(user).Property("RowVersion").OriginalValue = user.RowVersion;
+            Console.WriteLine($"[TicketDAL.Update] Ticket: {JsonSerializer.Serialize(ticket)}");
             context.Update(ticket);
             await context.SaveChangesAsync();
 
@@ -178,6 +180,7 @@ public class TicketDAL : ITicketDAL
         // }
         catch (Exception ex)
         {
+            Console.WriteLine($"[TicketDAL.Update] [Exception] Update Ticket: {ex.Message}");
             dto.Message = ex.Message;
             dto.RespCode = System.Net.HttpStatusCode.InternalServerError;
         }

@@ -11,4 +11,13 @@
     <ProjectReference Include="..\TripBookingBE.Commons\TripBookingBE.Commons.csproj" />
     <ProjectReference Include="..\TripBookingBE.DALs\TripBookingBE.DALs.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="EmailTemplates\**\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <PackageReference Include="RabbitMQ.client" Version="7.0.0" />
+    <PackageReference Include="SendGrid" Version="9.29.3" />
+    <PackageReference Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1" />
+  </ItemGroup>
 </Project>

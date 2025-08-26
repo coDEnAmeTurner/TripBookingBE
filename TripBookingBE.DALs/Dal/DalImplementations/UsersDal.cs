@@ -139,8 +139,8 @@ public class UsersDal : IUsersDal
         UserCreateOrUpdateDTO dto = new();
         try
         {
-            var currentState = context.Entry(user).State;
-            context.Entry(user).State = EntityState.Modified;
+            // var currentState = context.Entry(user).State;
+            // context.Entry(user).State = EntityState.Modified;
             context.Update(user);
             await context.SaveChangesAsync();
 

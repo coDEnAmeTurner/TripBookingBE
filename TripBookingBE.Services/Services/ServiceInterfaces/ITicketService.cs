@@ -1,3 +1,4 @@
+using TripBookingBE.Commons.DTO.EmailDTO;
 using TripBookingBE.Commons.DTO.TicketDTO;
 using TripBookingBE.Commons.TicketDTO;
 using TripBookingBE.DTO.TicketDTO;
@@ -51,4 +52,12 @@ public interface ITicketService
         string vnp_SecureHash,
         string url
     );
+
+    Task<EmailSendDTO> SendMailTicketCreationSuccessful(Ticket ticket);
+    Task<EmailSendDTO> SendMailTicketCreationFail(Ticket ticket);
+    Task<EmailSendDTO> SendTicketCreationMailToTicketOwner(long ticketId);
+
+    Task<EmailSendDTO> SendMailTicketPaySuccessful(Ticket ticket);
+    Task<EmailSendDTO> SendMailTicketPayFail(Ticket ticket);
+    Task<EmailSendDTO> SendTicketPayMailToTicketOwner(long ticketId);
 }
