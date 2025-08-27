@@ -80,6 +80,7 @@ builder.Services.AddScoped<IGeneralParamService, GeneralParamService>();
 builder.Services.AddScoped<IGeneralParamDal, GeneralParamDal>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ITestService, TestService>();
 
 //session
 builder.Services.AddDistributedMemoryCache();
