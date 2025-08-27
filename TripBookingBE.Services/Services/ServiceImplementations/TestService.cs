@@ -42,8 +42,9 @@ public class TestService : ITestService
             using var connection = await factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();
 
-            await channel.QueueDeclareAsync(queue: "task_queue", durable: true, exclusive: false,
-    autoDelete: false, arguments: null);
+    //         await channel.QueueDeclareAsync(queue: "task_queue", durable: true, exclusive: false,
+    // autoDelete: false, arguments: null);
+            await channel.ExchangeDeclareAsync(exchange: "logs", type: ExchangeType.Fanout);
 
             string message = GetMessage(args);
             var body = Encoding.UTF8.GetBytes(message);
@@ -51,7 +52,7 @@ public class TestService : ITestService
             {
                 Persistent = true
             };
-            await channel.BasicPublishAsync(exchange: string.Empty, routingKey: "task_queue", mandatory:true, basicProperties:properties, body: body);
+            await channel.BasicPublishAsync(exchange: "logs", routingKey: "", mandatory: true, basicProperties: properties, body: body);
         }
         catch (Exception ex)
         {
