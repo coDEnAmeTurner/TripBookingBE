@@ -34,7 +34,7 @@ public class TestsController : MyControllerBase
     [HttpPost("sendNewTask")]
     public async Task<ActionResult> SendNewTask(TestSendNewTaskRequest request)
     {
-        var dto =  await testService.SendNewTask(request.Args);
+        var dto =  await testService.SendNewTask(request.Args,request.Severity);
 
         if (dto.RespCode != 200)
         {

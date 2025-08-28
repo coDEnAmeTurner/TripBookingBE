@@ -33,7 +33,7 @@ public class TestService : ITestService
         return dto;
     }
 
-    public async Task<TestSendNewTaskDTO> SendNewTask(string args)
+    public async Task<TestSendNewTaskDTO> SendNewTask(string args, string severity)
     {
         var dto = new TestSendNewTaskDTO();
         try
@@ -44,7 +44,7 @@ public class TestService : ITestService
 
     //         await channel.QueueDeclareAsync(queue: "task_queue", durable: true, exclusive: false,
     // autoDelete: false, arguments: null);
-            await channel.ExchangeDeclareAsync(exchange: "logs", type: ExchangeType.Fanout);
+            await channel.ExchangeDeclareAsync(exchange: "logs", type: ExchangeType.Direct);
 
             string message = GetMessage(args);
             var body = Encoding.UTF8.GetBytes(message);
@@ -52,7 +52,7 @@ public class TestService : ITestService
             {
                 Persistent = true
             };
-            await channel.BasicPublishAsync(exchange: "logs", routingKey: "", mandatory: true, basicProperties: properties, body: body);
+            await channel.BasicPublishAsync(exchange: "logs", routingKey: severity, mandatory: true, basicProperties: properties, body: body);
         }
         catch (Exception ex)
         {
