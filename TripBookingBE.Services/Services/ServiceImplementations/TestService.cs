@@ -44,7 +44,7 @@ public class TestService : ITestService
 
     //         await channel.QueueDeclareAsync(queue: "task_queue", durable: true, exclusive: false,
     // autoDelete: false, arguments: null);
-            await channel.ExchangeDeclareAsync(exchange: "logs", type: ExchangeType.Direct);
+            await channel.ExchangeDeclareAsync(exchange: "logs", type: ExchangeType.Topic);
 
             string message = GetMessage(args);
             var body = Encoding.UTF8.GetBytes(message);
