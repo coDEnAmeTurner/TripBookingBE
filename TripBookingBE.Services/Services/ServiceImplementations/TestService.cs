@@ -38,21 +38,10 @@ public class TestService : ITestService
         var dto = new TestSendNewTaskDTO();
         try
         {
-            var factory = new ConnectionFactory { HostName = "localhost", Port = 6078 };
-            using var connection = await factory.CreateConnectionAsync();
-            using var channel = await connection.CreateChannelAsync();
-
-    //         await channel.QueueDeclareAsync(queue: "task_queue", durable: true, exclusive: false,
-    // autoDelete: false, arguments: null);
-            await channel.ExchangeDeclareAsync(exchange: "logs", type: ExchangeType.Topic);
-
-            string message = GetMessage(args);
-            var body = Encoding.UTF8.GetBytes(message);
-            var properties = new BasicProperties
-            {
-                Persistent = true
-            };
-            await channel.BasicPublishAsync(exchange: "logs", routingKey: severity, mandatory: true, basicProperties: properties, body: body);
+            Console.WriteLine("RPC Client");
+            string n = args.Length > 0 ? args : "30";
+            var resp = await InvokeAsync(n);
+            dto.Message = resp;
         }
         catch (Exception ex)
         {
@@ -66,5 +55,15 @@ public class TestService : ITestService
     private string GetMessage(string args)
     {
         return (args.Length > 0) ? args : "Hello World!";
+    }
+
+    private static async Task<string> InvokeAsync(string n)
+    {
+        var rpcClient = new RpcClient();
+        await rpcClient.StartAsync();
+
+        Console.WriteLine(" [x] Requesting fib({0})", n);
+        var response = await rpcClient.CallAsync(n);
+        return response;
     }
 }
