@@ -233,13 +233,4 @@ public class TestService : ITestService
         return (args.Length > 0) ? args : "Hello World!";
     }
 
-    private static async Task<string> InvokeAsync(string n)
-    {
-        var rpcClient = new RpcClient();
-        await rpcClient.StartAsync();
-
-        Console.WriteLine(" [x] Requesting fib({0})", n);
-        var response = await rpcClient.CallAsync(n);
-        return response;
-    }
 }

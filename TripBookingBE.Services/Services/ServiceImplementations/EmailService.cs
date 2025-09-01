@@ -13,9 +13,9 @@ public class EmailService : IEmailService
     private readonly SendGridConfigs sendGridConfigs;
     private readonly ISendGridClient sendGridClient;
 
-    private readonly RpcClient rpcClient;
+    private readonly IRpcClient rpcClient;
 
-    public EmailService(IOptions<SendGridConfigs> sendGridConfigs, ISendGridClient sendGridClient, RpcClient rpcClient)
+    public EmailService(IOptions<SendGridConfigs> sendGridConfigs, ISendGridClient sendGridClient, IRpcClient rpcClient)
     {
         this.sendGridConfigs = sendGridConfigs.Value;
         this.sendGridClient = sendGridClient;
@@ -24,29 +24,6 @@ public class EmailService : IEmailService
 
     public async Task<EmailSendDTO> SendMail(string toEmail, string subject, string htmlbody, string plainText)
     {
-        // try
-        // {
-        //     var msg = new SendGridMessage()
-        //     {
-        //         From = new EmailAddress(sendGridConfigs.FromEmail, sendGridConfigs.FromName),
-        //         Subject = subject,
-        //         HtmlContent = htmlbody,
-        //         PlainTextContent = plainText
-        //     };
-        //     msg.AddTo(new EmailAddress(toEmail));
-        //     var response = await sendGridClient.SendEmailAsync(msg);
-        //     if (!response.IsSuccessStatusCode)
-        //     {
-        //         dto.RespCode = (int)response.StatusCode;
-        //         dto.Message = response.Body.ToString();
-        //     }
-        // }
-        // catch (Exception ex)
-        // {
-        //     dto.RespCode = 500;
-        //     dto.Message = $"{ex.Message}\t{ex.InnerException.Message}";
-        // }
-
         var brokerreq = new EmailSendBrokerDTO()
         {
             ToEmail = toEmail,
