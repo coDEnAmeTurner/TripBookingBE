@@ -18,6 +18,7 @@ using TripBookingBE.Commons.Configurations;
 using TripBookingBE.Commons.VnPayLibrary;
 using Microsoft.AspNetCore.HttpOverrides;
 using SendGrid.Extensions.DependencyInjection;
+using RabbitMQ.Client;
 
 IdentityModelEventSource.ShowPII = true;
 
@@ -34,11 +35,21 @@ var config = new ConfigurationBuilder()
 builder.Services.Configure<ConnectionStrings>(config.GetSection("ConnectionStrings"));
 builder.Services.Configure<VnPayConfigs>(config.GetSection("VnPayConfigs"));
 builder.Services.Configure<SendGridConfigs>(config.GetSection("SendGridConfigs"));
+builder.Services.Configure<SendGridConfigs>(config.GetSection("SendGridConfigs"));
+builder.Services.Configure<RabbitMqConfigs>(config.GetSection("RabbitMqConfigs"));
 
 //vnpay
 builder.Services.AddScoped<Utils>();
 builder.Services.AddScoped<VnPayCompare>();
 builder.Services.AddScoped<VnPayLibrary>();
+
+//rpc client
+builder.Services.AddSingleton<IConnectionFactory>(new ConnectionFactory()
+{
+    HostName = config.GetValue<string>("RabbitMqConfigs:HostName"),
+    Port = config.GetValue<int>("RabbitMqConfigs:Port")
+});
+builder.Services.AddScoped<IRpcClient, RpcClient>();
 
 //sendgrid client
 builder.Services.AddSendGrid(options =>

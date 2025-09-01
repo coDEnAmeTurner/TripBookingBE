@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -12,39 +13,53 @@ public class EmailService : IEmailService
     private readonly SendGridConfigs sendGridConfigs;
     private readonly ISendGridClient sendGridClient;
 
-    public EmailService(IOptions<SendGridConfigs> sendGridConfigs, ISendGridClient sendGridClient)
+    private readonly RpcClient rpcClient;
+
+    public EmailService(IOptions<SendGridConfigs> sendGridConfigs, ISendGridClient sendGridClient, RpcClient rpcClient)
     {
         this.sendGridConfigs = sendGridConfigs.Value;
         this.sendGridClient = sendGridClient;
+        this.rpcClient = rpcClient;
     }
 
     public async Task<EmailSendDTO> SendMail(string toEmail, string subject, string htmlbody, string plainText)
     {
-        var dto = new EmailSendDTO();
+        // try
+        // {
+        //     var msg = new SendGridMessage()
+        //     {
+        //         From = new EmailAddress(sendGridConfigs.FromEmail, sendGridConfigs.FromName),
+        //         Subject = subject,
+        //         HtmlContent = htmlbody,
+        //         PlainTextContent = plainText
+        //     };
+        //     msg.AddTo(new EmailAddress(toEmail));
+        //     var response = await sendGridClient.SendEmailAsync(msg);
+        //     if (!response.IsSuccessStatusCode)
+        //     {
+        //         dto.RespCode = (int)response.StatusCode;
+        //         dto.Message = response.Body.ToString();
+        //     }
+        // }
+        // catch (Exception ex)
+        // {
+        //     dto.RespCode = 500;
+        //     dto.Message = $"{ex.Message}\t{ex.InnerException.Message}";
+        // }
 
-        try
+        var brokerreq = new EmailSendBrokerDTO()
         {
-            var msg = new SendGridMessage()
-            {
-                From = new EmailAddress(sendGridConfigs.FromEmail, sendGridConfigs.FromName),
-                Subject = subject,
-                HtmlContent = htmlbody,
-                PlainTextContent = plainText
-            };
-            msg.AddTo(new EmailAddress(toEmail));
-            var response = await sendGridClient.SendEmailAsync(msg);
-            if (!response.IsSuccessStatusCode)
-            {
-                dto.RespCode = (int)response.StatusCode;
-                dto.Message = response.Body.ToString();
-            }
-        }
-        catch (Exception ex)
-        {
-            dto.RespCode = 500;
-            dto.Message = $"{ex.Message}\t{ex.InnerException.Message}";
-        }
+            ToEmail = toEmail,
+            Subject = subject,
+            Htmlbody = htmlbody,
+            PlainText = plainText
+        };
+        string message = JsonSerializer.Serialize(brokerreq);
+        await rpcClient.StartAsync();
 
-        return dto;
+        var resp = await rpcClient.CallAsync(message);
+        var respobj = JsonSerializer.Deserialize<EmailSendDTO>(resp);
+
+        return respobj;
     }
 }

@@ -470,7 +470,7 @@ public class TicketService : ITicketService
                 - Route: {ticket.CustomerBookTrip?.Trip?.Route?.RouteDescription}
                 - Vehicle Plate Number: {ticket.CustomerBookTrip?.Trip?.RegistrationNumber}
                 - Seller Code: {ticket.SellerCode}
-        ";
+            ";
 
             maildto = await emailService.SendMail(ticket.CustomerBookTrip.Customer.Email, "[TripBooking] Ticket Input Completed!", message, plain);
             if (maildto.RespCode != 200)

@@ -1,13 +1,15 @@
 using System.Collections.Concurrent;
 using System.Text;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using TripBookingBE.Commons.Configurations;
 
-public class RpcClient : IAsyncDisposable
+public class RpcClient : IAsyncDisposable, IRpcClient
 {
-    private const string QUEUE_NAME = "rpc_queue";
 
     private readonly IConnectionFactory _connectionFactory;
+    private readonly RabbitMqConfigs rabbitMqConfigs;
     private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> _callbackMapper
         = new();
 
@@ -15,11 +17,11 @@ public class RpcClient : IAsyncDisposable
     private IChannel? _channel;
     private string? _replyQueueName;
 
-    public RpcClient()
+    public RpcClient(IConnectionFactory connectionFactory, IOptions<RabbitMqConfigs> rabbitconfigs)
     {
-        _connectionFactory = new ConnectionFactory { HostName = "localhost", Port=6078 };
+        _connectionFactory = connectionFactory;
+        rabbitMqConfigs = rabbitconfigs.Value;
     }
-
     public async Task StartAsync()
     {
         _connection = await _connectionFactory.CreateConnectionAsync();
@@ -70,7 +72,7 @@ public class RpcClient : IAsyncDisposable
         _callbackMapper.TryAdd(correlationId, tcs);
 
         var messageBytes = Encoding.UTF8.GetBytes(message);
-        await _channel.BasicPublishAsync(exchange: string.Empty, routingKey: QUEUE_NAME,
+        await _channel.BasicPublishAsync(exchange: string.Empty, routingKey: rabbitMqConfigs.EmailQueueName,
             mandatory: true, basicProperties: props, body: messageBytes);
 
         using CancellationTokenRegistration ctr =
