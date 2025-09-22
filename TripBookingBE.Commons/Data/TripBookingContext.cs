@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using TripBookingBE.Commons.Configurations;
 using TripBookingBE.Models;
@@ -10,10 +11,13 @@ namespace TripBookingBE.Data;
 
 public partial class TripBookingContext : DbContext
 {
-    public TripBookingContext(DbContextOptions<TripBookingContext> options)
+    public TripBookingContext(DbContextOptions<TripBookingContext> options, IConfiguration config)
         : base(options)
     {
     }
+
+    private readonly IConfiguration _config;
+
 
     public virtual DbSet<CustomerBookTrip> CustomerBookTrips { get; set; }
 
@@ -27,6 +31,15 @@ public partial class TripBookingContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<GeneralParam> GeneralParams { get; set; }
+
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //     if (!optionsBuilder.IsConfigured)
+    //     {
+    //         optionsBuilder.UseSqlServer(_config.GetConnectionString("TripBookingContext"));
+    //     }
+    // }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

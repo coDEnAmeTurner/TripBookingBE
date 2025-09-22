@@ -12,14 +12,18 @@ public class RoutesController : Controller
 {
     private readonly IRouteService routeService;
 
-    public RoutesController(IRouteService routeService)
+    private readonly ILogger<RoutesController> logger;
+
+    public RoutesController(IRouteService routeService, ILogger<RoutesController> logger)
     {
         this.routeService = routeService;
+        this.logger = logger;
     }
 
     public async Task<IActionResult> Index(string? description, string dateCreated, int? pageNumber)
     {
         RouteGetRoutesDTO dto = new();
+
 
         dto = await routeService.GetRoutes(description, String.IsNullOrEmpty(dateCreated) ? null : DateTime.ParseExact(dateCreated, "dd/MM/yyyy",
                                        System.Globalization.CultureInfo.InvariantCulture));

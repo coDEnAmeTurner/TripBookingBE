@@ -140,7 +140,7 @@ public class UsersDal : IUsersDal
         try
         {
             // var currentState = context.Entry(user).State;
-            // context.Entry(user).State = EntityState.Modified;
+            // context.Entry(user).State = EntityState.Modified 
             context.Update(user);
             await context.SaveChangesAsync();
 
