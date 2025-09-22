@@ -12,22 +12,32 @@ namespace TripBookingBE.RestControllers;
 public class ApiRoutesController : MyControllerBase
 {
     private readonly IRouteService routeService;
+    private readonly IHttpContextAccessor httpContextAccessor;
+    private readonly ILogger<ApiRoutesController> logger;
 
-    public ApiRoutesController(IRouteService routeService)
+    public ApiRoutesController(IRouteService routeService, ILogger<ApiRoutesController> logger, IHttpContextAccessor httpContextAccessor)
     {
         this.routeService = routeService;
+        this.logger = logger;
+        this.httpContextAccessor = httpContextAccessor;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> List([FromQuery] RouteListRequest request)
     {
+        logger.LogInformation($"Description: {request.Description}");
+
         var dto = await routeService.GetRoutes(request.Description, DateTime.ParseExact(request.DateCreated, "dd/MM/yyyy", CultureInfo.InvariantCulture));
+
         if (dto.RespCode != System.Net.HttpStatusCode.OK)
         {
             return Problem(dto.Message);
         }
 
         int pageSize = 10;
+
+        logger.LogWarning("RouteController - List: End");
         return Ok(await PaginatedList<Models.Route>.CreateAsync(dto.Routes, request.PageNumber ?? 1, pageSize));
     }
 
